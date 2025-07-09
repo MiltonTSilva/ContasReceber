@@ -1,4 +1,4 @@
-# 📲 ContasReceber
+# 📲 Contas a Receber
 
 É um aplicativo simples e eficiente para o controle de contas a receber.
 
