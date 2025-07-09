@@ -1,0 +1,8 @@
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #000;
+  box-decoration-break: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
