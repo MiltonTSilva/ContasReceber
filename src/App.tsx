@@ -1,10 +1,19 @@
+import { BrowserRouter } from "react-router-dom";
+import { Footer } from "./Components/Footer/Footer";
+import { Header } from "./Components/Header/Header";
+import { AppRoutes } from "./Routes";
 import "./App.css";
+import { GlobalProvider } from "./Hooks/globalProvider";
 
 function App() {
   return (
-    <>
-      <h1>Contas a Receber</h1>
-    </>
+    <BrowserRouter>
+      <GlobalProvider>
+        <Header />
+        <AppRoutes />
+        <Footer />
+      </GlobalProvider>
+    </BrowserRouter>
   );
 }
 
