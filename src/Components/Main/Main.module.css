@@ -1,4 +1,4 @@
-main {
+.main {
   background-color: rgb(36 36 36 / 1);
   padding: 20px;
   flex-grow: 1;
@@ -7,9 +7,14 @@ main {
   align-items: center;
   justify-content: center;
   max-width: 100vw;
-  min-height: 75vh;
+  min-height: 92.3vh;
   margin-left: 0.2px;
   margin-right: 0.2px;
+  transition: min-height 0.3s ease-in-out;
+}
+
+.mainLoggedIn {
+  min-height: 73vh;
 }
 
 main h1 span {
