@@ -1,12 +1,7 @@
 import { Main } from "../../Components/Main/Main";
-import { useGlobalState } from "../../Hooks/useGlobalState";
 import style from "./sobre.module.css";
 
 export function Sobre() {
-  const { user } = useGlobalState();
-  if (!user) {
-    return <p>Você precisa estar logado para acessar esta página.</p>;
-  }
   return (
     <Main>
       <h1 className={style.title}>Sobre</h1>
