@@ -21,6 +21,10 @@
   font-weight: bold;
 }
 
+.logo span{
+  font-size: 1.2rem; /* Tamanho do texto */
+  color: #fff; /* Cor do texto */ 
+}
 .nav {
   width: 100%;
   display: flex;
