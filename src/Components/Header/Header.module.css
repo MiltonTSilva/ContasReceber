@@ -5,4 +5,5 @@ header {
   padding: 10px 20px;
   background-color: #000;
   box-decoration-break: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 0.2rem;
 }
