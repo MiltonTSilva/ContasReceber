@@ -1,3 +1,25 @@
+.logo {
+  /* Cor de fundo para o logo */
+  background-color: #007bff;
+  color: #fff; /* Cor do texto */
+
+  /* Espaçamento interno para o texto não ficar colado na borda */
+  padding: 5px 20px;
+
+  /* Arredondamento dos cantos. Ajuste o valor como preferir. */
+  border-radius: 20px;
+
+  /* Para que o padding e o border-radius funcionem corretamente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap; /* Impede que o texto quebre em várias linhas */
+
+
+  /* Estilização opcional do texto */
+  font-weight: bold;
+}
 
 .nav {
   width: 100%;
@@ -14,9 +36,10 @@
   align-items: center;
   list-style: none;
   margin: 0;
+  margin-left: 10px;
   padding: 0;
   gap: 1.5rem;
-} 
+}
 
 .nav li {
   display: flex;
@@ -24,8 +47,14 @@
   padding: 0 1rem;
 }
 
+.nav img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
 .brand {
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bold;
   color: white;
   text-decoration: none;
@@ -44,7 +73,6 @@
   background-color: white;
   margin: 4px 10px;
 }
-
 
 .active {
   color: #007bff;
@@ -77,8 +105,8 @@
 .link:hover,
 .link:focus {
   color: #007bff;
-} 
- 
+}
+
 .link:hover::after,
 .link:focus::after {
   transform: scaleX(1);
@@ -86,8 +114,6 @@
 }
 
 @media (max-width: 768px) {
-
-  
   .nav ul {
     display: none;
     flex-direction: column;
