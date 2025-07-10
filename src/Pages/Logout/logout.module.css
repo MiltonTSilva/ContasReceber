@@ -1,0 +1,26 @@
+
+.logout-button {
+  /* Reseta os estilos do botão para que se pareça com um link */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  /* Herda os estilos de fonte para manter a consistência */
+  font-family: inherit;
+
+  /* Aplica os mesmos estilos dos outros links da navegação */
+  color: #555;
+  font-size: 1.5rem;
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
+}
+
+/* Ao passar o mouse ou focar, mudamos a cor para um vermelho sutil.
+   Isso indica uma ação de "saída" ou "perigo", melhorando a experiência do usuário. */
+.logout-button:hover,
+.logout-button:focus {
+  color: #dc3545;
+  outline: none;
+}
+
