@@ -2,10 +2,8 @@ import styles from "./Footer.module.css";
 
 export function Footer() {
   return (
-    <footer className={styles["footer"]}>
-      <p>
-        © 2025 Supabase. <span>Todos direitos reservado.</span>
-      </p>
+    <footer className={styles.footer}>
+      © 2025 Contas a Receber. <span>Todos direitos reservados.</span>
     </footer>
   );
 }
