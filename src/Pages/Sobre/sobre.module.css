@@ -1,0 +1,26 @@
+.title {
+  color: #1c70be;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.phrase {
+  text-align: center;
+  text-wrap: wrap;
+  font-size: 1.2em;
+  color: #fff;
+  width: 80%;
+  margin: 10px auto;
+}
+
+.address{
+  text-align: center;
+  font-size: 1.2em;
+  color: #1c70be;
+  width: 50%; 
+}
+
+.address a {
+  color: #1c70be;
+  text-decoration: none;
+}
