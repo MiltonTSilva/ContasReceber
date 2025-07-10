@@ -1,28 +1,21 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import type { ReactNode } from "react";
 import { GlobalContext } from "./globalContext";
 import { supabase } from "../services/supabase";
-import type { Session, User } from "@supabase/supabase-js";
-import type { SignInCredentials } from "../Types/GlobalTypes";
+import type {
+  User,
+  Session,
+  SignInWithPasswordCredentials,
+} from "@supabase/supabase-js";
 
-export const GlobalProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-
+export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Verifica se há um usuário autenticado ao carregar o app
+  // Gerencia o estado de autenticação
   useEffect(() => {
-    const getSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setUser(data.session?.user ?? null);
-      setLoading(false);
-    };
-
-    getSession();
-
-    // Listener para mudanças na autenticação
+    // onAuthStateChange é chamado na inicialização e em cada mudança de estado
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session: Session | null) => {
         setUser(session?.user ?? null);
@@ -31,36 +24,66 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({
     );
 
     return () => {
+      // Limpa o listener quando o componente é desmontado
       authListener.subscription.unsubscribe();
     };
   }, []);
 
-  const signInWithPassword = async ({ email, password }: SignInCredentials) => {
-    if (!email || !password) {
-      alert("Email e senha são obrigatórios.");
-      return;
-    }
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) throw error;
-  };
+  const signInWithPassword = useCallback(
+    async (credentials: SignInWithPasswordCredentials) => {
+      setError(null);
+      setLoading(true);
 
-  const signOut = async () => {
+      if (
+        !("email" in credentials) ||
+        !credentials.email ||
+        !credentials.password
+      ) {
+        setError("Email e senha são obrigatórios.");
+        setLoading(false);
+        return false;
+      }
+
+      const { error: signInError } = await supabase.auth.signInWithPassword(
+        credentials
+      );
+
+      if (signInError) {
+        console.error("Erro no login:", signInError);
+        setError(
+          signInError.message || "Ocorreu um erro ao tentar fazer login."
+        );
+        setLoading(false); // Finaliza o loading em caso de erro
+        return false; // Indica falha
+      }
+
+      // Em caso de sucesso, o onAuthStateChange vai cuidar do setLoading e do usuário.
+      return true; // Indica sucesso
+    },
+    []
+  );
+
+  const signOut = useCallback(async () => {
+    setError(null);
     await supabase.auth.signOut();
-  };
+  }, []);
 
-  const value = {
-    user,
-    loading,
-    signOut,
-    signInWithPassword,
+  const clearError = useCallback(() => setError(null), []);
 
-  };
+  // Memoriza o valor do contexto para evitar re-renderizações desnecessárias
+  const value = useMemo(
+    () => ({
+      user,
+      loading,
+      error,
+      signOut,
+      signInWithPassword,
+      clearError,
+    }),
+    [user, loading, error, signOut, signInWithPassword, clearError]
+  );
 
   return (
-
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
   );
 };
