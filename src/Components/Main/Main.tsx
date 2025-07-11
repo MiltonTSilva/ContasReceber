@@ -1,6 +1,8 @@
-import style from "./Main.module.css";
+import styles from "./Main.module.css";
 import { useGlobalState } from "../../Hooks/useGlobalState";
 import type { ReactNode } from "react";
+import { Header } from "../Header/Header";
+import { Footer } from "../Footer/Footer";
 
 interface MainProps {
   children: ReactNode;
@@ -8,9 +10,15 @@ interface MainProps {
 
 export function Main({ children }: MainProps) {
   const { user } = useGlobalState();
-  const containerClasses = `${style.main} ${
-    user ? style.mainLoggedIn : ""
+  const containerClasses = `${styles.main} ${
+    user ? styles.mainContent : ""
   }`.trim();
 
-  return <div className={containerClasses}>{children}</div>;
+  return (
+    <div className={styles.layout}>
+      <Header />
+      <div className={containerClasses}>{children}</div>
+      <Footer />
+    </div>
+  );
 }
