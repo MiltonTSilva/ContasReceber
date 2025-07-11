@@ -79,6 +79,54 @@ CREATE  TABLE public.accounts_receivable (
   CONSTRAINT accounts_receivable_pkey PRIMARY KEY (id),
   CONSTRAINT accounts_receivable_costumer_id_fkey FOREIGN KEY (costumer_id) REFERENCES customer(id)
 ) TABLESPACE pg_default;
+
+-- Cria a tabela para perfis de usuário públicos
+CREATE TABLE public.profiles (
+  id uuid NOT NULL REFERENCES auth.users ON DELETE CASCADE,
+  role text DEFAULT 'user'::text,
+  CONSTRAINT profiles_pkey PRIMARY KEY (id)
+);
+
+-- Habilita a Segurança a Nível de Linha (RLS)
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+-- Política: Permite que usuários leiam todos os perfis (é público)
+CREATE POLICY "Public profiles are viewable by everyone."
+ON public.profiles FOR SELECT USING (true);
+
+-- Política: Permite que usuários criem seu próprio perfil
+CREATE POLICY "Users can insert their own profile."
+ON public.profiles FOR INSERT WITH CHECK (auth.uid() = id);
+
+-- Política: Permite que usuários atualizem seu próprio perfil
+CREATE POLICY "Users can update own profile."
+ON public.profiles FOR UPDATE USING (auth.uid() = id);
+
+-- Trigger: Cria um perfil automaticamente para cada novo usuário registrado
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER SET search_path = public
+AS $$
+BEGIN
+  INSERT INTO public.profiles (id, role)
+  VALUES (new.id, 'user');
+  RETURN new;
+END;
+$$;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+
+-- Cria uma nova política que permite TODAS as operações (SELECT, INSERT, UPDATE, DELETE)
+-- para o usuário que é dono do registro.
+CREATE POLICY "Users can manage their own customers."
+ON public.customer FOR ALL
+USING ( auth.uid() = user_id )
+WITH CHECK ( auth.uid() = user_id );
+
+
 ```
 
 ## 🛠️ Criado por Milton Tomé da Silva (11) 9.6707-9318
