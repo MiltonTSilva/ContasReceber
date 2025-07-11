@@ -142,18 +142,24 @@ export function Clientes() {
     setCurrentPage(1); // Volta para a primeira página ao mudar a quantidade de itens
   };
 
-  if (loading)
+  // Mostra o carregamento em tela cheia apenas na carga inicial, quando não há clientes.
+  if (loading && clientes.length === 0) {
     return (
       <Main>
         <div>Carregando...</div>
       </Main>
     );
+  }
 
   return (
     <Main>
       <div className={style.container}>
         <h1>Lista de Clientes</h1>
-        <button className={style.buttonNew} onClick={handleNovoCliente}>
+        <button
+          className={style.buttonNew}
+          onClick={handleNovoCliente}
+          disabled={loading}
+        >
           Novo Cliente
         </button>
         <div className={style.tableContainer}>
@@ -176,12 +182,16 @@ export function Clientes() {
                     <td>{cliente.mobile}</td>
                     <td>{cliente.active ? "Ativo" : "Inativo"}</td>
                     <td className={style.actions}>
-                      <button onClick={() => handleEditar(cliente.id)}>
+                      <button
+                        onClick={() => handleEditar(cliente.id)}
+                        disabled={loading}
+                      >
                         Editar
                       </button>
                       <button
                         className={style.deleteButton}
                         onClick={() => handleExcluir(cliente.id)}
+                        disabled={loading}
                       >
                         Excluir
                       </button>
@@ -224,16 +234,21 @@ export function Clientes() {
                   </div>
                 </div>
                 <div className={style.cardActions}>
-                  <button onClick={() => handleEditar(cliente.id)}>
+                  <button
+                    onClick={() => handleEditar(cliente.id)}
+                    disabled={loading}
+                  >
                     Editar
                   </button>
                   <button
                     className={style.deleteButton}
                     onClick={() => handleExcluir(cliente.id)}
+                    disabled={loading}
                   >
                     Excluir
                   </button>
                   <button
+                    disabled={loading}
                     onClick={() =>
                       handleAtivarDesativar(cliente.id, cliente.active)
                     }
@@ -265,7 +280,10 @@ export function Clientes() {
           </div>
 
           <div className={style.paginationControls}>
-            <button onClick={handlePaginaAnterior} disabled={currentPage === 1}>
+            <button
+              onClick={handlePaginaAnterior}
+              disabled={currentPage === 1 || loading}
+            >
               Anterior
             </button>
             <span>
@@ -273,7 +291,7 @@ export function Clientes() {
             </span>
             <button
               onClick={handlePaginaSeguinte}
-              disabled={currentPage >= totalPages}
+              disabled={currentPage >= totalPages || loading}
             >
               Próxima
             </button>
