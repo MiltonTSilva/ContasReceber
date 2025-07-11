@@ -6,4 +6,5 @@ header {
   background-color: #000;
   box-decoration-break: 0 4px 8px rgba(0, 0, 0, 0.2);
   margin-bottom: 0.2rem;
+  flex-shrink: 0; /* Impede que o header encolha */
 }
