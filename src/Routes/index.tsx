@@ -7,6 +7,7 @@ import { Sobre } from "../Pages/Sobre/sobre";
 import { ProtectedRoute } from "../Components/ProtectedRoute/ProtectedRoute";
 import { Recebimento } from "../Pages/Recebimento/recebimento";
 import { useGlobalState } from "../Hooks/useGlobalState";
+import { ClientesForm } from "../Pages/Clientes/clientesForm";
 
 export function AppRoutes() {
   const { user } = useGlobalState();
@@ -25,6 +26,22 @@ export function AppRoutes() {
         element={
           <ProtectedRoute>
             <Clientes />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/clientes/clientesForm"
+        element={
+          <ProtectedRoute>
+            <ClientesForm />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/clientes/clientesForm/:id"
+        element={
+          <ProtectedRoute>
+            <ClientesForm />
           </ProtectedRoute>
         }
       />
