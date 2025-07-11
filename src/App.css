@@ -1,5 +1,5 @@
 #root {
   padding: 0.5rem;
   background-image: radial-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%), radial-gradient(rgba(0, 0, 0, 0) 33%, rgba(0, 0, 0, 0.3) 166%);
-
+  min-height: 100dvh;
 }
