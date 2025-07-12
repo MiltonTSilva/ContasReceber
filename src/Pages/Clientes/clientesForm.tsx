@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Main } from "../../Components/Main/Main";
 import style from "./clientesForm.module.css";
 import { supabase } from "../../services/supabase";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGlobalState } from "../../Hooks/useGlobalState";
+import Dialogs from "../../Components/Dialogs/Dialogs/Dialogs";
 
 export function ClientesForm() {
   const navigate = useNavigate();
@@ -16,6 +17,9 @@ export function ClientesForm() {
   const [active, setActive] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   const fetchCliente = useCallback(async () => {
     if (!id) return;
@@ -49,6 +53,10 @@ export function ClientesForm() {
     }
   }, [isEditing, fetchCliente]);
 
+  useEffect(() => {
+    nameInputRef.current?.focus();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -64,20 +72,29 @@ export function ClientesForm() {
           .update(customerData)
           .eq("id", id);
         if (error) throw error;
-        alert("Cliente atualizado com sucesso!");
+        setDialogMessage("Cliente atualizado com sucesso!");
+        setIsSuccessDialogOpen(true);
       } else {
         const { error } = await supabase
           .from("customer")
           .insert([customerData]);
         if (error) throw error;
-        alert("Cliente cadastrado com sucesso!");
+        setDialogMessage("Cliente cadastrado com sucesso!");
+        setIsSuccessDialogOpen(true);
       }
-      navigate("/clientes");
+      setName("");
+      setEmail("");
+      setMobile("");
+      setActive(true);
     } catch (error) {
       setError((error as Error).message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCloseDialog = () => {
+    setIsSuccessDialogOpen(false);
   };
 
   return (
@@ -91,6 +108,8 @@ export function ClientesForm() {
           <form className={style.form} onSubmit={handleSubmit}>
             <p className={style.subtitle}>Informe os dados abaixo.</p>
             <input
+              name="name"
+              ref={nameInputRef}
               className={style.input}
               type="text"
               placeholder="Digite o nome."
@@ -114,10 +133,10 @@ export function ClientesForm() {
               onChange={(e) => setMobile(e.target.value)}
               required
             />
-            <div className={style.checkboxContainer}>
+            <div className={style.checkboxContainer} tabIndex={0}>
               <input
-                id="active"
                 className={style.inputCheckbox}
+                id="active"
                 type="checkbox"
                 checked={active}
                 onChange={(e) => setActive(e.target.checked)}
@@ -149,6 +168,20 @@ export function ClientesForm() {
           </form>
         </div>
       </div>
+
+      <Dialogs
+        title="Sucesso"
+        isOpen={isSuccessDialogOpen}
+        onClose={handleCloseDialog}
+        titleColor="green"
+        footer={
+          <button className={style.button} onClick={handleCloseDialog}>
+            OK
+          </button>
+        }
+      >
+        <p>{dialogMessage}</p>
+      </Dialogs>
     </Main>
   );
 }
