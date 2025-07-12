@@ -1,4 +1,3 @@
-
 .dialogs {
   background-color: white;
   padding: 20px;
@@ -47,7 +46,7 @@
   max-width: 100%;
   height: auto;
   border-radius: 4px;
-} 
+}
 
 .overlay {
   position: fixed;
@@ -61,18 +60,6 @@
   align-items: center;
   z-index: 1000;
 }
-
-/* .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
 
 .dialogs {
   background: white;
@@ -88,7 +75,6 @@
 }
 
 .dialogsTitle {
-  color: #c0392b; /* Um tom de vermelho para indicar erro */
   margin-top: 0;
   margin-bottom: 15px;
   font-size: 1.5rem;
@@ -123,4 +109,3 @@
   border-top: 1px solid #eee;
   padding-top: 20px;
 }
-

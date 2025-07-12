@@ -19,14 +19,15 @@
 .buttonNew {
   background-color: #007bff;
   color: white;
-  padding: 0.3rem 1.5rem;
+  padding: 0.2rem 1.5rem;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
-  margin-bottom: 1.5rem;
+
   transition: background-color 0.2s;
   width: 140px;
+  white-space: nowrap;
 }
 
 .buttonNew:hover {
@@ -105,12 +106,6 @@
   margin-right: 8px; /* Adiciona espaço entre os botões */
 }
 
-.error {
-  color: #ff0000;
-  font-size: 1.2rem;
-  margin-top: 0.5rem;
-}
-
 .pagination {
   display: flex;
   justify-content: space-between;
@@ -154,9 +149,81 @@
   color: #fff;
 }
 
+.header {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.headerActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.searchInput {
+  background-color: #007bff;
+  padding: 0.2rem 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  flex-grow: 1;
+  max-width: 350px;
+}
+
+.searchInput::placeholder {
+  color: #fff; /* Exemplo: cinza claro */
+  opacity: 1; /* O Firefox aplica uma opacidade menor por padrão */
+}
+
+.loadingRow {
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+  color: #6c757d;
+}
+
+.emptyRow {
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+  color: #6c757d;
+}
+
+.loadingCardList {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  margin-top: 1.5rem;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  text-align: center;
+  color: #6c757d;
+  width: 100%;
+}
+.emptyCardList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  margin-top: 1.5rem;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.emptyCardList p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
 /* --- Estilos para os Cards --- */
 .cardList {
-  display: none; /* Escondido por padrão em telas grandes */
+  display: none;
 }
 
 .card {
@@ -229,15 +296,23 @@
 /* --- Media Query para Responsividade --- */
 @media (max-width: 768px) {
   .tableContainer {
-    display: none; /* Esconde a tabela em telas pequenas */
+    display: none;
   }
 
   .cardList {
-    display: block; /* Mostra os cards em telas pequenas */
+    display: block;
   }
 
   .pagination {
     flex-direction: column;
     align-items: center;
+  }
+
+  .headerActions {
+    flex-direction: column;
+  }
+
+  .searchInput {
+    width: 250px;
   }
 }
