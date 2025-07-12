@@ -8,6 +8,7 @@ interface ConfirmationDialogsProps {
   onConfirm: () => void;
   title: string;
   message: string;
+  titleColor?: string;
 }
 
 export function ConfirmationDialogs({
@@ -15,6 +16,7 @@ export function ConfirmationDialogs({
   onClose,
   onConfirm,
   title,
+  titleColor,
   message,
 }: ConfirmationDialogsProps) {
   return (
@@ -22,6 +24,7 @@ export function ConfirmationDialogs({
       title={title}
       isOpen={isOpen}
       onClose={onClose}
+      titleColor={titleColor}
       footer={
         <>
           <Button variant="cancel" onClick={onClose}>
