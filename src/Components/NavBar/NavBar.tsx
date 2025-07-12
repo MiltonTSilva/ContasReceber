@@ -17,7 +17,7 @@ export function NavBar() {
       <nav className={style.nav}>
         <Link to="/home" className={style.brand}>
           <div className={style.logo}>
-            <img src="favicon.png" alt="icone" />
+            <img src="/favicon.png" alt="icone" />
             <span>Contas a Receber</span>
           </div>
         </Link>
