@@ -16,6 +16,8 @@ export function Clientes() {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalClientes, setTotalClientes] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [clienteParaExcluir, setClienteParaExcluir] = useState<string | null>(
     null
   );
@@ -31,9 +33,15 @@ export function Clientes() {
     setError(null);
 
     try {
-      const { data, error, count } = await supabase
-        .from("customer")
-        .select("*", { count: "exact" })
+      let query = supabase.from("customer").select("*", { count: "exact" });
+
+      if (debouncedSearchTerm) {
+        query = query.or(
+          `name.ilike.%${debouncedSearchTerm}%,email.ilike.%${debouncedSearchTerm}%`
+        );
+      }
+
+      const { data, error, count } = await query
         .order("name", { ascending: true })
         .range(from, to);
 
@@ -45,15 +53,46 @@ export function Clientes() {
       setTotalClientes(count || 0);
     } catch (error) {
       setError((error as Error).message);
-      console.error("Erro ao buscar clientes:", error);
     } finally {
       setLoading(false);
     }
-  }, [user, currentPage, itemsPerPage]);
+  }, [user, currentPage, itemsPerPage, debouncedSearchTerm]);
 
   useEffect(() => {
     fetchClientes();
   }, [fetchClientes]);
+
+  useEffect(() => {
+    // Inicia a escuta por mudanças em tempo real na tabela 'customer'
+    const channel = supabase
+      .channel("customer-changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "customer" },
+        (payload) => {
+          console.log("Mudança recebida!", payload);
+          // Recarrega os clientes para refletir a mudança
+          fetchClientes();
+        }
+      )
+      .subscribe();
+
+    // Limpa a inscrição ao desmontar o componente para evitar vazamento de memória
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [fetchClientes]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+      setCurrentPage(1);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
 
   const handleNovoCliente = () => {
     navigate("/clientes/clientesForm");
@@ -86,6 +125,7 @@ export function Clientes() {
       } else {
         fetchClientes();
       }
+      setSearchTerm("");
     } catch (error) {
       const errorMessage = (error as Error).message;
       setError(errorMessage);
@@ -133,25 +173,28 @@ export function Clientes() {
     setCurrentPage(1);
   };
 
-  if (loading && clientes.length === 0) {
-    return (
-      <Main>
-        <div>Carregando...</div>
-      </Main>
-    );
-  }
-
   return (
     <Main>
       <div className={style.container}>
-        <h1>Lista de Clientes</h1>
-        <button
-          className={style.buttonNew}
-          onClick={handleNovoCliente}
-          disabled={loading}
-        >
-          Novo Cliente
-        </button>
+        <div className={style.header}>
+          <h1>Lista de Clientes</h1>
+          <div className={style.headerActions}>
+            <input
+              type="text"
+              placeholder="Buscar por nome ou e-mail..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className={style.searchInput}
+            />
+            <button
+              className={style.buttonNew}
+              onClick={handleNovoCliente}
+              disabled={loading}
+            >
+              Novo Cliente
+            </button>
+          </div>
+        </div>
         <div className={style.tableContainer}>
           <table className={style.table}>
             <thead>
@@ -164,7 +207,13 @@ export function Clientes() {
               </tr>
             </thead>
             <tbody>
-              {clientes.length > 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={5} className={style.loadingRow}>
+                    Carregando clientes...
+                  </td>
+                </tr>
+              ) : clientes.length > 0 ? (
                 clientes.map((cliente) => (
                   <tr key={cliente.id}>
                     <td>{cliente.name}</td>
@@ -197,7 +246,9 @@ export function Clientes() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5}>Nenhum cliente cadastrado.</td>
+                  <td colSpan={5} className={style.emptyRow}>
+                    Nenhum cliente cadastrado.
+                  </td>
                 </tr>
               )}
             </tbody>
@@ -205,7 +256,11 @@ export function Clientes() {
         </div>
 
         <div className={style.cardList}>
-          {clientes.length > 0 ? (
+          {loading ? (
+            <div className={style.loadingCardList}>
+              <p>Carregando clientes...</p>
+            </div>
+          ) : clientes.length > 0 ? (
             clientes.map((cliente) => (
               <div key={cliente.id} className={style.card}>
                 <div className={style.cardHeader}>{cliente.name}</div>
@@ -249,7 +304,9 @@ export function Clientes() {
               </div>
             ))
           ) : (
-            <p>Nenhum cliente cadastrado.</p>
+            <div className={style.emptyCardList}>
+              <p>Nenhum cliente cadastrado ainda.</p>
+            </div>
           )}
         </div>
 
@@ -297,6 +354,7 @@ export function Clientes() {
 
       <ConfirmationDialogs
         title="Confirmar Exclusão"
+        titleColor="red"
         message="Tem certeza que deseja excluir este cliente? Esta ação não pode ser desfeita."
         isOpen={clienteParaExcluir !== null}
         onClose={() => setClienteParaExcluir(null)}
