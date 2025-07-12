@@ -126,6 +126,14 @@ ON public.customer FOR ALL
 USING ( auth.uid() = user_id )
 WITH CHECK ( auth.uid() = user_id );
 
+-- Cria uma nova política de UPDATE que inclui administradores
+ALTER POLICY "Enable update for users based on user_id"
+ON public.customer
+FOR UPDATE
+USING (
+  (auth.uid() = user_id) OR
+  (EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND profiles.role = 'admin'))
+);
 
 ```
 
