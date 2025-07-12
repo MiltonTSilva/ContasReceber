@@ -5,6 +5,8 @@ import { supabase } from "../../services/supabase";
 import { useGlobalState } from "../../Hooks/useGlobalState";
 import style from "./Clientes.module.css";
 import type { Cliente } from "../../Types/ClientesTypes";
+import { ConfirmationDialogs } from "../../Components/Dialogs/ConfirmationDialogs/ConfirmationDialogs";
+import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
 
 export function Clientes() {
   const navigate = useNavigate();
@@ -14,6 +16,9 @@ export function Clientes() {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalClientes, setTotalClientes] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [clienteParaExcluir, setClienteParaExcluir] = useState<string | null>(
+    null
+  );
   const [error, setError] = useState<string | null>(null);
 
   const fetchClientes = useCallback(async () => {
@@ -58,36 +63,34 @@ export function Clientes() {
     navigate(`/clientes/clientesForm/${id}`);
   };
 
-  const handleExcluir = async (id: string) => {
-    if (window.confirm("Tem certeza que deseja excluir este cliente?")) {
-      try {
-        const { data, error } = await supabase
-          .from("customer")
-          .delete()
-          .eq("id", id)
-          .select();
+  const handleExcluir = (id: string) => {
+    setClienteParaExcluir(id);
+  };
 
-        // Se RLS impediu a exclusão, data estará vazio.
-        if (!data || data.length === 0) {
-          throw new Error("Você não tem permissão para excluir este cliente.");
-        }
-        if (error) throw error;
-        // alert("Cliente excluído com sucesso!");
-        //
-        // setClientes(clientes.filter((c) => c.id !== id));
-        // Se era o último item da página, volta para a página anterior
-        if (clientes.length === 1 && currentPage > 1) {
-          setCurrentPage(currentPage - 1);
-        } else {
-          fetchClientes(); // Recarrega os dados da página atual
-        }
-      } catch (error) {
-        setError((error as Error).message);
-        // alert("Erro ao excluir cliente.");
-        const errorMessage = (error as Error).message;
-        setError(errorMessage);
-        // alert(errorMessage); // Mostra a mensagem de permissão ou outro erro.
+  const confirmarExclusao = async () => {
+    if (!clienteParaExcluir) return;
+    try {
+      const { data, error } = await supabase
+        .from("customer")
+        .delete()
+        .eq("id", clienteParaExcluir)
+        .select();
+
+      if (!data || data.length === 0) {
+        throw new Error("Você não tem permissão para excluir este cliente.");
       }
+      if (error) throw error;
+
+      if (clientes.length === 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        fetchClientes();
+      }
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      setError(errorMessage);
+    } finally {
+      setClienteParaExcluir(null);
     }
   };
 
@@ -97,31 +100,19 @@ export function Clientes() {
         .from("customer")
         .update({ active: !active })
         .eq("id", id)
-        .select()
-        .single();
+        .select();
 
       if (error) throw error;
 
-      // alert(`Cliente ${!active ? "ativado" : "desativado"} com sucesso!`);
-      setClientes(clientes.map((c) => (c.id === id ? data : c)));
-    } catch (error) {
-      setError((error as Error).message);
-      // alert("Erro ao atualizar status do cliente.");
-      const errorMessage = (error as Error).message;
-      // Verifica se o erro é a violação de RLS (nenhuma linha retornada pelo .single())
-      if (
-        errorMessage.includes(
-          "JSON object requested, multiple (or no) rows returned"
-        )
-      ) {
-        const customMessage =
-          "Apenas o usuário proprietário tem permissão para alterar esta informação.";
-        setError(customMessage);
-        // alert(customMessage);
-      } else {
-        setError(errorMessage);
-        // alert("Erro ao atualizar status do cliente.");
+      if (!data || data.length === 0) {
+        throw new Error(
+          "Permissão negada. Apenas o proprietário ou um administrador pode alterar este cliente."
+        );
       }
+      setClientes(clientes.map((c) => (c.id === id ? data[0] : c)));
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      setError(errorMessage);
     }
   };
 
@@ -139,10 +130,9 @@ export function Clientes() {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setItemsPerPage(Number(e.target.value));
-    setCurrentPage(1); // Volta para a primeira página ao mudar a quantidade de itens
+    setCurrentPage(1);
   };
 
-  // Mostra o carregamento em tela cheia apenas na carga inicial, quando não há clientes.
   if (loading && clientes.length === 0) {
     return (
       <Main>
@@ -263,7 +253,6 @@ export function Clientes() {
           )}
         </div>
 
-        {error && <p className={style.error}>{error}</p>}
         <div className={style.pagination}>
           <div className={style.itemsPerPageSelector}>
             <label htmlFor="items-per-page">Itens por página:</label>
@@ -298,6 +287,21 @@ export function Clientes() {
           </div>
         </div>
       </div>
+
+      <ErrorDialogs
+        title="Ocorreu um erro"
+        message={error!}
+        isOpen={error !== null}
+        onClose={() => setError(null)}
+      />
+
+      <ConfirmationDialogs
+        title="Confirmar Exclusão"
+        message="Tem certeza que deseja excluir este cliente? Esta ação não pode ser desfeita."
+        isOpen={clienteParaExcluir !== null}
+        onClose={() => setClienteParaExcluir(null)}
+        onConfirm={confirmarExclusao}
+      />
     </Main>
   );
 }
