@@ -5,6 +5,7 @@ import { supabase } from "../../services/supabase";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGlobalState } from "../../Hooks/useGlobalState";
 import Dialogs from "../../Components/Dialogs/Dialogs/Dialogs";
+import PhoneInput from "../../Components/PhoneInput/PhoneInput";
 
 export function ClientesForm() {
   const navigate = useNavigate();
@@ -125,14 +126,20 @@ export function ClientesForm() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <input
+{/*             <input
               className={style.input}
               type="tel"
               placeholder="Digite o celular."
               value={mobile}
               onChange={(e) => setMobile(e.target.value)}
               required
+            /> */}
+            <PhoneInput
+              mobile={mobile}
+              setMobile={setMobile}
+              className={style.input}
             />
+
             <div className={style.checkboxContainer} tabIndex={0}>
               <input
                 className={style.inputCheckbox}
