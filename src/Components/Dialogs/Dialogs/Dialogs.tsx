@@ -7,6 +7,7 @@ interface DialogsProps {
   onClose: () => void;
   children: React.ReactNode;
   footer?: React.ReactNode;
+  titleColor?: string;
 }
 
 const Dialogs: React.FC<DialogsProps> = ({
@@ -15,6 +16,7 @@ const Dialogs: React.FC<DialogsProps> = ({
   onClose,
   children,
   footer,
+  titleColor,
 }) => {
   if (!isOpen) return null;
 
@@ -24,7 +26,9 @@ const Dialogs: React.FC<DialogsProps> = ({
         <button className={styles.closeButton} onClick={onClose}>
           &times;
         </button>
-        <h2 className={styles.dialogsTitle}>{title}</h2>
+        <h2 className={styles.dialogsTitle} style={{ color: titleColor }}>
+          {title}
+        </h2>
         <div className={styles.dialogsContent}>{children}</div>
         {footer && <div className={styles.dialogsActions}>{footer}</div>}
       </div>
