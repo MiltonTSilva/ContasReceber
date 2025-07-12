@@ -1,6 +1,6 @@
 import { Button } from "../../Button/Button";
 import Dialogs from "../Dialogs/Dialogs";
-import style from "../Dialogs.module.css";
+import style from "../Dialogs/Dialogs.module.css";
 
 interface ErrorDialogsProps {
   isOpen: boolean;
@@ -20,6 +20,7 @@ export function ErrorDialogs({
       title={title}
       isOpen={isOpen}
       onClose={onClose}
+      titleColor="red"
       footer={
         <Button variant="primary" onClick={onClose}>
           OK
