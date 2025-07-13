@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./button.module.css";
 
-type ButtonVariant = "primary" | "danger" | "cancel";
+type ButtonVariant = "primary" | "secondary" | "active" | "danger" | "cancel";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
