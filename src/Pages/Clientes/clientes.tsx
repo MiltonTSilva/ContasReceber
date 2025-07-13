@@ -7,6 +7,49 @@ import style from "./Clientes.module.css";
 import type { Cliente } from "../../Types/ClientesTypes";
 import { ConfirmationDialogs } from "../../Components/Dialogs/ConfirmationDialogs/ConfirmationDialogs";
 import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
+import Card from "../../Components/UI/Card/Card";
+import CardField from "../../Components/UI/Card/CardField";
+import { Button } from "../../Components/Button/Button";
+
+type ActionButtonsProps = {
+  cliente: Cliente;
+  loading: boolean;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+  onToggleActive: (id: string, active: boolean) => void;
+};
+
+const ActionButtons = ({
+  cliente,
+  loading,
+  onEdit,
+  onDelete,
+  onToggleActive,
+}: ActionButtonsProps) => (
+  <>
+    <Button
+      variant="secondary"
+      disabled={loading}
+      onClick={() => onEdit(cliente.id)}
+    >
+      Editar
+    </Button>
+    <Button
+      variant="danger"
+      disabled={loading}
+      onClick={() => onDelete(cliente.id)}
+    >
+      Excluir
+    </Button>
+    <Button
+      variant="active"
+      disabled={loading}
+      onClick={() => onToggleActive(cliente.id, cliente.active)}
+    >
+      {cliente.active ? "Desativar" : "Ativar"}
+    </Button>
+  </>
+);
 
 export function Clientes() {
   const navigate = useNavigate();
@@ -220,27 +263,14 @@ export function Clientes() {
                     <td>{cliente.email}</td>
                     <td>{cliente.mobile}</td>
                     <td>{cliente.active ? "Ativo" : "Inativo"}</td>
-                    <td className={style.actions}>
-                      <button
-                        onClick={() => handleEditar(cliente.id)}
-                        disabled={loading}
-                      >
-                        Editar
-                      </button>
-                      <button
-                        className={style.deleteButton}
-                        onClick={() => handleExcluir(cliente.id)}
-                        disabled={loading}
-                      >
-                        Excluir
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleAtivarDesativar(cliente.id, cliente.active)
-                        }
-                      >
-                        {cliente.active ? "Desativar" : "Ativar"}
-                      </button>
+                    <td>
+                      <ActionButtons
+                        cliente={cliente}
+                        loading={loading}
+                        onEdit={handleEditar}
+                        onDelete={handleExcluir}
+                        onToggleActive={handleAtivarDesativar}
+                      />
                     </td>
                   </tr>
                 ))
@@ -261,48 +291,29 @@ export function Clientes() {
               <p>Carregando clientes...</p>
             </div>
           ) : clientes.length > 0 ? (
-            clientes.map((cliente) => (
-              <div key={cliente.id} className={style.card}>
-                <div className={style.cardHeader}>{cliente.name}</div>
-                <div className={style.cardBody}>
-                  <div className={style.cardField}>
-                    <label>E-mail</label>
-                    <span>{cliente.email || "Não informado"}</span>
-                  </div>
-                  <div className={style.cardField}>
-                    <label>Celular</label>
-                    <span>{cliente.mobile || "Não informado"}</span>
-                  </div>
-                  <div className={style.cardField}>
-                    <label>Status</label>
-                    <span>{cliente.active ? "Ativo" : "Inativo"}</span>
-                  </div>
-                </div>
-                <div className={style.cardActions}>
-                  <button
-                    onClick={() => handleEditar(cliente.id)}
-                    disabled={loading}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className={style.deleteButton}
-                    onClick={() => handleExcluir(cliente.id)}
-                    disabled={loading}
-                  >
-                    Excluir
-                  </button>
-                  <button
-                    disabled={loading}
-                    onClick={() =>
-                      handleAtivarDesativar(cliente.id, cliente.active)
-                    }
-                  >
-                    {cliente.active ? "Desativar" : "Ativar"}
-                  </button>
-                </div>
-              </div>
-            ))
+            <div className={style.cardList}>
+              {clientes.map((cliente) => (
+                <Card key={cliente.id}>
+                  <Card.Header>{cliente.name}</Card.Header>
+                  <Card.Body>
+                    <CardField label="E-mail">{cliente.email}</CardField>
+                    <CardField label="Celular">{cliente.mobile}</CardField>
+                    <CardField label="Status">
+                      {cliente.active ? "Ativo" : "Inativo"}
+                    </CardField>
+                  </Card.Body>
+                  <Card.Actions>
+                    <ActionButtons
+                      cliente={cliente}
+                      loading={loading}
+                      onEdit={handleEditar}
+                      onDelete={handleExcluir}
+                      onToggleActive={handleAtivarDesativar}
+                    />
+                  </Card.Actions>
+                </Card>
+              ))}
+            </div>
           ) : (
             <div className={style.emptyCardList}>
               <p>Nenhum cliente cadastrado ainda.</p>
