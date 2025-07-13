@@ -1,5 +1,5 @@
 .button {
-  padding: 10px 20px;
+  padding: 1dvh 2dvw;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -7,6 +7,7 @@
   font-weight: bold;
   transition: background-color 0.2s ease-in-out, transform 0.1s ease;
   color: white;
+  margin-right: 8px;
 }
 
 .button:hover {
@@ -19,6 +20,10 @@
   transform: none;
 }
 
+.button:last-child {
+  margin-right: 0;
+}
+
 /* --- Variantes --- */
 
 .primary {
@@ -27,6 +32,14 @@
 
 .primary:hover:not(:disabled) {
   background-color: #0056b3;
+}
+
+.secondary {
+  background-color: #ffc107;
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: #b08503;
 }
 
 .danger {
@@ -43,4 +56,12 @@
 
 .cancel:hover:not(:disabled) {
   background-color: #5a6268;
+}
+
+.active {
+  background-color: #04f73d;
+}
+
+.active:hover:not(:disabled) {
+  background-color: #03a72a;
 }
