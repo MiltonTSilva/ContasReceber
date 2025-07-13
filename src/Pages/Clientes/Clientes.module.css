@@ -1,13 +1,10 @@
 .container {
   padding: 0rem;
   max-width: 100dvw;
-
   margin: 0 auto;
-
-  /* A altura mínima agora é controlada pelo layout principal (Main.tsx) */
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Faz este container crescer para preencher o espaço em <main> */
+  flex-grow: 1;
 }
 
 .container h1 {
@@ -36,8 +33,8 @@
 
 .tableContainer {
   width: 100%;
-  overflow-y: auto; /* Adiciona rolagem vertical e horizontal quando necessário */
-  max-height: 45dvh; /*  Ajuste a altura máxima conforme necessário */
+  overflow-y: auto;
+  max-height: 45dvh;
   border: 1px solid #dddddd;
 }
 
@@ -59,7 +56,7 @@
 
 .table th,
 .table td {
-  padding: 9px 15px;
+  padding: 5px 15px;
   text-align: left;
   border-bottom: 1px solid #ddd;
   color: #fff;
@@ -71,39 +68,9 @@
   background-color: #007bff;
 }
 
-/* .table tbody tr:last-child td {
-  border-bottom: none;
-} */
-
 .actions {
   flex-wrap: wrap;
   vertical-align: middle;
-}
-
-.actions button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: white;
-  font-size: 0.9rem;
-  transition: background-color 0.2s;
-}
-
-.actions button:nth-child(1) {
-  background-color: #ffc107; /* Amarelo para Editar */
-}
-
-.actions .deleteButton {
-  background-color: #dc3545; /* Vermelho para Excluir */
-}
-
-.actions button:last-child {
-  background-color: #28a745; /* Verde para Ativar/Desativar */
-}
-
-.actions button:not(:last-child) {
-  margin-right: 8px; /* Adiciona espaço entre os botões */
 }
 
 .pagination {
