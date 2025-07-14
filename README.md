@@ -75,6 +75,7 @@ CREATE  TABLE public.accounts_receivable (
   payment_received_at date NULL,
   amount_to_receive numeric NULL,
   costumer_id uuid not null default gen_random_uuid (),
+  active boolean null,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT accounts_receivable_pkey PRIMARY KEY (id),
   CONSTRAINT accounts_receivable_costumer_id_fkey FOREIGN KEY (costumer_id) REFERENCES customer(id)
