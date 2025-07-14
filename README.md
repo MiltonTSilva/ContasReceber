@@ -50,6 +50,7 @@ full_name text null,
 email text null,
 created_at timestamp without time zone not null default now(),
 id uuid not null default gen_random_uuid (),
+active boolean null,
 constraint users_pkey primary key (id),
 constraint users_email_key unique (email),
 constraint users_name_key unique (full_name)
