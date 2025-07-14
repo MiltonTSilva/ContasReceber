@@ -17,16 +17,23 @@ export function Sobre() {
       </p>
 
       <address className={style.address}>
-        Criado por: Milton Tomé da Silva
+        <span className={style.author}>Criado por: </span> Milton Tomé da Silva
         <br />
-        E-mail: miltontsilva@gmail.com
+        <span className={style.author}> E-mail: </span> miltontsilva@gmail.com
         <br />
-        <a href="https://github.com/MiltonTSilva">Github</a>
+        <span className={style.author}>Github: </span>
+        <a href="https://github.com/MiltonTSilva">
+          https://github.com/MiltonTSilva
+        </a>
         <br />
-        <a href="https://www.linkedin.com/in/miltontsilva/">LinkedIn</a>
+        <span className={style.author}>LinkedIn: </span>
+        <a href="https://www.linkedin.com/in/miltontsilva/">
+          https://www.linkedin.com/in/miltontsilva/
+        </a>
         <br />
+        <span className={style.author}> Whatsapp: </span>
         <a href="https://api.whatsapp.com/send?phone=5511967079318">
-          Whatsapp: (11) 9.6707-9318
+          (11) 9.6707-9318
         </a>
       </address>
     </Main>
