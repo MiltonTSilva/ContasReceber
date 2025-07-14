@@ -47,6 +47,14 @@
   border-radius: 50%;
 }
 
+.user{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #fff;
+}
+
 .brand {
   font-size: 1rem;
   font-weight: bold;
