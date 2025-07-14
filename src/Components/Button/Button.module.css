@@ -60,6 +60,7 @@
 
 .active {
   background-color: #04f73d;
+  width: 38%;
 }
 
 .active:hover:not(:disabled) {
