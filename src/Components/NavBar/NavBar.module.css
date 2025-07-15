@@ -47,12 +47,19 @@
   border-radius: 50%;
 }
 
-.user{
+.user {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   color: #fff;
+  font-size:  1.1rem;
+}
+
+.user-name {
+  color: #007bff;
+  margin-right: 10px;
+  font-size:  1.2rem;
 }
 
 .brand {
