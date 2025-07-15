@@ -82,7 +82,12 @@ export function NavBar() {
           </ul>
         </nav>
         <div className={style.user}>
-          <p>Usuário(a): {user?.user_metadata.full_name} </p>
+          <p>
+            <span className={style["user-name"]}>Usuário(a):</span>
+            {user?.user_metadata.display_name != undefined
+              ? user?.user_metadata.display_name
+              : user?.user_metadata.full_name}
+          </p>
         </div>
       </>
     )
