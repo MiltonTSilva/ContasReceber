@@ -76,6 +76,7 @@ CREATE  TABLE public.accounts_receivable (
   payment_received_at date NULL,
   amount_to_receive numeric NULL,
   costumer_id uuid not null default gen_random_uuid (),
+  user_id uuid not null default gen_random_uuid (),
   active boolean null,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT accounts_receivable_pkey PRIMARY KEY (id),
@@ -136,6 +137,35 @@ USING (
   (auth.uid() = user_id) OR
   (EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND profiles.role = 'admin'))
 );
+
+CREATE POLICY "Users can manage their own accounts_receivable."
+ON public.accounts_receivable FOR ALL
+USING ( auth.uid() = user_id )
+WITH CHECK ( auth.uid() = user_id );
+
+CREATE POLICY "Enable update for users based on user_id"
+ON public.accounts_receivable
+FOR UPDATE
+USING (
+  (auth.uid() = user_id) OR
+  (EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND profiles.role = 'admin'))
+);
+
+-- Cria view para busca por name de customer, received_date e amount_to_receive
+
+CREATE VIEW public.accounts_receivable_view AS
+SELECT
+  ar.id,
+  ar.received_date,
+  to_char(ar.received_date, 'DD/MM/YYYY') AS received_text,
+  ar.payment_received_at,
+  ar.amount_to_receive,
+  ROUND(ar.amount_to_receive, 2)::text AS amount_text,
+  ar.created_at,
+  ar.costumer_id,
+  c.name AS customer_name
+FROM public.accounts_receivable ar
+JOIN public.customer c ON c.id = ar.costumer_id;
 
 ```
 
