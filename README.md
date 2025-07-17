@@ -163,6 +163,7 @@ SELECT
   ROUND(ar.amount_to_receive, 2)::text AS amount_text,
   ar.created_at,
   ar.costumer_id,
+  ar.active,
   c.name AS customer_name
 FROM public.accounts_receivable ar
 JOIN public.customer c ON c.id = ar.costumer_id;
