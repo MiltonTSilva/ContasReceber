@@ -82,12 +82,11 @@ export function ClientesForm() {
         if (error) throw error;
         setDialogMessage("Cliente cadastrado com sucesso!");
         setIsSuccessDialogOpen(true);
-         setName("");
-         setEmail("");
-         setMobile("");
-         setActive(true);
+        setName("");
+        setEmail("");
+        setMobile("");
+        setActive(true);
       }
-     
     } catch (error) {
       setError((error as Error).message);
     } finally {
