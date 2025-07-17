@@ -36,12 +36,6 @@
   height: 50%;
 }
 
-span {
-  color: #555;
-  font-size: 1.2em;
-  text-align: center;
-}
-
 
 @media screen and (max-width: 768px) {
   .container {

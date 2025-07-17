@@ -4,14 +4,13 @@
   align-items: center;
   justify-content: center;
   background-color: rgb(65, 66, 65);
-  width: 380px;
-  padding: 10px;
+  padding: 5px;
+  border-radius: 12px;
 }
 
 .card {
   background-color: rgb(36 36 36 / 1);
   padding: 1rem 3rem;
-  border-radius: 12px;
   width: 100%;
   max-width: 350px;
   text-align: center;
@@ -91,6 +90,6 @@
 
 .error {
   color: red;
-  margin-top: 1rem;
+  margin-top: 0.3rem;
   text-align: center;
 }

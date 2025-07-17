@@ -4,9 +4,14 @@
 
   padding: 7px;
   text-align: center;
-
+  font-size: 1.2em;
   margin-top: 0.2rem;
   flex-shrink: 0;
+}
+span {
+  color: #555;
+  font-size: 1em;
+  text-align: center;
 }
 
 @media screen and (max-width: 768px) {

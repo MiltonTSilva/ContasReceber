@@ -1,5 +1,4 @@
 .container {
-  
   max-width: 100dvw;
   margin: 0 auto;
   display: flex;
@@ -23,7 +22,7 @@
   font-size: 1rem;
 
   transition: background-color 0.2s;
-  width: 140px;
+  width: 180px;
   white-space: nowrap;
 }
 
@@ -39,6 +38,8 @@
 
 .tableContainer {
   width: 100%;
+  display: block;
+  overflow-x: auto;
   overflow-y: auto;
   max-height: 45dvh;
   border: 1px solid #dddddd;
@@ -129,8 +130,8 @@
 }
 
 .header {
-  width: 100%;
   margin-bottom: 1.5rem;
+  width: 100%;
 }
 
 .headerActions {
@@ -253,6 +254,12 @@
   margin-bottom: 0.2rem;
 }
 
+.actionsColumn {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .cardActions {
   margin-top: 1rem;
   display: flex;
@@ -282,26 +289,31 @@
   background-color: #28a745; /* Verde para Ativar/Desativar */
 }
 
-/* --- Media Query para Responsividade --- */
+/* Breakpoint Responsivo: abaixo de 1200px, troca para cartões */
 @media (max-width: 1199px) {
   .tableContainer {
     display: none;
   }
 
   .cardList {
-    display: block;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
   }
-
-  .pagination {
-    flex-direction: column;
-    align-items: center;
-  }
-
   .headerActions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
+    align-items: stretch;
   }
 
   .searchInput {
-    width: 250px;
+    font-size: 0.78rem;
+    width: 100%;
+  }
+
+  .buttonNew {
+    width: 100%;
   }
 }

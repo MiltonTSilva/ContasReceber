@@ -13,11 +13,11 @@
   margin: 10px auto;
 }
 
-.address{
+.address {
   text-align: center;
   font-size: 1.2em;
   color: #1c70be;
-  width: 50%; 
+  width: 50%;
 }
 
 .address a {
@@ -25,7 +25,8 @@
   text-decoration: none;
 }
 
-.author{
-  color: black;
-
+.author {
+  color: #fff;
+  font-weight: 400;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
