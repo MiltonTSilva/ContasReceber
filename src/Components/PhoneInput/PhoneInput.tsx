@@ -13,8 +13,8 @@ const PhoneInput: FC<PhoneInputProps> = ({
   className,
 }: PhoneInputProps) => {
   const inputRef = useMask({
-    mask: "(99) 9.9999-9999",
-    replacement: { 9: /\d/ },
+    mask: "(__) _.____-____",
+    replacement: { _: /\d/ },
   });
 
   return (
