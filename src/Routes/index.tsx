@@ -1,13 +1,16 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+
 import { Register } from "../Pages/login/resgister";
 import { Login } from "../Pages/login/login";
 import { Home } from "../Pages/Home/home";
 import { Clientes } from "../Pages/Clientes/clientes";
-import { Sobre } from "../Pages/Sobre/sobre";
-import { ProtectedRoute } from "../Components/ProtectedRoute/ProtectedRoute";
-import { Recebimento } from "../Pages/Recebimento/recebimento";
-import { useGlobalState } from "../Hooks/useGlobalState";
 import { ClientesForm } from "../Pages/Clientes/clientesForm";
+import { Recebimentos } from "../Pages/Recebimentos/recebimentos";
+import { RecebimentosForm } from "../Pages/Recebimentos/recebimentosForm";
+import { Sobre } from "../Pages/Sobre/sobre";
+
+import { ProtectedRoute } from "../Components/ProtectedRoute/ProtectedRoute";
+import { useGlobalState } from "../Hooks/useGlobalState";
 
 export function AppRoutes() {
   const { user } = useGlobalState();
@@ -46,10 +49,26 @@ export function AppRoutes() {
         }
       />
       <Route
-        path="/recebimento"
+        path="/recebimentos"
         element={
           <ProtectedRoute>
-            <Recebimento />
+            <Recebimentos />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/recebimentos/recebimentosForm"
+        element={
+          <ProtectedRoute>
+            <RecebimentosForm />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/recebimentos/recebimentosForm/:id"
+        element={
+          <ProtectedRoute>
+            <RecebimentosForm />
           </ProtectedRoute>
         }
       />
