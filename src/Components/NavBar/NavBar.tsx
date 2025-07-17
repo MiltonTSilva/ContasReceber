@@ -50,7 +50,7 @@ export function NavBar() {
             <li>
               <Link
                 className={style.link}
-                to="/recebimento"
+                to="/recebimentos"
                 onClick={() => setMenuOpen(false)}
               >
                 Recebimento
