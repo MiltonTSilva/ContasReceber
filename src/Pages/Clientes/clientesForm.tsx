@@ -82,11 +82,12 @@ export function ClientesForm() {
         if (error) throw error;
         setDialogMessage("Cliente cadastrado com sucesso!");
         setIsSuccessDialogOpen(true);
+         setName("");
+         setEmail("");
+         setMobile("");
+         setActive(true);
       }
-      setName("");
-      setEmail("");
-      setMobile("");
-      setActive(true);
+     
     } catch (error) {
       setError((error as Error).message);
     } finally {
@@ -101,56 +102,56 @@ export function ClientesForm() {
   return (
     <Main>
       <div className={style.container}>
+        <h2 className={style.title}>
+          {isEditing ? "Editar Cliente" : "Cadastro de Clientes"}
+        </h2>
         <div className={style.card}>
-          <h2 className={style.title}>
-            {isEditing ? "Editar Cliente" : "Cadastro de Clientes"}
-          </h2>
-
           <form className={style.form} onSubmit={handleSubmit}>
-            <p className={style.subtitle}>Informe os dados abaixo.</p>
-            <input
-              name="name"
-              ref={nameInputRef}
-              className={style.input}
-              type="text"
-              placeholder="Digite o nome."
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-            <input
-              className={style.input}
-              type="email"
-              placeholder="Digite o email."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-{/*             <input
-              className={style.input}
-              type="tel"
-              placeholder="Digite o celular."
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
-              required
-            /> */}
-            <PhoneInput
-              mobile={mobile}
-              setMobile={setMobile}
-              className={style.input}
-            />
-
-            <div className={style.checkboxContainer} tabIndex={0}>
+            <div>
+              <label className={style.label}>Nome:</label>
               <input
-                className={style.inputCheckbox}
-                id="active"
-                type="checkbox"
-                checked={active}
-                onChange={(e) => setActive(e.target.checked)}
+                name="name"
+                ref={nameInputRef}
+                className={style.input}
+                type="text"
+                placeholder="Digite o nome."
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
               />
-              <label htmlFor="active" className={style.label}>
+            </div>
+            <div>
+              <label className={style.label}>Email:</label>
+              <input
+                className={style.input}
+                type="email"
+                placeholder="Digite o email."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            <div>
+              <label className={style.label}>Telefone:</label>
+              <PhoneInput
+                mobile={mobile}
+                setMobile={setMobile}
+                className={style.input}
+              />
+            </div>
+            <div>
+              <label className={style.label}>Status:</label>
+              <div className={style.checkboxContainer} tabIndex={0}>
+                <input
+                  className={style.inputCheckbox}
+                  id="active"
+                  type="checkbox"
+                  checked={active}
+                  onChange={(e) => setActive(e.target.checked)}
+                />
                 Ativo
-              </label>
+              </div>
             </div>
 
             <div className={style.actions}>
