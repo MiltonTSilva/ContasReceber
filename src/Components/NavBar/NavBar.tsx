@@ -83,7 +83,7 @@ export function NavBar() {
         </nav>
         <div className={style.user}>
           <p>
-            <span className={style["user-name"]}>Usuário(a):</span>
+            <span className={style["user-name"]}>Bem-vindo,</span>
             {user?.user_metadata.display_name != undefined
               ? user?.user_metadata.display_name
               : user?.user_metadata.full_name}
