@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Main } from "../../Components/Main/Main";
 import style from "./register.module.css";
 import { supabase } from "../../services/supabase";
@@ -10,6 +10,7 @@ export function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +37,10 @@ export function Register() {
     }
   };
 
+  useEffect(() => {
+    nameInputRef.current?.focus();
+  }, []);
+
   const handleReturn = () => {
     navigate("/login");
   };
@@ -51,6 +56,7 @@ export function Register() {
               Para fazer o seu registro, informe os dados abaixo.
             </p>
             <input
+              ref={nameInputRef}
               className={style.input}
               type="text"
               placeholder="Digite seu nome."
