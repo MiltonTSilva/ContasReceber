@@ -10,6 +10,7 @@ import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs
 import Card from "../../Components/UI/Card/Card";
 import CardField from "../../Components/UI/Card/CardField";
 import { Button } from "../../Components/Button/Button";
+import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 
 type ActionButtonsProps = {
   recebimento: Recebimento;
@@ -65,6 +66,11 @@ export function Recebimentos() {
     string | null
   >(null);
   const [error, setError] = useState<string | null>(null);
+  const {
+    translate: geminiTranslate,
+    translatedText,
+    error: translationError,
+  } = useGeminiTranslation();
 
   const fetchRecebimento = useCallback(async () => {
     if (!user) return;
@@ -82,7 +88,6 @@ export function Recebimentos() {
 
       if (debouncedSearchTerm) {
         const sanitized = debouncedSearchTerm.replace(",", ".").trim();
-        //const encoded = encodeURIComponent(`*${sanitized}*`);
         query = query.or(
           `received_text.ilike.*${sanitized}*,amount_text.ilike.*${sanitized}*,customer_name.ilike.*${sanitized}*`
         );
@@ -221,6 +226,23 @@ export function Recebimentos() {
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(1);
   };
+
+  const translateError = useCallback(
+    (error: string) => {
+      console.log(error);
+      geminiTranslate(error, "português do Brasil");
+      if (translationError) {
+        console.error("Erro na tradução:", translationError);
+      }
+    },
+    [geminiTranslate, translationError]
+  );
+
+  useEffect(() => {
+    if (error) {
+      translateError(error);
+    }
+  }, [error, translateError]);
 
   return (
     <Main>
@@ -407,7 +429,7 @@ export function Recebimentos() {
 
       <ErrorDialogs
         title="Ocorreu um erro"
-        message={error!}
+        message={translatedText}
         isOpen={error !== null}
         onClose={() => setError(null)}
       />

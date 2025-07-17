@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useGlobalState } from "../../Hooks/useGlobalState";
 import Dialogs from "../../Components/Dialogs/Dialogs/Dialogs";
 import PhoneInput from "../../Components/PhoneInput/PhoneInput";
+import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 
 export function ClientesForm() {
   const navigate = useNavigate();
@@ -21,6 +22,12 @@ export function ClientesForm() {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const nameInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    translate: geminiTranslate,
+    translatedText,
+    error: translationError,
+  } = useGeminiTranslation();
 
   const fetchCliente = useCallback(async () => {
     if (!id) return;
@@ -98,6 +105,27 @@ export function ClientesForm() {
     setIsSuccessDialogOpen(false);
   };
 
+  useEffect(() => {
+    nameInputRef.current?.focus();
+  }, []);
+
+  const translateError = useCallback(
+    (error: string) => {
+      console.log(error);
+      geminiTranslate(error, "português do Brasil");
+      if (translationError) {
+        console.error("Erro na tradução:", translationError);
+      }
+    },
+    [geminiTranslate, translationError]
+  );
+
+  useEffect(() => {
+    if (error) {
+      translateError(error);
+    }
+  }, [error, translateError]);
+
   return (
     <Main>
       <div className={style.container}>
@@ -171,7 +199,7 @@ export function ClientesForm() {
               </button>
             </div>
 
-            {error && <p className={style.error}>{error}</p>}
+            {translatedText && <p className={style.error}>{translatedText}</p>}
           </form>
         </div>
       </div>

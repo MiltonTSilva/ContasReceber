@@ -7,6 +7,7 @@ import { useGlobalState } from "../../Hooks/useGlobalState";
 import Dialogs from "../../Components/Dialogs/Dialogs/Dialogs";
 import MoneyInput from "../../Components/UI/MoneyInput/MoneyInput";
 import type { Cliente } from "../../Types/ClientesTypes";
+import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 
 export function RecebimentosForm() {
   const navigate = useNavigate();
@@ -27,6 +28,11 @@ export function RecebimentosForm() {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const costumerIdInputRef = useRef<HTMLSelectElement | null>(null);
+  const {
+    translate: geminiTranslate,
+    translatedText,
+    error: translationError,
+  } = useGeminiTranslation();
 
   const unformatMoney = (value: string): number => {
     if (!value) return 0;
@@ -99,6 +105,23 @@ export function RecebimentosForm() {
   useEffect(() => {
     costumerIdInputRef.current?.focus();
   }, []);
+
+  const translateError = useCallback(
+    (error: string) => {
+      console.log(error);
+      geminiTranslate(error, "português do Brasil");
+      if (translationError) {
+        console.error("Erro na tradução:", translationError);
+      }
+    },
+    [geminiTranslate, translationError]
+  );
+
+  useEffect(() => {
+    if (error) {
+      translateError(error);
+    }
+  }, [error, translateError]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -237,7 +260,7 @@ export function RecebimentosForm() {
               </button>
             </div>
 
-            {error && <p className={style.error}>{error}</p>}
+            {translatedText && <p className={style.error}>{translatedText}</p>}
           </form>
         </div>
       </div>
