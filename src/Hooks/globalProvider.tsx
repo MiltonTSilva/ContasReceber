@@ -24,7 +24,6 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     );
 
     return () => {
-      // Limpa o listener quando o componente é desmontado
       authListener.subscription.unsubscribe();
     };
   }, []);
@@ -53,12 +52,12 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         setError(
           signInError.message || "Ocorreu um erro ao tentar fazer login."
         );
-        setLoading(false); // Finaliza o loading em caso de erro
-        return false; // Indica falha
+        setLoading(false); 
+        return false; 
       }
 
       // Em caso de sucesso, o onAuthStateChange vai cuidar do setLoading e do usuário.
-      return true; // Indica sucesso
+      return true;
     },
     []
   );
