@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Main } from "../../Components/Main/Main";
 import style from "./login.module.css";
 import { useGlobalState } from "../../Hooks/useGlobalState";
 import { Link, useNavigate } from "react-router-dom";
+import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 
 export function Login() {
   const navigate = useNavigate();
@@ -10,6 +11,11 @@ export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const {
+    translate: geminiTranslate,
+    translatedText,
+    error: translationError,
+  } = useGeminiTranslation();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,9 +28,25 @@ export function Login() {
   };
 
   useEffect(() => {
-    // Foca no input de nome quando o componente é montado
     nameInputRef.current?.focus();
   }, []);
+
+  const translateError = useCallback(
+    (error: string) => {
+      console.log(error);
+      geminiTranslate(error, "português do Brasil");
+      if (translationError) {
+        console.error("Erro na tradução:", translationError);
+      }
+    },
+    [geminiTranslate, translationError]
+  );
+
+  useEffect(() => {
+    if (error) {
+      translateError(error);
+    }
+  }, [error, translateError]);
 
   return (
     <Main>
@@ -61,7 +83,7 @@ export function Login() {
             </button>
             <hr className={style.separator} />
             <Link to="/register">Não tem uma conta? Cadastre-se</Link>
-            {error && <p className={style.error}>{error}</p>}
+            {translatedText && <p className={style.error}>{translatedText}</p>}
           </form>
         </div>
       </div>
