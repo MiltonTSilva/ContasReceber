@@ -228,6 +228,7 @@ export function Clientes() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className={style.searchInput}
+              disabled={loading}
             />
             <button
               className={style.buttonNew}
