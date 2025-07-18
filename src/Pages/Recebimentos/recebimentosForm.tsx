@@ -48,9 +48,9 @@ export function RecebimentosForm() {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from("accounts_receivable")
+        .from("accounts_receivable_view")
         .select("*")
-        .eq("id", id)
+        .eq("id", id.trim())
         .single();
 
       if (error) throw error;
@@ -69,7 +69,6 @@ export function RecebimentosForm() {
       }
     } catch (error) {
       setError((error as Error).message);
-      console.error("Erro ao buscar recebimento:", error);
     } finally {
       setLoading(false);
     }
@@ -88,7 +87,6 @@ export function RecebimentosForm() {
       setClientes(data || []);
     } catch (error) {
       setError((error as Error).message);
-      console.error("Erro ao buscar dados do cliente:", error);
     } finally {
       setLoading(false);
     }
@@ -110,7 +108,6 @@ export function RecebimentosForm() {
 
   const translateError = useCallback(
     (error: string) => {
-      console.log(error);
       geminiTranslate(error, "português do Brasil");
       if (translationError) {
         console.error("Erro na tradução:", translationError);
@@ -146,6 +143,9 @@ export function RecebimentosForm() {
           .from("accounts_receivable")
           .update(accounts_receivableData)
           .eq("id", id);
+
+        console.log(accounts_receivableData);
+        console.log(id);
         if (error) throw error;
         setDialogMessage("Recebimento atualizado com sucesso!");
         setIsSuccessDialogOpen(true);
