@@ -56,6 +56,14 @@ constraint users_email_key unique (email),
 constraint users_name_key unique (full_name)
 ) TABLESPACE pg_default;
 
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+
+  -- Habilita a Segurança a Nível de Linha (RLS)
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+
+
 🗂️ Tabela `customer`
 
 create table public.customer (
@@ -68,20 +76,49 @@ create table public.customer (
   constraint Cliente_pkey primary key (id)
 ) TABLESPACE pg_default;
 
+  -- Habilita a Segurança a Nível de Linha (RLS)
+ALTER TABLE public.customer ENABLE ROW LEVEL SECURITY;
+
+-- Cria uma nova política de CREATE,UPDATE,DELETE E SELECT que inclui administradores
+CREATE POLICY "Enable all operations for users and admins"
+ON public.customer
+FOR ALL
+USING (
+  (auth.uid() = user_id) OR
+  (EXISTS (
+    SELECT 1
+    FROM profiles
+    WHERE profiles.id = auth.uid()
+    AND profiles.role = 'admin'
+  ))
+)
+WITH CHECK (
+  (auth.uid() = user_id) OR
+  (EXISTS (
+    SELECT 1
+    FROM profiles
+    WHERE profiles.id = auth.uid()
+    AND profiles.role = 'admin'
+  ))
+);
+
 🗂️ Tabela `accounts_receivable`
 
-CREATE  TABLE public.accounts_receivable (
+create table public.accounts_receivable (
   id uuid not null default gen_random_uuid (),
-  received_date date NULL DEFAULT now(),
-  payment_received_at date NULL,
-  amount_to_receive numeric NULL,
-  costumer_id uuid not null default gen_random_uuid (),
-  user_id uuid not null default gen_random_uuid (),
-  active boolean null,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  CONSTRAINT accounts_receivable_pkey PRIMARY KEY (id),
-  CONSTRAINT accounts_receivable_costumer_id_fkey FOREIGN KEY (costumer_id) REFERENCES customer(id)
+  received_date date not null default now(),
+  payment_received_at date null,
+  amount_to_receive numeric not null default '0'::numeric,
+  costumer_id uuid not null,
+  created_at timestamp with time zone not null default now(),
+  active boolean not null default false,
+  user_id uuid not null,
+  constraint accounts_receivable_pkey primary key (id),
+  constraint accounts_receivable_costumer_id_fkey foreign KEY (costumer_id) references customer (id)
 ) TABLESPACE pg_default;
+
+  -- Habilita a Segurança a Nível de Linha (RLS)
+ALTER TABLE public.accounts_receivable ENABLE ROW LEVEL SECURITY;
 
 -- Cria a tabela para perfis de usuário públicos
 CREATE TABLE public.profiles (
@@ -117,39 +154,6 @@ BEGIN
   RETURN new;
 END;
 $$;
-
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
-
--- Cria uma nova política que permite TODAS as operações (SELECT, INSERT, UPDATE, DELETE)
--- para o usuário que é dono do registro.
-CREATE POLICY "Users can manage their own customers."
-ON public.customer FOR ALL
-USING ( auth.uid() = user_id )
-WITH CHECK ( auth.uid() = user_id );
-
--- Cria uma nova política de UPDATE que inclui administradores
-ALTER POLICY "Enable update for users based on user_id"
-ON public.customer
-FOR UPDATE
-USING (
-  (auth.uid() = user_id) OR
-  (EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND profiles.role = 'admin'))
-);
-
-CREATE POLICY "Users can manage their own accounts_receivable."
-ON public.accounts_receivable FOR ALL
-USING ( auth.uid() = user_id )
-WITH CHECK ( auth.uid() = user_id );
-
-CREATE POLICY "Enable update for users based on user_id"
-ON public.accounts_receivable
-FOR UPDATE
-USING (
-  (auth.uid() = user_id) OR
-  (EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND profiles.role = 'admin'))
-);
 
 -- Cria view para busca por name de customer, received_date e amount_to_receive
 
