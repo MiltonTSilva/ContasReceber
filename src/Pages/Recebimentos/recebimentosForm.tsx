@@ -8,6 +8,7 @@ import Dialogs from "../../Components/Dialogs/Dialogs/Dialogs";
 import MoneyInput from "../../Components/UI/MoneyInput/MoneyInput";
 import type { Cliente } from "../../Types/ClientesTypes";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
+import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
 
 export function RecebimentosForm() {
   const navigate = useNavigate();
@@ -27,7 +28,8 @@ export function RecebimentosForm() {
   const [error, setError] = useState<string | null>(null);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
-  const costumerIdInputRef = useRef<HTMLSelectElement | null>(null);
+  const costumerIdSelectRef = useRef<HTMLSelectElement | null>(null);
+
   const {
     translate: geminiTranslate,
     translatedText,
@@ -103,7 +105,7 @@ export function RecebimentosForm() {
   }, [fetchcliente]);
 
   useEffect(() => {
-    costumerIdInputRef.current?.focus();
+    costumerIdSelectRef.current?.focus();
   }, []);
 
   const translateError = useCallback(
@@ -184,7 +186,7 @@ export function RecebimentosForm() {
                 Cliente:
                 <select
                   name="costumerId"
-                  ref={costumerIdInputRef}
+                  ref={costumerIdSelectRef}
                   className={style.input}
                   value={costumer_id}
                   onChange={(e) => setCostumerId(e.target.value)}
@@ -243,7 +245,11 @@ export function RecebimentosForm() {
               </div>
             </label>
             <div className={style.actions}>
-              <button className={style.button} type="submit" disabled={loading}>
+              <button
+                className={style.button}
+                type="submit"
+                disabled={loading || error !== null}
+              >
                 {loading
                   ? isEditing
                     ? "Salvando..."
@@ -259,8 +265,6 @@ export function RecebimentosForm() {
                 Retornar
               </button>
             </div>
-
-            {translatedText && <p className={style.error}>{translatedText}</p>}
           </form>
         </div>
       </div>
@@ -278,6 +282,13 @@ export function RecebimentosForm() {
       >
         <p>{dialogMessage}</p>
       </Dialogs>
+
+      <ErrorDialogs
+        title="Ocorreu um erro"
+        message={translatedText}
+        isOpen={error !== null}
+        onClose={() => setError(null)}
+      />
     </Main>
   );
 }

@@ -7,6 +7,7 @@ import { useGlobalState } from "../../Hooks/useGlobalState";
 import Dialogs from "../../Components/Dialogs/Dialogs/Dialogs";
 import PhoneInput from "../../Components/PhoneInput/PhoneInput";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
+import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
 
 export function ClientesForm() {
   const navigate = useNavigate();
@@ -49,7 +50,6 @@ export function ClientesForm() {
       }
     } catch (error) {
       setError((error as Error).message);
-      console.error("Erro ao buscar cliente:", error);
     } finally {
       setLoading(false);
     }
@@ -111,7 +111,6 @@ export function ClientesForm() {
 
   const translateError = useCallback(
     (error: string) => {
-      console.log(error);
       geminiTranslate(error, "português do Brasil");
       if (translationError) {
         console.error("Erro na tradução:", translationError);
@@ -182,7 +181,11 @@ export function ClientesForm() {
             </div>
 
             <div className={style.actions}>
-              <button className={style.button} type="submit" disabled={loading}>
+              <button
+                className={style.button}
+                type="submit"
+                disabled={loading || error !== null}
+              >
                 {loading
                   ? isEditing
                     ? "Salvando..."
@@ -198,8 +201,6 @@ export function ClientesForm() {
                 Retornar
               </button>
             </div>
-
-            {translatedText && <p className={style.error}>{translatedText}</p>}
           </form>
         </div>
       </div>
@@ -217,6 +218,13 @@ export function ClientesForm() {
       >
         <p>{dialogMessage}</p>
       </Dialogs>
+
+      <ErrorDialogs
+        title="Ocorreu um erro"
+        message={translatedText}
+        isOpen={error !== null}
+        onClose={() => setError(null)}
+      />
     </Main>
   );
 }
