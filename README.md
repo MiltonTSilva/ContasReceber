@@ -164,6 +164,7 @@ SELECT
   ar.created_at,
   ar.costumer_id,
   ar.active,
+  ar.user_id,
   c.name AS customer_name
 FROM public.accounts_receivable ar
 JOIN public.customer c ON c.id = ar.costumer_id;
