@@ -19,6 +19,8 @@ type ActionButtonsProps = {
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
   onToggleActive: (id: string, active: boolean) => void;
+  isAdmin: boolean;
+  userLogado: ReturnType<typeof useGlobalState>["user"];
 };
 
 const ActionButtons = ({
@@ -27,31 +29,38 @@ const ActionButtons = ({
   onEdit,
   onDelete,
   onToggleActive,
-}: ActionButtonsProps) => (
-  <>
-    <Button
-      variant="secondary"
-      disabled={loading}
-      onClick={() => onEdit(cliente.id)}
-    >
-      Editar
-    </Button>
-    <Button
-      variant="danger"
-      disabled={loading}
-      onClick={() => onDelete(cliente.id)}
-    >
-      Excluir
-    </Button>
-    <Button
-      variant="active"
-      disabled={loading}
-      onClick={() => onToggleActive(cliente.id, cliente.active)}
-    >
-      {cliente.active ? "Desativar" : "Ativar"}
-    </Button>
-  </>
-);
+  isAdmin,
+  userLogado,
+}: ActionButtonsProps) => {
+  const isOwner = userLogado?.id === cliente.user_id;
+  const canPerformAction = isAdmin || isOwner;
+  const isDisabled = loading || !canPerformAction;
+  return (
+    <>
+      <Button
+        variant="secondary"
+        disabled={isDisabled}
+        onClick={() => onEdit(cliente.id)}
+      >
+        Editar
+      </Button>
+      <Button
+        variant="danger"
+        disabled={isDisabled}
+        onClick={() => onDelete(cliente.id)}
+      >
+        Excluir
+      </Button>
+      <Button
+        variant="active"
+        disabled={isDisabled}
+        onClick={() => onToggleActive(cliente.id, cliente.active)}
+      >
+        {cliente.active ? "Desativar" : "Ativar"}
+      </Button>
+    </>
+  );
+};
 
 export function Clientes() {
   const navigate = useNavigate();
@@ -91,7 +100,7 @@ export function Clientes() {
       let query = supabase.from("customer").select("*", { count: "exact" });
 
       if (!isAdmin) {
-        query = query.eq("active", true).eq("user_id", user.id);
+        query = query.eq("active", true);
       }
 
       if (debouncedSearchTerm) {
@@ -173,15 +182,11 @@ export function Clientes() {
   const confirmarExclusao = async () => {
     if (!clienteParaExcluir) return;
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("customer")
         .delete()
-        .eq("id", clienteParaExcluir)
-        .select();
+        .eq("id", clienteParaExcluir);
 
-      if (!data || data.length === 0) {
-        throw new Error("Você não tem permissão para excluir este cliente.");
-      }
       if (error) throw error;
 
       if (clientes.length === 1 && currentPage > 1) {
@@ -304,7 +309,7 @@ export function Clientes() {
               </tr>
             </thead>
             <tbody>
-              {loading ? (
+              {loading && clientes.length === 0 ? (
                 <tr>
                   <td colSpan={5} className={style.loadingRow}>
                     Carregando clientes...
@@ -324,6 +329,8 @@ export function Clientes() {
                         onEdit={handleEditar}
                         onDelete={handleExcluir}
                         onToggleActive={handleAtivarDesativar}
+                        isAdmin={isAdmin}
+                        userLogado={user}
                       />
                     </td>
                   </tr>
@@ -340,7 +347,7 @@ export function Clientes() {
         </div>
 
         <div className={style.cardList}>
-          {loading ? (
+          {loading && clientes.length === 0 ? (
             <div className={style.loadingCardList}>
               <p>Carregando clientes...</p>
             </div>
@@ -363,6 +370,8 @@ export function Clientes() {
                       onEdit={handleEditar}
                       onDelete={handleExcluir}
                       onToggleActive={handleAtivarDesativar}
+                      isAdmin={isAdmin}
+                      userLogado={user}
                     />
                   </Card.Actions>
                 </Card>
