@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Main } from "../../Components/Main/Main";
 import { supabase } from "../../services/supabase";
@@ -11,6 +11,7 @@ import Card from "../../Components/UI/Card/Card";
 import CardField from "../../Components/UI/Card/CardField";
 import { Button } from "../../Components/Button/Button";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
+import { useAdmin } from "../../Hooks/useAdmin";
 
 type ActionButtonsProps = {
   recebimento: Recebimento;
@@ -66,6 +67,10 @@ export function Recebimentos() {
     string | null
   >(null);
   const [error, setError] = useState<string | null>(null);
+  const buscaInputRef = useRef<HTMLInputElement | null>(null);
+  const skipFocusRef = useRef(false);
+  const { isAdmin } = useAdmin();
+
   const {
     translate: geminiTranslate,
     translatedText,
@@ -85,6 +90,10 @@ export function Recebimentos() {
       let query = supabase
         .from("accounts_receivable_view")
         .select("*, custumer:costumer_id(name)", { count: "exact" });
+
+      if (!isAdmin) {
+        query = query.eq("active", true).eq("user_id", user.id);
+      }
 
       if (debouncedSearchTerm) {
         const sanitized = debouncedSearchTerm.replace(",", ".").trim();
@@ -108,7 +117,7 @@ export function Recebimentos() {
     } finally {
       setLoading(false);
     }
-  }, [user, currentPage, itemsPerPage, debouncedSearchTerm]);
+  }, [user, currentPage, itemsPerPage, debouncedSearchTerm, isAdmin]);
 
   useEffect(() => {
     fetchRecebimento();
@@ -121,9 +130,7 @@ export function Recebimentos() {
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "accounts_receivable" },
-        (payload) => {
-          console.log("Mudança recebida!", payload);
-          // Recarrega os Recebimento para refletir a mudança
+        () => {
           fetchRecebimento();
         }
       )
@@ -145,6 +152,15 @@ export function Recebimentos() {
       clearTimeout(handler);
     };
   }, [searchTerm]);
+
+  useEffect(() => {
+    if (loading) return;
+    if (skipFocusRef.current) {
+      skipFocusRef.current = false;
+      return;
+    }
+    buscaInputRef.current?.focus();
+  }, [loading]);
 
   const handleNovoRecebimento = () => {
     navigate("/Recebimentos/RecebimentosForm");
@@ -190,9 +206,10 @@ export function Recebimentos() {
 
   const handleAtivarDesativar = async (id: string, active: boolean) => {
     try {
+      const novoStatus = !active;
       const { data, error } = await supabase
         .from("accounts_receivable")
-        .update({ active: !active })
+        .update({ active: novoStatus })
         .eq("id", id)
         .select("*, custumer:costumer_id(name)");
 
@@ -203,7 +220,16 @@ export function Recebimentos() {
           "Permissão negada. Apenas o proprietário ou um administrador pode alterar este recebimento."
         );
       }
-      setRecebimento(Recebimento.map((r) => (r.id === id ? data[0] : r)));
+      if (novoStatus === false && !isAdmin) {
+        setRecebimento((clientesAtuais) =>
+          clientesAtuais.filter((c) => c.id !== id)
+        );
+        if (Recebimento.length === 1 && currentPage > 1) {
+          setCurrentPage(currentPage - 1);
+        }
+      } else {
+        setRecebimento(Recebimento.map((r) => (r.id === id ? data[0] : r)));
+      }
     } catch (error) {
       const errorMessage = (error as Error).message;
       setError(errorMessage);
@@ -213,23 +239,25 @@ export function Recebimentos() {
   const totalPages = Math.ceil(totalRecebimento / itemsPerPage);
 
   const handlePaginaAnterior = () => {
+    skipFocusRef.current = true;
     setCurrentPage((prev) => Math.max(prev - 1, 1));
   };
 
   const handlePaginaSeguinte = () => {
+    skipFocusRef.current = true;
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   };
 
   const handleItemsPerPageChange = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
+    skipFocusRef.current = true;
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(1);
   };
 
   const translateError = useCallback(
     (error: string) => {
-      console.log(error);
       geminiTranslate(error, "português do Brasil");
       if (translationError) {
         console.error("Erro na tradução:", translationError);
@@ -251,6 +279,8 @@ export function Recebimentos() {
           <h1>Lista de Recebimento</h1>
           <div className={style.headerActions}>
             <input
+              name="buscaInput"
+              ref={buscaInputRef}
               type="text"
               placeholder="Buscar por nome aluno ou data de recebimento ou valor..."
               value={searchTerm}
@@ -261,7 +291,7 @@ export function Recebimentos() {
             <button
               className={style.buttonNew}
               onClick={handleNovoRecebimento}
-              disabled={loading}
+              disabled={loading || error !== null}
             >
               Novo Recebimento
             </button>

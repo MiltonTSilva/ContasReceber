@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Main } from "../../Components/Main/Main";
 import { supabase } from "../../services/supabase";
@@ -11,6 +11,7 @@ import Card from "../../Components/UI/Card/Card";
 import CardField from "../../Components/UI/Card/CardField";
 import { Button } from "../../Components/Button/Button";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
+import { useAdmin } from "../../Hooks/useAdmin";
 
 type ActionButtonsProps = {
   cliente: Cliente;
@@ -61,11 +62,16 @@ export function Clientes() {
   const [totalClientes, setTotalClientes] = useState(0);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [clienteParaExcluir, setClienteParaExcluir] = useState<string | null>(
     null
   );
   const [error, setError] = useState<string | null>(null);
+  const buscaInputRef = useRef<HTMLInputElement | null>(null);
+  const skipFocusRef = useRef(false);
+  const { isAdmin } = useAdmin();
+
   const {
     translate: geminiTranslate,
     translatedText,
@@ -83,6 +89,10 @@ export function Clientes() {
 
     try {
       let query = supabase.from("customer").select("*", { count: "exact" });
+
+      if (!isAdmin) {
+        query = query.eq("active", true).eq("user_id", user.id);
+      }
 
       if (debouncedSearchTerm) {
         query = query.or(
@@ -105,28 +115,24 @@ export function Clientes() {
     } finally {
       setLoading(false);
     }
-  }, [user, currentPage, itemsPerPage, debouncedSearchTerm]);
+  }, [user, currentPage, itemsPerPage, debouncedSearchTerm, isAdmin]);
 
   useEffect(() => {
     fetchClientes();
   }, [fetchClientes]);
 
   useEffect(() => {
-    // Inicia a escuta por mudanças em tempo real na tabela 'customer'
     const channel = supabase
       .channel("customer-changes")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "customer" },
-        (payload) => {
-          console.log("Mudança recebida!", payload);
-          // Recarrega os clientes para refletir a mudança
+        () => {
           fetchClientes();
         }
       )
       .subscribe();
 
-    // Limpa a inscrição ao desmontar o componente para evitar vazamento de memória
     return () => {
       supabase.removeChannel(channel);
     };
@@ -142,6 +148,15 @@ export function Clientes() {
       clearTimeout(handler);
     };
   }, [searchTerm]);
+
+  useEffect(() => {
+    if (loading) return;
+    if (skipFocusRef.current) {
+      skipFocusRef.current = false;
+      return;
+    }
+    buscaInputRef.current?.focus();
+  }, [loading]);
 
   const handleNovoCliente = () => {
     navigate("/clientes/clientesForm");
@@ -185,9 +200,10 @@ export function Clientes() {
 
   const handleAtivarDesativar = async (id: string, active: boolean) => {
     try {
+      const novoStatus = !active;
       const { data, error } = await supabase
         .from("customer")
-        .update({ active: !active })
+        .update({ active: novoStatus })
         .eq("id", id)
         .select();
 
@@ -198,7 +214,17 @@ export function Clientes() {
           "Permissão negada. Apenas o proprietário ou um administrador pode alterar este cliente."
         );
       }
-      setClientes(clientes.map((c) => (c.id === id ? data[0] : c)));
+
+      if (novoStatus === false && !isAdmin) {
+        setClientes((clientesAtuais) =>
+          clientesAtuais.filter((c) => c.id !== id)
+        );
+        if (clientes.length === 1 && currentPage > 1) {
+          setCurrentPage(currentPage - 1);
+        }
+      } else {
+        setClientes(clientes.map((c) => (c.id === id ? data[0] : c)));
+      }
     } catch (error) {
       const errorMessage = (error as Error).message;
       setError(errorMessage);
@@ -208,23 +234,25 @@ export function Clientes() {
   const totalPages = Math.ceil(totalClientes / itemsPerPage);
 
   const handlePaginaAnterior = () => {
+    skipFocusRef.current = true;
     setCurrentPage((prev) => Math.max(prev - 1, 1));
   };
 
   const handlePaginaSeguinte = () => {
+    skipFocusRef.current = true;
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   };
 
   const handleItemsPerPageChange = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
+    skipFocusRef.current = true;
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(1);
   };
 
   const translateError = useCallback(
     (error: string) => {
-      console.log(error);
       geminiTranslate(error, "português do Brasil");
       if (translationError) {
         console.error("Erro na tradução:", translationError);
@@ -246,6 +274,8 @@ export function Clientes() {
           <h1>Lista de Clientes</h1>
           <div className={style.headerActions}>
             <input
+              name="buscaInput"
+              ref={buscaInputRef}
               type="text"
               placeholder="Buscar por nome ou e-mail..."
               value={searchTerm}
@@ -256,7 +286,7 @@ export function Clientes() {
             <button
               className={style.buttonNew}
               onClick={handleNovoCliente}
-              disabled={loading}
+              disabled={loading || error !== null}
             >
               Novo Cliente
             </button>
@@ -382,7 +412,7 @@ export function Clientes() {
 
       <ErrorDialogs
         title="Ocorreu um erro"
-        message={translatedText!}
+        message={translatedText}
         isOpen={error !== null}
         onClose={() => setError(null)}
       />
