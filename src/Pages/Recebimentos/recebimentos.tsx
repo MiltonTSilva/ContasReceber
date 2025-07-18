@@ -177,17 +177,11 @@ export function Recebimentos() {
   const confirmarExclusao = async () => {
     if (!recebimentoParaExcluir) return;
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("accounts_receivable")
         .delete()
-        .eq("id", recebimentoParaExcluir)
-        .select();
+        .eq("id", recebimentoParaExcluir);
 
-      if (!data || data.length === 0) {
-        throw new Error(
-          "Você não tem permissão para excluir este recebimento."
-        );
-      }
       if (error) throw error;
 
       if (Recebimento.length === 1 && currentPage > 1) {
@@ -301,7 +295,7 @@ export function Recebimentos() {
           <table className={style.table}>
             <thead>
               <tr>
-                <th>Aluno</th>
+                <th>Cliente</th>
                 <th>Recebimento</th>
                 <th>Valor </th>
                 <th>Pagamento</th>
@@ -310,7 +304,7 @@ export function Recebimentos() {
               </tr>
             </thead>
             <tbody>
-              {loading ? (
+              {loading && Recebimento.length === 0 ? (
                 <tr>
                   <td colSpan={5} className={style.loadingRow}>
                     Carregando Recebimento...
@@ -366,7 +360,7 @@ export function Recebimentos() {
         </div>
 
         <div className={style.cardList}>
-          {loading ? (
+          {loading && Recebimento.length === 0 ? (
             <div className={style.loadingCardList}>
               <p>Carregando Recebimento...</p>
             </div>
@@ -378,7 +372,7 @@ export function Recebimentos() {
                     {recebimento.custumer?.name ?? "Cliente não encontrado"}
                   </Card.Header>
                   <Card.Body>
-                    <CardField label="Data de recebimento">
+                    <CardField label="Recebimento">
                       {recebimento.received_date
                         ? new Intl.DateTimeFormat("pt-BR").format(
                             new Date(recebimento.received_date)
@@ -386,12 +380,12 @@ export function Recebimentos() {
                         : "-"}
                     </CardField>
 
-                    <CardField label="Data recebida">
+                    <CardField label="Pagamento">
                       {recebimento.payment_received_at
                         ? new Intl.DateTimeFormat("pt-BR").format(
                             new Date(recebimento.payment_received_at)
                           )
-                        : "-"}
+                        : "Aguardando"}
                     </CardField>
                     <CardField label="Valor">
                       {new Intl.NumberFormat("pt-BR", {
