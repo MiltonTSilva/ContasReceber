@@ -4,13 +4,15 @@ import style from "./login.module.css";
 import { useGlobalState } from "../../Hooks/useGlobalState";
 import { Link, useNavigate } from "react-router-dom";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
+import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
 
 export function Login() {
   const navigate = useNavigate();
-  const { signInWithPassword, loading, error } = useGlobalState();
+  const { signInWithPassword, loading } = useGlobalState();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const nameInputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string | null>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
   const {
     translate: geminiTranslate,
     translatedText,
@@ -18,22 +20,25 @@ export function Login() {
   } = useGeminiTranslation();
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    const success = await signInWithPassword({ email, password });
+      const success = await signInWithPassword({ email, password });
 
-    if (success) {
-      navigate("/home");
+      if (success) {
+        navigate("/home");
+      }
+    } catch (error) {
+      setError((error as Error).message);
     }
   };
 
   useEffect(() => {
-    nameInputRef.current?.focus();
+    emailInputRef.current?.focus();
   }, []);
 
   const translateError = useCallback(
     (error: string) => {
-      console.log(error);
       geminiTranslate(error, "português do Brasil");
       if (translationError) {
         console.error("Erro na tradução:", translationError);
@@ -62,9 +67,10 @@ export function Login() {
             </p>
 
             <input
-              ref={nameInputRef}
+              ref={emailInputRef}
               className={style.input}
               type="email"
+              autoComplete="email"
               placeholder="Digite seu email."
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -73,20 +79,31 @@ export function Login() {
             <input
               className={style.input}
               type="password"
+              autoComplete="current-password"
               placeholder="Digite sua senha."
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <button className={style.button} type="submit" disabled={loading}>
+            <button
+              className={style.button}
+              type="submit"
+              disabled={loading || error !== null}
+            >
               {loading ? "Entrando..." : "Entrar"}
             </button>
             <hr className={style.separator} />
             <Link to="/register">Não tem uma conta? Cadastre-se</Link>
-            {translatedText && <p className={style.error}>{translatedText}</p>}
           </form>
         </div>
       </div>
+
+      <ErrorDialogs
+        title="Ocorreu um erro"
+        message={translatedText}
+        isOpen={error !== null && !!translatedText}
+        onClose={() => setError(null)}
+      />
     </Main>
   );
 }
