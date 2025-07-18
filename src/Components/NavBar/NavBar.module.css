@@ -30,9 +30,6 @@
   justify-content: flex-start;
   align-items: center;
   list-style: none;
-  margin: 0;
-  margin-left: 50px;
-
 }
 
 .nav li {
@@ -53,13 +50,13 @@
   align-items: flex-end;
   flex-direction: column;
   color: #fff;
-  font-size:  1.1rem;
+  font-size: 1.1rem;
 }
 
 .user-name {
   color: #007bff;
   margin-right: 10px;
-  font-size:  1.2rem;
+  font-size: 1.2rem;
 }
 
 .brand {
@@ -118,15 +115,21 @@
 }
 
 @media (max-width: 1199px) {
-
   .nav ul {
+    background-color: #007bff;
+    border-radius: 5px;
     display: none;
     flex-direction: column;
-    width: 60%;
+    width: 35%;
     position: absolute;
-    top: 15%;
-    left: 20%;
+    top: 20%;
+    left: 2%;
     text-align: center;
+  }
+
+  .link {
+    color: #fff;
+    font-size: 0.78rem;
   }
 
   .nav.open {

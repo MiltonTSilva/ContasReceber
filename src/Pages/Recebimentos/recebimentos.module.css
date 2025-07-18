@@ -295,6 +295,10 @@
     display: none;
   }
 
+  .header {
+    font-size: 0.78rem;
+  }
+
   .cardList {
     display: grid;
     gap: 1.5rem;
@@ -314,6 +318,7 @@
   }
 
   .buttonNew {
+    font-size: 0.78rem;
     width: 100%;
   }
 }

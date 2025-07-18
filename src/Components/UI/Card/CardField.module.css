@@ -1,12 +1,15 @@
 .cardField {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.cardField span{
+  text-align: start;
 }
 .label {
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: #666;
   font-weight: bold;
-  margin-bottom: 2px;
 }
 .value {
   font-size: 1rem;

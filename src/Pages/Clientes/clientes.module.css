@@ -1,5 +1,4 @@
 .container {
-  
   max-width: 100dvw;
   margin: 0 auto;
   display: flex;
@@ -288,6 +287,9 @@
     display: none;
   }
 
+  .header {
+    font-size: 0.78rem;
+  }
   .cardList {
     display: block;
   }
