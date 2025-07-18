@@ -13,9 +13,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Gerencia o estado de autenticação
   useEffect(() => {
-    // onAuthStateChange é chamado na inicialização e em cada mudança de estado
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session: Session | null) => {
         setUser(session?.user ?? null);
@@ -38,9 +36,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         !credentials.email ||
         !credentials.password
       ) {
-        setError("Email e senha são obrigatórios.");
         setLoading(false);
-        return false;
+        throw new Error("Email e senha são obrigatórios.");
       }
 
       const { error: signInError } = await supabase.auth.signInWithPassword(
@@ -48,15 +45,13 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       );
 
       if (signInError) {
-        console.error("Erro no login:", signInError);
-        setError(
+        setLoading(false);
+        throw new Error(
           signInError.message || "Ocorreu um erro ao tentar fazer login."
         );
-        setLoading(false); 
-        return false; 
       }
 
-      // Em caso de sucesso, o onAuthStateChange vai cuidar do setLoading e do usuário.
+      setLoading(false);
       return true;
     },
     []
