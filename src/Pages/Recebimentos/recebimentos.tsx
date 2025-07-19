@@ -124,7 +124,6 @@ export function Recebimentos() {
   }, [fetchRecebimento]);
 
   useEffect(() => {
-    // Inicia a escuta por mudanças em tempo real na tabela 'accounts_receivable'
     const channel = supabase
       .channel("accounts_receivable-changes")
       .on(
@@ -136,7 +135,6 @@ export function Recebimentos() {
       )
       .subscribe();
 
-    // Limpa a inscrição ao desmontar o componente para evitar vazamento de memória
     return () => {
       supabase.removeChannel(channel);
     };
@@ -374,17 +372,17 @@ export function Recebimentos() {
                   <Card.Body>
                     <CardField label="Recebimento">
                       {recebimento.received_date
-                        ? new Intl.DateTimeFormat("pt-BR").format(
-                            new Date(recebimento.received_date)
-                          )
+                        ? new Intl.DateTimeFormat("pt-BR", {
+                            timeZone: "UTC",
+                          }).format(new Date(recebimento.received_date))
                         : "-"}
                     </CardField>
 
                     <CardField label="Pagamento">
                       {recebimento.payment_received_at
-                        ? new Intl.DateTimeFormat("pt-BR").format(
-                            new Date(recebimento.payment_received_at)
-                          )
+                        ? new Intl.DateTimeFormat("pt-BR", {
+                            timeZone: "UTC",
+                          }).format(new Date(recebimento.payment_received_at))
                         : "Aguardando"}
                     </CardField>
                     <CardField label="Valor">
