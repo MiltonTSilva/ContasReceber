@@ -23,11 +23,15 @@ export function NavBar() {
             </div>
           </Link>
 
-          <div className={style.menuIcon} onClick={toggleMenu}>
+          <div
+            className={`${style.menuIcon} ${menuOpen ? style.open : ""}`}
+            onClick={toggleMenu}
+          >
             <div />
             <div />
             <div />
           </div>
+
           <ul className={`${style.nav} ${menuOpen ? style.open : ""}`}>
             <li>
               <Link
