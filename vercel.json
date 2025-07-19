@@ -1,0 +1,14 @@
+{
+  "headers": [
+    {
+      "source": "/clientes",
+
+      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+    },
+    {
+      "source": "/recebimentos",
+
+      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+    }
+  ]
+}
