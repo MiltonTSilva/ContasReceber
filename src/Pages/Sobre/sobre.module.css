@@ -14,14 +14,14 @@
 }
 
 .address {
-  text-align: center;
+  display: grid;
   font-size: 1.2em;
-  color: #1c70be;
-  width: 50%;
+  grid-template-columns: auto auto;
+  gap: 8px 12px;
+  margin-top: 5px;
 }
 
 .address a {
-  color: #1c70be;
   text-decoration: none;
 }
 
@@ -29,4 +29,32 @@
   color: #fff;
   font-weight: 400;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin-bottom: 1px;
+  text-align: right;
+}
+.author + span {
+  color: #1c70be;
+  text-align: left;
+  font-style: italic;
+}
+
+@media (max-width: 1199px) {
+  .address {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    font-size: 1em;
+  }
+
+  .address a {
+    text-decoration: none;
+  }
+
+  .author + span {
+    color: #1c70be;
+    text-align: left;
+    font-style: italic;
+  }
 }

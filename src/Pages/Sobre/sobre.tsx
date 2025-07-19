@@ -17,24 +17,44 @@ export function Sobre() {
       </p>
 
       <address className={style.address}>
-        <span className={style.author}>Criado por: </span> Milton Tomé da Silva
-        <br />
-        <span className={style.author}> E-mail: </span> miltontsilva@gmail.com
-        <br />
-        <span className={style.author}>Github: </span>
-        <a href="https://github.com/MiltonTSilva">
-          https://github.com/MiltonTSilva
-        </a>
-        <br />
-        <span className={style.author}>LinkedIn: </span>
-        <a href="https://www.linkedin.com/in/miltontsilva/">
-          https://www.linkedin.com/in/miltontsilva/
-        </a>
-        <br />
-        <span className={style.author}> Whatsapp: </span>
-        <a href="https://api.whatsapp.com/send?phone=5511967079318">
-          (11) 9.6707-9318
-        </a>
+        <span className={style.author}>Criado por:</span>
+        <span>Milton Tomé da Silva</span>
+
+        <span className={style.author}>E-mail:</span>
+        <span>miltontsilva@gmail.com</span>
+
+        <span className={style.author}>Github:</span>
+        <span>
+          <a
+            href="https://github.com/MiltonTSilva"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            https://github.com/MiltonTSilva
+          </a>
+        </span>
+
+        <span className={style.author}>LinkedIn:</span>
+        <span>
+          <a
+            href="https://www.linkedin.com/in/miltontsilva/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            https://www.linkedin.com/in/miltontsilva/
+          </a>
+        </span>
+
+        <span className={style.author}>Whatsapp:</span>
+        <span>
+          <a
+            href="https://api.whatsapp.com/send?phone=5511967079318"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            (11) 9.6707-9318
+          </a>
+        </span>
       </address>
     </Main>
   );
