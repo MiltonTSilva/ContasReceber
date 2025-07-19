@@ -1,9 +1,6 @@
 .container {
-  min-height: auto;
   background-color: #1c70be;
 }
-
-
 
 .title {
   color: #1c70be;
@@ -20,7 +17,6 @@
   margin: 10px auto;
 }
 
-
 .image-container {
   width: 100%;
   height: auto;
@@ -36,12 +32,7 @@
   height: 50%;
 }
 
-
 @media screen and (max-width: 768px) {
-  .container {
-    min-height: auto;
-    background-color: #1c70be;
-  }
   .image-container {
     flex-direction: row;
   }

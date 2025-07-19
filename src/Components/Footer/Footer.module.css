@@ -14,8 +14,8 @@ span {
   text-align: center;
 }
 
-@media screen and (max-width: 768px) {
-  .footer p {
+@media screen and (max-width: 1199px) {
+  .footer {
     display: flex;
     flex-direction: column;
     align-items: center;
