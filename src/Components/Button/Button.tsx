@@ -1,7 +1,13 @@
 import React from "react";
 import styles from "./button.module.css";
 
-type ButtonVariant = "primary" | "secondary" | "active" | "danger" | "cancel";
+type ButtonVariant =
+  | "bg-primary"
+  | "bg-secondary"
+  | "bg-active"
+  | "bg-danger"
+  | "bg-cancel"
+  | "bg-warning";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -10,11 +16,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button = ({
   children,
-  variant = "primary",
+  variant = "bg-primary",
   className,
   ...props
 }: ButtonProps) => {
-  const buttonClass = `${styles.button} ${styles[variant]} ${className || ""}`;
+  const buttonClass = `${styles.button} ${styles[variant]} button ${variant} ${
+    className || ""
+  }`;
 
   return (
     <button className={buttonClass.trim()} {...props}>
