@@ -5,3 +5,137 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
 }
+
+#root {
+  padding: 0.5rem;
+  background-image: radial-gradient(
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.5) 100%
+    ),
+    radial-gradient(rgba(0, 0, 0, 0) 33%, rgba(0, 0, 0, 0.3) 166%);
+  min-height: 100dvh;
+
+  --bg-primary: #007bff;
+  --bgh-primary: #0056b3;
+
+  --bg-secondary: #6c757d;
+  --bgh-secondary: #6c757d;
+
+  --bg-danger: #dc3545;
+  --bgh-danger: #c82333;
+
+  --bg-success: #28a745;
+  --bgh-success: #218838;
+
+  --bg-warning: #ffc107;
+  --bgh-warning: #b08503;
+
+  --bg-info: #17a2b8;
+  --bgh-info: #117a8b;
+
+  --bg-cancel: #6c757d;
+  --bgh-cancel: #5a6268;
+
+  --bg-active: #04f73d;
+  --bgh-active: #03a72a;
+
+  --bg-disabled: #9ca3af;
+  --bgh-disabled: #6b7280;
+
+  --bg-light: #f8f9fa;
+  --bgh-light: #e2e6ea;
+
+  --bg-dark: #343a40;
+  --bgh-dark: #23272b;
+
+  --bg-white: #ffffff;
+  --bgh-white: #ffffff;
+
+  --bg-black: #000000;
+  --bgh-black: #000000;
+
+  --bg-gray: #6c757d;
+  --bgh-gray: #5a6268;
+
+  --bg-gray-dark: #343a40;
+  --bgh-gray-dark: #23272b;
+
+  --bg-gray-light: #f8f9fa;
+  --bgh-gray-light: #e2e6ea;
+
+  --bg-gray-lighter: #e9ecef;
+  --bgh-gray-lighter: #ced4da;
+
+  --bg-gray-dark: #343a40;
+  --bgh-gray-dark: #23272b;
+
+  --bg-gray-darker: #212529;
+  --bgh-gray-darker: #1c1f23;
+
+  --bg-border-color: #dee2e6;
+
+  --bg-border-color-dark: #495057;
+}
+
+/* --- Variantes --- */
+
+.bg-primary {
+  background-color: var(--bg-primary);
+}
+
+.bg-primary:hover:not(:disabled) {
+  background-color: var(--bgh-primary);
+}
+
+.bg-secondary {
+  background-color: var(--bg-secondary);
+}
+
+.bg-secondary:hover:not(:disabled) {
+  background-color: var(--bgh-secondary);
+}
+
+.bg-danger {
+  background-color: var(--bg-danger);
+}
+
+.bg-danger:hover:not(:disabled) {
+  background-color: var(--bgh-danger);
+}
+
+.bg-warning {
+  background-color: var(--bg-warning);
+}
+
+.bg-warning:hover:not(:disabled) {
+  background-color: var(--bgh-warning);
+}
+
+.bg-cancel {
+  background-color: var(--bg-cancel);
+}
+
+.bg-cancel:hover:not(:disabled) {
+  background-color: var(--bgh-cancel);
+}
+
+.bg-active {
+  background-color: var(--bg-active);
+  width: 35%;
+}
+
+.bg-active:hover:not(:disabled) {
+  background-color: var(--bgh-active);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  border-radius: 10px;
+  background-color: var(--bg-black);
+  width: 100%;
+  grid-column: 1 / -1;
+  padding: 1rem;
+}
