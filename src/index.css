@@ -128,6 +128,24 @@
   background-color: var(--bgh-active);
 }
 
+.bg-info {
+  background-color: var(--bg-info);
+  width: 35%;
+}
+
+.bg-info:hover:not(:disabled) {
+  background-color: var(--bgh-info);
+}
+
+.bg-success {
+  background-color: var(--bg-success);
+  width: 35%;
+}
+
+.bg-success:hover:not(:disabled) {
+  background-color: var(--bgh-success);
+}
+
 .actions {
   display: flex;
   justify-content: space-between;
