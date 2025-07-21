@@ -7,7 +7,11 @@ type ButtonVariant =
   | "bg-active"
   | "bg-danger"
   | "bg-cancel"
-  | "bg-warning";
+  | "bg-warning"
+  | "bg-info"
+  | "bg-success"
+  | "bg-light"
+  | "bg-dark";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
