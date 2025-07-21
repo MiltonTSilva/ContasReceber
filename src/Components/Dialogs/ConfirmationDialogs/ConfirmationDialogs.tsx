@@ -27,10 +27,10 @@ export function ConfirmationDialogs({
       titleColor={titleColor}
       footer={
         <>
-          <Button variant="cancel" onClick={onClose}>
+          <Button variant="bg-cancel" onClick={onClose}>
             Cancelar
           </Button>
-          <Button variant="danger" onClick={onConfirm}>
+          <Button variant="bg-danger" onClick={onConfirm}>
             Confirmar
           </Button>
         </>
