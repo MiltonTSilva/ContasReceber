@@ -29,7 +29,7 @@ export const useGeminiTranslation = () => {
       setTranslatedText("");
 
       try {
-        const prompt = `Traduza o seguinte texto para ${targetLanguage}: "${text}", mostre apenas uma resposta`;
+        const prompt = `Traduza o seguinte texto para ${targetLanguage}: "${text}", mostre apenas uma resposta, e retire a terminologia técnica e o contexto de banco de dados`;
 
         const response = await fetch(API_URL, {
           method: "POST",
