@@ -22,7 +22,7 @@ export function ErrorDialogs({
       onClose={onClose}
       titleColor="red"
       footer={
-        <Button variant="primary" onClick={onClose}>
+        <Button variant="bg-primary" onClick={onClose}>
           OK
         </Button>
       }
