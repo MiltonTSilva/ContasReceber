@@ -12,30 +12,6 @@
   text-align: center;
 }
 
-.buttonNew {
-  background-color: #007bff;
-  color: white;
-  padding: 0.2rem 1.5rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-
-  transition: background-color 0.2s;
-  width: 180px;
-  white-space: nowrap;
-}
-
-.buttonNew:disabled {
-  background-color: #9ca3af;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.buttonNew:hover:not(:disabled) {
-  background-color: #0056b3;
-}
-
 .tableContainer {
   width: 100%;
   display: block;
@@ -51,11 +27,11 @@
   width: 100%;
   border-collapse: collapse;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: rgb(36 36 36 / 1);
+  background-color: var(--bg-gray-darker);
 }
 
 .table th {
-  background-color: #343a40;
+  background-color: var(--bg-gray);
   font-size: 1.1rem;
   position: sticky;
   top: 0;
@@ -74,7 +50,7 @@
 }
 
 .table tbody tr:hover {
-  background-color: #007bff;
+  background-color: var(--bg-primary);
 }
 
 .table tbody tr:last-child td {
@@ -143,11 +119,12 @@
 }
 
 .searchInput {
-  background-color: #007bff;
-  padding: 0.2rem 1.5rem;
+  background-color: var(--bg-primary);
+  padding: 0.3rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 1.3rem;
+  font-weight: bold;
   flex-grow: 1;
   width: 450px;
 }
@@ -158,13 +135,13 @@
 }
 
 .searchInput:disabled {
-  background-color: #9ca3af;
+  background-color: var(--bg-disabled);
   cursor: not-allowed;
   opacity: 0.7;
 }
 
 .searchInput:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: var(--bgh-disabled);
 }
 
 .loadingRow {
@@ -216,78 +193,6 @@
   display: none;
 }
 
-.card {
-  background-color: #343a40;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.cardHeader {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 0.5rem;
-}
-
-.cardBody {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.cardField label {
-  font-weight: bold;
-  color: #fff;
-  font-size: 1.3rem;
-  display: block;
-  margin-bottom: 0.2rem;
-}
-
-.cardField span {
-  font-weight: bold;
-  color: #000;
-  font-size: 1.2rem;
-  margin-bottom: 0.2rem;
-}
-
-.actionsColumn {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.cardActions {
-  margin-top: 1rem;
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
-}
-
-.cardActions button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: white;
-  font-size: 0.9rem;
-  transition: background-color 0.2s;
-}
-
-.cardActions button:nth-child(1) {
-  background-color: #ffc107; /* Amarelo para Editar */
-}
-
-.cardActions .deleteButton {
-  background-color: #dc3545; /* Vermelho para Excluir */
-}
-
-.cardActions button:last-child {
-  background-color: #28a745; /* Verde para Ativar/Desativar */
-}
 
 /* Breakpoint Responsivo: abaixo de 1200px, troca para cartões */
 @media (max-width: 1199px) {
@@ -313,12 +218,12 @@
   }
 
   .searchInput {
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     width: 100%;
   }
 
-  .buttonNew {
-    font-size: 0.78rem;
+  .button {
+    padding: 0.3rem;
     width: 100%;
   }
 }
