@@ -7,13 +7,13 @@ export function Sobre() {
       <h1 className={style.title}>Sobre</h1>
       <p className={style.phrase}>
         Este aplicativo foi criado com o objetivo de centralizar as contas a
-        receber de alunos.
+        receber de clientes.
       </p>
 
       <p className={style.phrase}>
         O aplicativo é uma ferramenta simples e eficiente para o controle de
-        contas a receber, pensado especialmente para professores que desejam
-        organizar seus recebimentos com clareza e agilidade.
+        contas a receber, pensado qualquer pessoa que deseja organizar seus
+        recebimentos com clareza e agilidade.
       </p>
 
       <address className={style.address}>

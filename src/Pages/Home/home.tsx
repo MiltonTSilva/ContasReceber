@@ -8,12 +8,11 @@ export function Home() {
         <h1 className={style.title}>Bem-vindo</h1>
 
         <p className={style.phrase}>
-          Um aplicativo simples e eficiente para o controle de contas a
-          receber.
+          Um aplicativo simples e eficiente para o controle de contas a receber.
         </p>
         <p className={style.phrase}>
-          Pensado para professores que desejam organizar seus recebimentos com
-          clareza e agilidade.
+          Pensado para qualquer pessoa que deseja organizar seus recebimentos
+          com clareza e agilidade.
         </p>
       </Main>
     </div>
