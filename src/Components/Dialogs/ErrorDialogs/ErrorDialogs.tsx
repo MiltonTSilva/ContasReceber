@@ -27,7 +27,11 @@ export function ErrorDialogs({
         </Button>
       }
     >
-      <p className={style.dialogsMessage}>{message}</p>
+      {message.length === 0 ? (
+        "Aguare um momento, estamos processando sua solicitação."
+      ) : (
+        <p className={style.dialogsMessage}>{message}</p>
+      )}
     </Dialogs>
   );
 }
