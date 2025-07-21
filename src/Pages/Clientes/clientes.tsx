@@ -38,21 +38,21 @@ const ActionButtons = ({
   return (
     <>
       <Button
-        variant="secondary"
+        variant="bg-warning"
         disabled={isDisabled}
         onClick={() => onEdit(cliente.id)}
       >
         Editar
       </Button>
       <Button
-        variant="danger"
+        variant="bg-danger"
         disabled={isDisabled}
         onClick={() => onDelete(cliente.id)}
       >
         Excluir
       </Button>
       <Button
-        variant="active"
+        variant="bg-active"
         disabled={isDisabled}
         onClick={() => onToggleActive(cliente.id, cliente.active)}
       >
@@ -288,13 +288,13 @@ export function Clientes() {
               className={style.searchInput}
               disabled={loading}
             />
-            <button
-              className={style.buttonNew}
+            <Button
+              variant="bg-primary"
               onClick={handleNovoCliente}
               disabled={loading || error !== null}
             >
               Novo Cliente
-            </button>
+            </Button>
           </div>
         </div>
         <div className={style.tableContainer}>
@@ -400,21 +400,23 @@ export function Clientes() {
           </div>
 
           <div className={style.paginationControls}>
-            <button
+            <Button
+              variant="bg-primary"
               onClick={handlePaginaAnterior}
               disabled={currentPage === 1 || loading}
             >
               Anterior
-            </button>
+            </Button>
             <span>
               Página {currentPage} de {totalPages}
             </span>
-            <button
+            <Button
+              variant="bg-primary"
               onClick={handlePaginaSeguinte}
               disabled={currentPage >= totalPages || loading}
             >
               Próxima
-            </button>
+            </Button>
           </div>
         </div>
       </div>

@@ -9,6 +9,8 @@ import MoneyInput from "../../Components/UI/MoneyInput/MoneyInput";
 import type { Cliente } from "../../Types/ClientesTypes";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
+import { Button } from "../../Components/Button/Button";
+import "../../index.css";
 
 export function RecebimentosForm() {
   const navigate = useNavigate();
@@ -244,9 +246,16 @@ export function RecebimentosForm() {
                 Ativo
               </div>
             </label>
-            <div className={style.actions}>
-              <button
-                className={style.button}
+            <div className="actions">
+              <Button
+                type="reset"
+                variant="bg-cancel"
+                onClick={() => navigate("/recebimentos")}
+              >
+                Retornar
+              </Button>
+              <Button
+                variant="bg-primary"
                 type="submit"
                 disabled={loading || error !== null}
               >
@@ -255,15 +264,7 @@ export function RecebimentosForm() {
                     ? "Salvando..."
                     : "Cadastrando..."
                   : "Salvar"}
-              </button>
-
-              <button
-                type="reset"
-                className={style.button}
-                onClick={() => navigate("/recebimentos")}
-              >
-                Retornar
-              </button>
+              </Button>
             </div>
           </form>
         </div>
@@ -275,9 +276,13 @@ export function RecebimentosForm() {
         onClose={handleCloseDialog}
         titleColor="green"
         footer={
-          <button className={style.button} onClick={handleCloseDialog}>
+          <Button
+            variant="bg-primary"
+            type="button"
+            onClick={handleCloseDialog}
+          >
             OK
-          </button>
+          </Button>
         }
       >
         <p>{dialogMessage}</p>

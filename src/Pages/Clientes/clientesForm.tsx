@@ -8,6 +8,7 @@ import Dialogs from "../../Components/Dialogs/Dialogs/Dialogs";
 import PhoneInput from "../../Components/PhoneInput/PhoneInput";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
+import { Button } from "../../Components/Button/Button";
 
 export function ClientesForm() {
   const navigate = useNavigate();
@@ -180,9 +181,17 @@ export function ClientesForm() {
               </div>
             </div>
 
-            <div className={style.actions}>
-              <button
-                className={style.button}
+            <div className="actions">
+              <Button
+                type="reset"
+                variant="bg-cancel"
+                onClick={() => navigate("/clientes")}
+              >
+                Retornar
+              </Button>
+
+              <Button
+                variant="bg-primary"
                 type="submit"
                 disabled={loading || error !== null}
               >
@@ -191,15 +200,7 @@ export function ClientesForm() {
                     ? "Salvando..."
                     : "Cadastrando..."
                   : "Salvar"}
-              </button>
-
-              <button
-                type="reset"
-                className={style.button}
-                onClick={() => navigate("/clientes")}
-              >
-                Retornar
-              </button>
+              </Button>
             </div>
           </form>
         </div>
@@ -211,9 +212,13 @@ export function ClientesForm() {
         onClose={handleCloseDialog}
         titleColor="green"
         footer={
-          <button className={style.button} onClick={handleCloseDialog}>
+          <Button
+            variant="bg-primary"
+            type="button"
+            onClick={handleCloseDialog}
+          >
             OK
-          </button>
+          </Button>
         }
       >
         <p>{dialogMessage}</p>

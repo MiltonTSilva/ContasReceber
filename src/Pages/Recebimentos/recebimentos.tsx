@@ -30,21 +30,21 @@ const ActionButtons = ({
 }: ActionButtonsProps) => (
   <>
     <Button
-      variant="secondary"
+      variant="bg-warning"
       disabled={loading}
       onClick={() => onEdit(recebimento.id)}
     >
       Editar
     </Button>
     <Button
-      variant="danger"
+      variant="bg-danger"
       disabled={loading}
       onClick={() => onDelete(recebimento.id)}
     >
       Excluir
     </Button>
     <Button
-      variant="active"
+      variant="bg-active"
       disabled={loading}
       onClick={() => onToggleActive(recebimento.id, recebimento.active)}
     >
@@ -274,19 +274,19 @@ export function Recebimentos() {
               name="buscaInput"
               ref={buscaInputRef}
               type="text"
-              placeholder="Buscar por nome aluno ou data de recebimento ou valor..."
+              placeholder="Buscar por cliente, data de recebimento ou valor..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className={style.searchInput}
               disabled={loading}
             />
-            <button
-              className={style.buttonNew}
+            <Button
+              className={style.button}
               onClick={handleNovoRecebimento}
               disabled={loading || error !== null}
             >
               Novo Recebimento
-            </button>
+            </Button>
           </div>
         </div>
         <div className={style.tableContainer}>
@@ -430,21 +430,21 @@ export function Recebimentos() {
           </div>
 
           <div className={style.paginationControls}>
-            <button
+            <Button
               onClick={handlePaginaAnterior}
               disabled={currentPage === 1 || loading}
             >
               Anterior
-            </button>
+            </Button>
             <span>
               Página {currentPage} de {totalPages}
             </span>
-            <button
+            <Button
               onClick={handlePaginaSeguinte}
               disabled={currentPage >= totalPages || loading}
             >
               Próxima
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -461,7 +461,9 @@ export function Recebimentos() {
         titleColor="red"
         message="Tem certeza que deseja excluir este recebimento? Esta ação não pode ser desfeita."
         isOpen={recebimentoParaExcluir !== null}
-        onClose={() => setRecebimentoParaExcluir(null)}
+        onClose={() => {
+          setRecebimentoParaExcluir(null);
+        }}
         onConfirm={confirmarExclusao}
       />
     </Main>
