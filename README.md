@@ -2,15 +2,15 @@
 
 É um aplicativo simples e eficiente para o controle de contas a receber.
 
-Pensado para professores que desejam organizar seus recebimentos com clareza e agilidade.
+Pensado para qualquer pessoa que deseja organizar seus recebimentos com clareza e agilidade.
 
 🔍 Funcionalidades principais:
 
-Cadastro rápido de alunos
+Cadastro rápido de clientes
 
 Cadastro do recebimento
 
-Visualização por aluno, data de vencimento, status de pagamento
+Visualização por cliente, data de vencimento, status de pagamento
 
 🧩 Ideal para quem busca praticidade sem abrir mão do controle.
 
@@ -20,7 +20,7 @@ Este projeto foi desenvolvido com foco na simplicidade e eficiência, utilizando
 
 ## 🧩 Frontend: React
 
-Interface responsiva e intuitiva, voltada para professores
+Interface responsiva e intuitiva
 
 Componentização com React Hooks e Context API para melhor gerenciamento de estado
 
