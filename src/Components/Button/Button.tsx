@@ -5,6 +5,7 @@ type ButtonVariant =
   | "bg-primary"
   | "bg-secondary"
   | "bg-active"
+  | "bg-notActive"
   | "bg-danger"
   | "bg-cancel"
   | "bg-warning"
