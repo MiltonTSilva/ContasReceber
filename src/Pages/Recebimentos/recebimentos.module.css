@@ -37,6 +37,7 @@
   top: 0;
   z-index: 1;
   border: 1px solid #dddddd;
+  color: #fff;
 }
 
 .table th,
@@ -44,12 +45,10 @@
   padding: 5px 15px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  color: #fff;
   vertical-align: middle;
   white-space: nowrap;
 }
 
-/* Exemplo: aplica hover apenas nas colunas 2 e 4 */
 .table tbody tr:hover td:nth-child(1),
 .table tbody tr:hover td:nth-child(2),
 .table tbody tr:hover td:nth-child(3),
@@ -126,7 +125,7 @@
 
 .searchInput {
   background-color: var(--bg-primary);
-  padding: 0.3rem;
+  padding: 0.1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1.3rem;
@@ -199,12 +198,26 @@
   display: none;
 }
 
-.active {
-  width: 25%;
+.received {
+  background-color: var(--bg-gray-darker);
+  color: var(--bg-white);
 }
 
-.desactive {
+.notReceived {
   background-color: var(--bg-info);
+  color: var(--bg-black);
+  font-weight: bold;
+}
+
+.active {
+  background-color: var(--bg-active);
+  color: var(--bg-white);
+}
+
+.notActive {
+  background-color: var(--bg-notActive);
+  color: var(--bg-black);
+  font-weight: bold;
 }
 
 /* Breakpoint Responsivo: abaixo de 1200px, troca para cartões */

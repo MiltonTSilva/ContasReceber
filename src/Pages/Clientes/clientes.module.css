@@ -41,12 +41,15 @@
   padding: 5px 15px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  color: #fff;
+
   vertical-align: middle;
   white-space: nowrap;
 }
 
-.table tbody tr:hover {
+.table tbody tr:hover td:nth-child(1),
+.table tbody tr:hover td:nth-child(2),
+.table tbody tr:hover td:nth-child(3),
+.table tbody tr:hover td:nth-child(4) {
   background-color: var(--bg-primary);
 }
 
@@ -118,7 +121,7 @@
 
 .searchInput {
   background-color: var(--bg-primary);
-  padding: 0.3rem;
+  padding: 0.1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1.3rem;
@@ -189,6 +192,17 @@
 /* --- Estilos para os Cards --- */
 .cardList {
   display: none;
+}
+
+.active {
+  background-color: var(--bg-active);
+  color: var(--bg-white);
+}
+
+.notActive {
+  background-color: var(--bg-notActive);
+  color: var(--bg-black);
+  font-weight: bold;
 }
 
 /* --- Media Query para Responsividade --- */
