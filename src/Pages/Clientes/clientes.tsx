@@ -12,6 +12,16 @@ import CardField from "../../Components/UI/Card/CardField";
 import { Button } from "../../Components/Button/Button";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { useAdmin } from "../../Hooks/useAdmin";
+import {
+  FaToggleOn,
+  FaToggleOff,
+  FaEdit,
+  FaTrashAlt,
+  FaArrowAltCircleLeft,
+  FaRegArrowAltCircleRight,
+} from "react-icons/fa";
+
+import { FaCircleUser } from "react-icons/fa6";
 
 type ActionButtonsProps = {
   cliente: Cliente;
@@ -35,28 +45,32 @@ const ActionButtons = ({
   const isOwner = userLogado?.id === cliente.user_id;
   const canPerformAction = isAdmin || isOwner;
   const isDisabled = loading || !canPerformAction;
+
   return (
     <>
       <Button
         variant="bg-warning"
         disabled={isDisabled}
         onClick={() => onEdit(cliente.id)}
+        title="Editar"
       >
-        Editar
+        <FaEdit />
       </Button>
       <Button
         variant="bg-danger"
         disabled={isDisabled}
         onClick={() => onDelete(cliente.id)}
+        title="Excluir"
       >
-        Excluir
+        <FaTrashAlt />
       </Button>
       <Button
-        variant="bg-active"
+        variant={cliente.active ? "bg-active" : "bg-notActive"}
         disabled={isDisabled}
         onClick={() => onToggleActive(cliente.id, cliente.active)}
+        title="Ativar/Desativar"
       >
-        {cliente.active ? "Desativar" : "Ativar"}
+        {cliente.active ? <FaToggleOff /> : <FaToggleOn />}
       </Button>
     </>
   );
@@ -292,8 +306,9 @@ export function Clientes() {
               variant="bg-primary"
               onClick={handleNovoCliente}
               disabled={loading || error !== null}
+              title="Novo Cliente"
             >
-              Novo Cliente
+              <FaCircleUser />
             </Button>
           </div>
         </div>
@@ -318,10 +333,34 @@ export function Clientes() {
               ) : clientes.length > 0 ? (
                 clientes.map((cliente) => (
                   <tr key={cliente.id}>
-                    <td>{cliente.name}</td>
-                    <td>{cliente.email}</td>
-                    <td>{cliente.mobile}</td>
-                    <td>{cliente.active ? "Ativo" : "Inativo"}</td>
+                    <td
+                      className={
+                        cliente.active ? style.active : style.notActive
+                      }
+                    >
+                      {cliente.name}
+                    </td>
+                    <td
+                      className={
+                        cliente.active ? style.active : style.notActive
+                      }
+                    >
+                      {cliente.email}
+                    </td>
+                    <td
+                      className={
+                        cliente.active ? style.active : style.notActive
+                      }
+                    >
+                      {cliente.mobile}
+                    </td>
+                    <td
+                      className={
+                        cliente.active ? style.active : style.notActive
+                      }
+                    >
+                      {cliente.active ? "Ativo" : "Inativo"}
+                    </td>
                     <td>
                       <ActionButtons
                         cliente={cliente}
@@ -391,6 +430,7 @@ export function Clientes() {
               id="items-per-page"
               value={itemsPerPage}
               onChange={handleItemsPerPageChange}
+              title="Selecione o número de itens por página"
             >
               <option value={5}>5</option>
               <option value={10}>10</option>
@@ -404,8 +444,9 @@ export function Clientes() {
               variant="bg-primary"
               onClick={handlePaginaAnterior}
               disabled={currentPage === 1 || loading}
+              title="Página Anterior"
             >
-              Anterior
+              <FaArrowAltCircleLeft />
             </Button>
             <span>
               Página {currentPage} de {totalPages}
@@ -414,8 +455,9 @@ export function Clientes() {
               variant="bg-primary"
               onClick={handlePaginaSeguinte}
               disabled={currentPage >= totalPages || loading}
+              title="Próxima Página"
             >
-              Próxima
+              <FaRegArrowAltCircleRight />
             </Button>
           </div>
         </div>
@@ -431,6 +473,7 @@ export function Clientes() {
       <ConfirmationDialogs
         title="Confirmar Exclusão"
         titleColor="red"
+        variant="bg-danger"
         message="Tem certeza que deseja excluir este cliente? Esta ação não pode ser desfeita."
         isOpen={clienteParaExcluir !== null}
         onClose={() => setClienteParaExcluir(null)}

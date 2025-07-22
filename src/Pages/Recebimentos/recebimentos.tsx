@@ -12,6 +12,16 @@ import CardField from "../../Components/UI/Card/CardField";
 import { Button } from "../../Components/Button/Button";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { useAdmin } from "../../Hooks/useAdmin";
+import {
+  FaToggleOn,
+  FaToggleOff,
+  FaEdit,
+  FaTrashAlt,
+  FaArrowAltCircleLeft,
+  FaRegArrowAltCircleRight,
+  FaMoneyCheckAlt,
+} from "react-icons/fa";
+import { LuReceipt } from "react-icons/lu";
 
 type ActionButtonsProps = {
   recebimento: Recebimento;
@@ -19,6 +29,7 @@ type ActionButtonsProps = {
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
   onToggleActive: (id: string, active: boolean) => void;
+  onPaymentReceived: (id: string) => void;
 };
 
 const ActionButtons = ({
@@ -27,28 +38,40 @@ const ActionButtons = ({
   onEdit,
   onDelete,
   onToggleActive,
+  onPaymentReceived,
 }: ActionButtonsProps) => (
   <>
     <Button
       variant="bg-warning"
       disabled={loading}
       onClick={() => onEdit(recebimento.id)}
+      title="Editar"
     >
-      Editar
+      <FaEdit />
     </Button>
     <Button
       variant="bg-danger"
       disabled={loading}
       onClick={() => onDelete(recebimento.id)}
+      title="Excluir"
     >
-      Excluir
+      <FaTrashAlt />
     </Button>
     <Button
-      variant="bg-active"
+      variant={recebimento.active ? "bg-active" : "bg-notActive"}
       disabled={loading}
       onClick={() => onToggleActive(recebimento.id, recebimento.active)}
+      title="Ativar/Desativar"
     >
-      {recebimento.active ? "Desativar" : "Ativar"}
+      {recebimento.active ? <FaToggleOff /> : <FaToggleOn />}
+    </Button>
+    <Button
+      variant="bg-info"
+      disabled={loading}
+      onClick={() => onPaymentReceived(recebimento.id)}
+      title="Receber Pagamento"
+    >
+      <FaMoneyCheckAlt />
     </Button>
   </>
 );
@@ -57,6 +80,7 @@ export function Recebimentos() {
   const navigate = useNavigate();
   const { user } = useGlobalState();
   const [Recebimento, setRecebimento] = useState<Recebimento[]>([]);
+  const [payment_received_at, setPaymentReceivedAt] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalRecebimento, setTotalRecebimento] = useState(0);
@@ -66,6 +90,7 @@ export function Recebimentos() {
   const [recebimentoParaExcluir, setRecebimentoParaExcluir] = useState<
     string | null
   >(null);
+  const [recebimentoPago, setRecebimentoPago] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const buscaInputRef = useRef<HTMLInputElement | null>(null);
   const skipFocusRef = useRef(false);
@@ -172,6 +197,11 @@ export function Recebimentos() {
     setRecebimentoParaExcluir(id);
   };
 
+  const handlePagar = (id: string) => {
+    setPaymentReceivedAt(new Date().toISOString());
+    setRecebimentoPago(id);
+  };
+
   const confirmarExclusao = async () => {
     if (!recebimentoParaExcluir) return;
     try {
@@ -193,6 +223,46 @@ export function Recebimentos() {
       setError(errorMessage);
     } finally {
       setRecebimentoParaExcluir(null);
+    }
+  };
+
+  const confirmarRecebimento = async () => {
+    console.log("Confirmar recebimento:", recebimentoPago);
+    console.log("Payment received at:", payment_received_at);
+    if (!recebimentoPago) return;
+    try {
+      const { data, error } = await supabase
+        .from("accounts_receivable")
+        .update({ payment_received_at: payment_received_at })
+        .eq("id", recebimentoPago)
+        .select("*, custumer:costumer_id(name)");
+
+      if (error) throw error;
+
+      if (Recebimento.length === 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        fetchRecebimento();
+      }
+      if (payment_received_at && isAdmin) {
+        console.log("Recebimento pago:", data[0]);
+        setRecebimento((clientesAtuais) =>
+          clientesAtuais.filter((c) => c.id !== recebimentoPago)
+        );
+        if (Recebimento.length === 1 && currentPage > 1) {
+          setCurrentPage(currentPage - 1);
+        }
+      } else {
+        setRecebimento(
+          Recebimento.map((r) => (r.id === recebimentoPago ? data[0] : r))
+        );
+      }
+      setSearchTerm("");
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      setError(errorMessage);
+    } finally {
+      setRecebimentoPago(null);
     }
   };
 
@@ -284,8 +354,9 @@ export function Recebimentos() {
               className={style.button}
               onClick={handleNovoRecebimento}
               disabled={loading || error !== null}
+              title="Novo Recebimento"
             >
-              Novo Recebimento
+              <LuReceipt />
             </Button>
           </div>
         </div>
@@ -311,30 +382,72 @@ export function Recebimentos() {
               ) : Recebimento.length > 0 ? (
                 Recebimento.map((recebimento) => (
                   <tr key={recebimento.id}>
-                    <td>
+                    <td
+                      className={
+                        recebimento.payment_received_at
+                          ? style.notReceived
+                          : recebimento.active
+                          ? style.active
+                          : style.notActive
+                      }
+                    >
                       {recebimento.custumer?.name ?? "Cliente não encontrado"}
                     </td>
-                    <td>
+                    <td
+                      className={
+                        recebimento.payment_received_at
+                          ? style.notReceived
+                          : recebimento.active
+                          ? style.active
+                          : style.notActive
+                      }
+                    >
                       {recebimento.received_date
                         ? new Intl.DateTimeFormat("pt-BR", {
                             timeZone: "UTC",
                           }).format(new Date(recebimento.received_date))
                         : "-"}
                     </td>
-                    <td>
+                    <td
+                      className={
+                        recebimento.payment_received_at
+                          ? style.notReceived
+                          : recebimento.active
+                          ? style.active
+                          : style.notActive
+                      }
+                    >
                       {new Intl.NumberFormat("pt-BR", {
                         style: "currency",
                         currency: "BRL",
                       }).format(recebimento.amount_to_receive)}
                     </td>
-                    <td>
+                    <td
+                      className={
+                        recebimento.payment_received_at
+                          ? style.notReceived
+                          : recebimento.active
+                          ? style.active
+                          : style.notActive
+                      }
+                    >
                       {recebimento.payment_received_at
                         ? new Intl.DateTimeFormat("pt-BR", {
                             timeZone: "UTC",
                           }).format(new Date(recebimento.payment_received_at))
                         : "Aguardando"}
                     </td>
-                    <td>{recebimento.active ? "Ativo" : "Inativo"}</td>
+                    <td
+                      className={
+                        recebimento.payment_received_at
+                          ? style.notReceived
+                          : recebimento.active
+                          ? style.active
+                          : style.notActive
+                      }
+                    >
+                      {recebimento.active ? "Ativo" : "Inativo"}
+                    </td>
                     <td className="actionsColumn ">
                       <ActionButtons
                         recebimento={recebimento}
@@ -342,6 +455,7 @@ export function Recebimentos() {
                         onEdit={handleEditar}
                         onDelete={handleExcluir}
                         onToggleActive={handleAtivarDesativar}
+                        onPaymentReceived={handlePagar}
                       />
                     </td>
                   </tr>
@@ -402,6 +516,7 @@ export function Recebimentos() {
                       onEdit={handleEditar}
                       onDelete={handleExcluir}
                       onToggleActive={handleAtivarDesativar}
+                      onPaymentReceived={handlePagar}
                     />
                   </Card.Actions>
                 </Card>
@@ -421,6 +536,8 @@ export function Recebimentos() {
               id="items-per-page"
               value={itemsPerPage}
               onChange={handleItemsPerPageChange}
+              title="Selecione o número de itens por página"
+              className={style.itemSelector}
             >
               <option value={5}>5</option>
               <option value={10}>10</option>
@@ -433,8 +550,9 @@ export function Recebimentos() {
             <Button
               onClick={handlePaginaAnterior}
               disabled={currentPage === 1 || loading}
+              title="Página Anterior"
             >
-              Anterior
+              <FaArrowAltCircleLeft />
             </Button>
             <span>
               Página {currentPage} de {totalPages}
@@ -442,8 +560,9 @@ export function Recebimentos() {
             <Button
               onClick={handlePaginaSeguinte}
               disabled={currentPage >= totalPages || loading}
+              title="Próxima Página"
             >
-              Próxima
+              <FaRegArrowAltCircleRight />
             </Button>
           </div>
         </div>
@@ -458,13 +577,26 @@ export function Recebimentos() {
 
       <ConfirmationDialogs
         title="Confirmar Exclusão"
-        titleColor="red"
+        titleColor="#dc3545"
+        variant="bg-danger"
         message="Tem certeza que deseja excluir este recebimento? Esta ação não pode ser desfeita."
         isOpen={recebimentoParaExcluir !== null}
         onClose={() => {
           setRecebimentoParaExcluir(null);
         }}
         onConfirm={confirmarExclusao}
+      />
+
+      <ConfirmationDialogs
+        title="Confirmar Recebimento"
+        titleColor="#218838"
+        variant="bg-success"
+        message="Tem certeza que deseja fazer este recebimento? Esta ação não pode ser desfeita."
+        isOpen={recebimentoPago !== null}
+        onClose={() => {
+          setRecebimentoPago(null);
+        }}
+        onConfirm={confirmarRecebimento}
       />
     </Main>
   );

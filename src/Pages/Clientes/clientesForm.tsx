@@ -9,6 +9,9 @@ import PhoneInput from "../../Components/PhoneInput/PhoneInput";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
 import { Button } from "../../Components/Button/Button";
+import { FaEdit } from "react-icons/fa";
+import { LuReceipt } from "react-icons/lu";
+import { MdAssignmentReturn, MdOutlineSave } from "react-icons/md";
 
 export function ClientesForm() {
   const navigate = useNavigate();
@@ -129,9 +132,11 @@ export function ClientesForm() {
   return (
     <Main>
       <div className={style.container}>
-        <h2 className={style.title}>
-          {isEditing ? "Editar Cliente" : "Cadastro de Clientes"}
-        </h2>
+        <p className={style.title}>{isEditing ? <FaEdit /> : <LuReceipt />}</p>
+        <p className={style.title}>
+          {isEditing ? "Editar Cliente" : "Cadastro de Cliente"}
+        </p>
+
         <div className={style.card}>
           <form className={style.form} onSubmit={handleSubmit}>
             <div>
@@ -186,20 +191,18 @@ export function ClientesForm() {
                 type="reset"
                 variant="bg-cancel"
                 onClick={() => navigate("/clientes")}
+                title="Voltar para lista de Clientes"
               >
-                Retornar
+                <MdAssignmentReturn />
               </Button>
 
               <Button
                 variant="bg-primary"
                 type="submit"
                 disabled={loading || error !== null}
+                title="Salvar Cliente"
               >
-                {loading
-                  ? isEditing
-                    ? "Salvando..."
-                    : "Cadastrando..."
-                  : "Salvar"}
+                <MdOutlineSave />
               </Button>
             </div>
           </form>

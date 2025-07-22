@@ -11,6 +11,10 @@ import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
 import { Button } from "../../Components/Button/Button";
 import "../../index.css";
+import { useAdmin } from "../../Hooks/useAdmin";
+import { FaEdit } from "react-icons/fa";
+import { LuReceipt } from "react-icons/lu";
+import { MdAssignmentReturn, MdOutlineSave } from "react-icons/md";
 
 export function RecebimentosForm() {
   const navigate = useNavigate();
@@ -31,6 +35,7 @@ export function RecebimentosForm() {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const costumerIdSelectRef = useRef<HTMLSelectElement | null>(null);
+  const { isAdmin } = useAdmin();
 
   const {
     translate: geminiTranslate,
@@ -77,12 +82,19 @@ export function RecebimentosForm() {
   }, [id]);
 
   const fetchcliente = useCallback(async () => {
+    if (!user) return;
     setLoading(true);
+    setError(null);
     try {
-      const { data, error } = await supabase
-        .from("customer")
-        .select("*")
-        .order("name", { ascending: true });
+      let query = supabase.from("customer").select("*");
+
+      if (!isAdmin) {
+        query = query.eq("active", true).eq("user_id", user.id);
+      }
+
+      const { data, error } = await query.order("name", {
+        ascending: true,
+      });
 
       if (error) throw error;
 
@@ -92,7 +104,7 @@ export function RecebimentosForm() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user, isAdmin]);
 
   useEffect(() => {
     if (isEditing) {
@@ -178,9 +190,10 @@ export function RecebimentosForm() {
   return (
     <Main>
       <div className={style.container}>
-        <h2 className={style.title}>
-          {isEditing ? "Editar recebimento" : "Cadastro de recebimentos"}
-        </h2>
+        <p className={style.title}>{isEditing ? <FaEdit /> : <LuReceipt />}</p>
+        <p className={style.title}>
+          {isEditing ? "Editar Recebimentos" : "Cadastro de recebimentos"}
+        </p>
         <div className={style.card}>
           <form className={style.form} onSubmit={handleSubmit}>
             <div>
@@ -251,19 +264,17 @@ export function RecebimentosForm() {
                 type="reset"
                 variant="bg-cancel"
                 onClick={() => navigate("/recebimentos")}
+                title="Voltar para lista de Recebimentos"
               >
-                Retornar
+                <MdAssignmentReturn />
               </Button>
               <Button
                 variant="bg-primary"
                 type="submit"
                 disabled={loading || error !== null}
+                title="Salvar Recebimento"
               >
-                {loading
-                  ? isEditing
-                    ? "Salvando..."
-                    : "Cadastrando..."
-                  : "Salvar"}
+                <MdOutlineSave />
               </Button>
             </div>
           </form>
