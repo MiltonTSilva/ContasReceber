@@ -3,20 +3,33 @@ import style from "./Card.module.css";
 
 interface CardSubcomponentProps {
   children: React.ReactNode;
+  className?: string;
 }
 
 // --- Subcomponentes ---
-const CardHeader = ({ children }: CardSubcomponentProps) => (
-  <div className={style.cardHeader}>{children}</div>
-);
+const CardHeader = ({ children, className }: CardSubcomponentProps) => {
+  return (
+    <div className={`${style.cardHeader} ${className || ""}`.trim()}>
+      {children}
+    </div>
+  );
+};
 
-const CardBody = ({ children }: CardSubcomponentProps) => (
-  <div className={style.cardBody}>{children}</div>
-);
+const CardBody = ({ children, className }: CardSubcomponentProps) => {
+  return (
+    <div className={`${style.cardBody} ${className || ""}`.trim()}>
+      {children}
+    </div>
+  );
+};
 
-const CardActions = ({ children }: CardSubcomponentProps) => (
-  <div className={style.cardActions}>{children}</div>
-);
+const CardActions = ({ children, className }: CardSubcomponentProps) => {
+  return (
+    <div className={`${style.cardActions} ${className || ""}`.trim()}>
+      {children}
+    </div>
+  );
+};
 
 // --- Componente Principal ---
 interface CardProps {
