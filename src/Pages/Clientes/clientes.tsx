@@ -394,7 +394,11 @@ export function Clientes() {
             <div className={style.cardList}>
               {clientes.map((cliente) => (
                 <Card key={cliente.id}>
-                  <Card.Header>{cliente.name}</Card.Header>
+                  <Card.Header
+                    className={cliente.active ? style.active : style.notActive}
+                  >
+                    {cliente.name}
+                  </Card.Header>
                   <Card.Body>
                     <CardField label="E-mail">{cliente.email}</CardField>
                     <CardField label="Celular">{cliente.mobile}</CardField>
