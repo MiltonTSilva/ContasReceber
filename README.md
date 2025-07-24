@@ -40,6 +40,8 @@ Notificações em tempo real com Supabase Realtime (para status de pagamento)
 
 Hospedagem e APIs prontas para uso sem necessidade de configuração de servidor
 
+Envio de e-mail dois dias antes do vencimento
+
 ## 🗂️Esquema das tabelas:
 
 ```
@@ -113,6 +115,7 @@ create table public.accounts_receivable (
   created_at timestamp with time zone not null default now(),
   active boolean not null default false,
   user_id uuid not null,
+  email_send boolean null default false,
   constraint accounts_receivable_pkey primary key (id),
   constraint accounts_receivable_costumer_id_fkey foreign KEY (costumer_id) references customer (id)
 ) TABLESPACE pg_default;
@@ -157,7 +160,7 @@ $$;
 
 -- Cria view para busca por name de customer, received_date e amount_to_receive
 
-CREATE VIEW public.accounts_receivable_view AS
+CREATE VIEW public.accounts_receivable_view WITH (security_invoker=on) AS
 SELECT
   ar.id,
   ar.received_date,
@@ -169,7 +172,9 @@ SELECT
   ar.costumer_id,
   ar.active,
   ar.user_id,
-  c.name AS customer_name
+  ar.email_send,
+  c.name ,
+  c.email
 FROM public.accounts_receivable ar
 JOIN public.customer c ON c.id = ar.costumer_id;
 
