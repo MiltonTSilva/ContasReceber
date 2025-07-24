@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import style from "./NavBar.module.css";
 import { useGlobalState } from "../../Hooks/useGlobalState";
 import { Logout } from "../../Pages/Logout/logout";
+import { Logo } from "../Logo/Logo";
 
 export function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,12 +17,7 @@ export function NavBar() {
     user && (
       <>
         <nav className={style.nav}>
-          <Link to="/home" className={style.brand}>
-            <div className={style.logo}>
-              <img src="/favicon.png" alt="icone" />
-              <span>Contas a Receber</span>
-            </div>
-          </Link>
+          <Logo />
 
           <div
             className={`${style.menuIcon} ${menuOpen ? style.open : ""}`}
