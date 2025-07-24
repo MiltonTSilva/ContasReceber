@@ -1,0 +1,32 @@
+.brand {
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+  color: var(--white);
+  padding: 5px 20px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.image {
+  height: 42px;
+  width: 52px;
+}
+
+.text {
+  color: inherit;
+  font-size: 1.2rem;
+}
