@@ -1,6 +1,6 @@
 header {
   padding: 10px 20px;
-  background-color: var(--bg-black);
+  background-color: var(--black);
   margin-bottom: 0.2rem;
   flex-shrink: 0;
 }

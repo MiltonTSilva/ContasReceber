@@ -27,11 +27,11 @@
   width: 100%;
   border-collapse: collapse;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: var(--bg-gray-darker);
+  background-color: var(--gray-darker);
 }
 
 .table th {
-  background-color: var(--bg-gray);
+  background-color: var(--gray);
   font-size: 1.1rem;
   position: sticky;
   top: 0;
@@ -54,16 +54,11 @@
 .table tbody tr:hover td:nth-child(3),
 .table tbody tr:hover td:nth-child(4),
 .table tbody tr:hover td:nth-child(5) {
-  background-color: var(--bg-primary);
+  background-color: var(--primary);
 }
 
 .table tbody tr:last-child td {
   border-bottom: none;
-}
-
-.actions {
-  flex-wrap: wrap;
-  vertical-align: middle;
 }
 
 .pagination {
@@ -103,7 +98,7 @@
 
 .itemsPerPageSelector select {
   padding: 8px;
-  background-color: var(--bg-primary);
+  background-color: var(--primary);
 }
 
 .itemsPerPageSelector label {
@@ -124,7 +119,7 @@
 }
 
 .searchInput {
-  background-color: var(--bg-primary);
+  background-color: var(--primary);
   padding: 0.1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -140,13 +135,13 @@
 }
 
 .searchInput:disabled {
-  background-color: var(--bg-disabled);
+  background-color: var(--disabled);
   cursor: not-allowed;
   opacity: 0.7;
 }
 
 .searchInput:hover:not(:disabled) {
-  background-color: var(--bgh-disabled);
+  background-color: var(--h-disabled);
 }
 
 .loadingRow {
@@ -193,30 +188,29 @@
   font-size: 1.1rem;
 }
 
-/* --- Estilos para os Cards --- */
 .cardList {
   display: none;
 }
 
 .received {
-  background-color: var(--bg-gray-darker);
-  color: var(--bg-white);
+  background-color: var(--gray-darker);
+  color: var(--white);
 }
 
 .notReceived {
-  background-color: var(--bg-info);
-  color: var(--bg-black);
+  background-color: var(--info);
+  color: var(--black);
   font-weight: bold;
 }
 
 .active {
-  background-color: var(--bg-active);
-  color: var(--bg-white);
+  background-color: var(--active);
+  color: var(--white);
 }
 
 .notActive {
-  background-color: var(--bg-notActive);
-  color: var(--bg-black);
+  background-color: var(--notActive);
+  color: var(--black);
   font-weight: bold;
 }
 

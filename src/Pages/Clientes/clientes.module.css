@@ -28,7 +28,7 @@
 }
 
 .table th {
-  background-color: var(--bg-gray);
+  background-color: var(--gray);
   font-size: 1.1rem;
   position: sticky;
   top: 0;
@@ -50,16 +50,11 @@
 .table tbody tr:hover td:nth-child(2),
 .table tbody tr:hover td:nth-child(3),
 .table tbody tr:hover td:nth-child(4) {
-  background-color: var(--bg-primary);
+  background-color: var(--primary);
 }
 
 .table tbody tr:last-child td {
   border-bottom: none;
-}
-
-.actions {
-  flex-wrap: wrap;
-  vertical-align: middle;
 }
 
 .pagination {
@@ -99,7 +94,7 @@
 
 .itemsPerPageSelector select {
   padding: 8px;
-  background-color: var(--bg-primary);
+  background-color: var(--primary);
 }
 
 .itemsPerPageSelector label {
@@ -120,7 +115,7 @@
 }
 
 .searchInput {
-  background-color: var(--bg-primary);
+  background-color: var(--primary);
   padding: 0.1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -136,13 +131,13 @@
 }
 
 .searchInput:disabled {
-  background-color: var(--bg-disabled);
+  background-color: var(--disabled);
   cursor: not-allowed;
   opacity: 0.7;
 }
 
 .searchInput:hover:not(:disabled) {
-  background-color: var(--bgh-disabled);
+  background-color: var(--h-disabled);
 }
 
 .loadingRow {
@@ -189,19 +184,18 @@
   font-size: 1.1rem;
 }
 
-/* --- Estilos para os Cards --- */
 .cardList {
   display: none;
 }
 
 .active {
-  background-color: var(--bg-active);
-  color: var(--bg-white);
+  background-color: var(--active);
+  color: var(--white);
 }
 
 .notActive {
-  background-color: var(--bg-notActive);
-  color: var(--bg-black);
+  background-color: var(--notActive);
+  color: var(--black);
   font-weight: bold;
 }
 
@@ -233,6 +227,6 @@
   }
   .button {
     padding: 0.3rem;
-    width: 100%;
+    width: 100px;
   }
 }

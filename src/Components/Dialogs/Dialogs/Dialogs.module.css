@@ -1,5 +1,5 @@
 .dialogs {
-  background-color: var(--bg-primary);
+  background-color: var(--cyan);
   padding: 25px;
   border-radius: 8px;
   box-shadow: 1px 1px rgb(250, 249, 249);
@@ -41,7 +41,7 @@
   border-radius: 15px;
   margin-bottom: 10px;
   padding: 15px;
-  background-color: var(--bg-gray-lighter);
+  background-color: var(--gray-lighter);
   font-size: 1rem;
   font-weight: bold;
 }

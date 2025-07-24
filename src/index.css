@@ -4,6 +4,7 @@
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
+ 
 }
 
 #root {
@@ -15,143 +16,129 @@
     radial-gradient(rgba(0, 0, 0, 0) 33%, rgba(0, 0, 0, 0.3) 166%);
   min-height: 100dvh;
 
-  --bg-primary: #007bff;
-  --bgh-primary: #0056b3;
+  --h-primary: #0056b3;
+  --h-secondary: #6c757d;
+  --h-danger: #c82333;
+  --h-success: #218838;
+  --h-warning: #b08503;
+  --h-info: #072f35;
+  --h-cancel: #5a6268;
+  --h-active: #026118;
+  --h-notActive: #014d57;
+  --h-disabled: #6b7280;
+  --h-light: #e2e6ea;
+  --h-dark: #23272b;
+  --h-white: #ffffff;
+  --h-black: #000000;
+  --h-gray: #5a6268;
+  --h-gray-dark: #23272b;
+  --h-gray-light: #e2e6ea;
+  --h-gray-lighter: #ced4da;
+  --h-gray-darker: #1c1f23;
 
-  --bg-secondary: #6c757d;
-  --bgh-secondary: #6c757d;
+  --cancel: #6c757d;
+  --active: #02aa29;
+  --notActive: #048091;
+  --disabled: #9ca3af;
 
-  --bg-danger: #dc3545;
-  --bgh-danger: #c82333;
-
-  --bg-success: #28a745;
-  --bgh-success: #218838;
-
-  --bg-warning: #ffc107;
-  --bgh-warning: #b08503;
-
-  --bg-info: #093f47;
-  --bgh-info: #072f35;
-
-  --bg-cancel: #6c757d;
-  --bgh-cancel: #5a6268;
-
-  --bg-active: #02aa29;
-  --bgh-active: #026118;
-
-  --bg-notActive: #048091;
-  --bgh-notActive: #014d57;
-
-  --bg-disabled: #9ca3af;
-  --bgh-disabled: #6b7280;
-
-  --bg-light: #f8f9fa;
-  --bgh-light: #e2e6ea;
-
-  --bg-dark: #343a40;
-  --bgh-dark: #23272b;
-
-  --bg-white: #ffffff;
-  --bgh-white: #ffffff;
-
-  --bg-black: #000000;
-  --bgh-black: #000000;
-
-  --bg-gray: #6c757d;
-  --bgh-gray: #5a6268;
-
-  --bg-gray-dark: #343a40;
-  --bgh-gray-dark: #23272b;
-
-  --bg-gray-light: #f8f9fa;
-  --bgh-gray-light: #e2e6ea;
-
-  --bg-gray-lighter: #e9ecef;
-  --bgh-gray-lighter: #ced4da;
-
-  --bg-gray-dark: #343a40;
-  --bgh-gray-dark: #23272b;
-
-  --bg-gray-darker: #212529;
-  --bgh-gray-darker: #1c1f23;
-
-  --bg-border-color: #dee2e6;
-
-  --bg-border-color-dark: #495057;
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --pink: #e83e8c;
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --yellow: #ffc107;
+  --green: #28a745;
+  --teal: #20c997;
+  --cyan: #17a2b8;
+  --white: #fff;
+  --black: #000000;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
+  --gray-darker: #212529;
+  --gray-light: #f8f9fa;
+  --gray-lighter: #e9ecef;
+  --primary: #007bff;
+  --secondary: #6c757d;
+  --success: #28a745;
+  --info: #17a2b8;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #343a40;
 }
 
 /* --- Variantes --- */
 
 .bg-primary {
-  background-color: var(--bg-primary);
+  background-color: var(--primary);
 }
 
 .bg-primary:hover:not(:disabled) {
-  background-color: var(--bgh-primary);
+  background-color: var(--h-primary);
 }
 
 .bg-secondary {
-  background-color: var(--bg-secondary);
+  background-color: var(--secondary);
 }
 
 .bg-secondary:hover:not(:disabled) {
-  background-color: var(--bgh-secondary);
+  background-color: var(--h-secondary);
 }
 
 .bg-danger {
-  background-color: var(--bg-danger);
+  background-color: var(--danger);
 }
 
 .bg-danger:hover:not(:disabled) {
-  background-color: var(--bgh-danger);
+  background-color: var(--h-danger);
 }
 
 .bg-warning {
-  background-color: var(--bg-warning);
+  background-color: var(--warning);
 }
 
 .bg-warning:hover:not(:disabled) {
-  background-color: var(--bgh-warning);
+  background-color: var(--h-warning);
 }
 
 .bg-cancel {
-  background-color: var(--bg-cancel);
+  background-color: var(--cancel);
 }
 
 .bg-cancel:hover:not(:disabled) {
-  background-color: var(--bgh-cancel);
+  background-color: var(--h-cancel);
 }
 
 .bg-active {
-  background-color: var(--bg-active);
+  background-color: var(--active);
 }
 
 .bg-active:hover:not(:disabled) {
-  background-color: var(--bgh-active);
+  background-color: var(--h-active);
 }
 
 .bg-notActive {
-  background-color: var(--bg-notActive);
+  background-color: var(--notActive);
 }
 
 .bg-notActive:hover:not(:disabled) {
-  background-color: var(--bgh-notActive);
+  background-color: var(--h-notActive);
 }
 
 .bg-info {
-  background-color: var(--bg-info);
+  background-color: var(--info);
 }
 
 .bg-info:hover:not(:disabled) {
-  background-color: var(--bgh-info);
+  background-color: var(--h-info);
 }
 
 .bg-success {
-  background-color: var(--bg-success);
+  background-color: var(--success);
 }
 
 .bg-success:hover:not(:disabled) {
-  background-color: var(--bgh-success);
+  background-color: var(--h-success);
 }
 
 .actions {
@@ -160,7 +147,7 @@
   gap: 0.5rem;
   flex-wrap: wrap;
   border-radius: 10px;
-  background-color: var(--bg-black);
+  background-color: var(--black);
   width: 100%;
   grid-column: 1 / -1;
   padding: 1rem;
