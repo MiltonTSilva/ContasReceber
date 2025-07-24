@@ -158,8 +158,6 @@ export function RecebimentosForm() {
           .update(accounts_receivableData)
           .eq("id", id);
 
-        console.log(accounts_receivableData);
-        console.log(id);
         if (error) throw error;
         setDialogMessage("Recebimento atualizado com sucesso!");
         setIsSuccessDialogOpen(true);
