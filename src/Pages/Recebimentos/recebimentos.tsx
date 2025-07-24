@@ -123,7 +123,7 @@ export function Recebimentos() {
       if (debouncedSearchTerm) {
         const sanitized = debouncedSearchTerm.replace(",", ".").trim();
         query = query.or(
-          `received_text.ilike.*${sanitized}*,amount_text.ilike.*${sanitized}*,customer_name.ilike.*${sanitized}*`
+          `received_text.ilike.*${sanitized}*,amount_text.ilike.*${sanitized}*,name.ilike.*${sanitized}*`
         );
       }
 
@@ -227,8 +227,6 @@ export function Recebimentos() {
   };
 
   const confirmarRecebimento = async () => {
-    console.log("Confirmar recebimento:", recebimentoPago);
-    console.log("Payment received at:", payment_received_at);
     if (!recebimentoPago) return;
     try {
       const { data, error } = await supabase
@@ -245,7 +243,7 @@ export function Recebimentos() {
         fetchRecebimento();
       }
       if (payment_received_at && isAdmin) {
-        console.log("Recebimento pago:", data[0]);
+ 
         setRecebimento((clientesAtuais) =>
           clientesAtuais.filter((c) => c.id !== recebimentoPago)
         );
@@ -391,7 +389,7 @@ export function Recebimentos() {
                           : style.notActive
                       }
                     >
-                      {recebimento.custumer?.name ?? "Cliente não encontrado"}
+                      {recebimento?.custumer?.name ?? "Cliente não encontrado"}
                     </td>
                     <td
                       className={
@@ -439,11 +437,7 @@ export function Recebimentos() {
                     </td>
                     <td
                       className={
-                        recebimento.payment_received_at
-                          ? style.notReceived
-                          : recebimento.active
-                          ? style.active
-                          : style.notActive
+                        recebimento.active ? style.active : style.notActive
                       }
                     >
                       {recebimento.active ? "Ativo" : "Inativo"}
@@ -479,9 +473,18 @@ export function Recebimentos() {
           ) : Recebimento.length > 0 ? (
             <div className={style.cardList}>
               {Recebimento.map((recebimento) => (
-                <Card key={recebimento.id}>
+                <Card
+                  key={recebimento.id}
+                  className={
+                    recebimento.payment_received_at
+                      ? style.notReceived
+                      : recebimento.active
+                      ? style.active
+                      : style.notActive
+                  }
+                >
                   <Card.Header>
-                    {recebimento.custumer?.name ?? "Cliente não encontrado"}
+                    {recebimento?.custumer?.name ?? "Cliente não encontrado"}
                   </Card.Header>
                   <Card.Body>
                     <CardField label="Recebimento">
@@ -509,7 +512,7 @@ export function Recebimentos() {
                       {recebimento.active ? "Ativo" : "Inativo"}
                     </CardField>
                   </Card.Body>
-                  <Card.Actions>
+                  <Card.Actions className={style.received}>
                     <ActionButtons
                       recebimento={recebimento}
                       loading={loading}
@@ -537,7 +540,6 @@ export function Recebimentos() {
               value={itemsPerPage}
               onChange={handleItemsPerPageChange}
               title="Selecione o número de itens por página"
-              className={style.itemSelector}
             >
               <option value={5}>5</option>
               <option value={10}>10</option>
