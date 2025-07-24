@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useGlobalState } from "../../Hooks/useGlobalState";
 import style from "./logout.module.css";
+import { Button } from "../../Components/Button/Button";
 
 export function Logout() {
   const { signOut } = useGlobalState();
@@ -16,8 +17,13 @@ export function Logout() {
   };
 
   return (
-    <button className={style["logout-button"]} onClick={handleLogout}>
+    <Button
+      type="button"
+      variant="bg-danger"
+      className={style["logout-button"]}
+      onClick={handleLogout}
+    >
       Sair
-    </button>
+    </Button>
   );
 }
