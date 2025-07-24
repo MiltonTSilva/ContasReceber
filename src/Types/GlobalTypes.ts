@@ -1,17 +1,19 @@
 import type {
-  User,
   SignInWithPasswordCredentials,
+  User,
 } from "@supabase/supabase-js";
 
-export type { SignInWithPasswordCredentials };
+export type Theme = "light" | "dark";
 
 export interface GlobalContextType {
   user: User | null;
-  loading: boolean; 
-  error: string | null; 
-  clearError: () => void; 
-  signOut: () => Promise<void>; 
+  loading: boolean;
+  error: string | null;
+  clearError: () => void;
+  signOut: () => Promise<void>;
+  theme: Theme;
+  toggleTheme: () => void;
   signInWithPassword: (
-    credentials: SignInWithPasswordCredentials
-  ) => Promise<boolean>; 
+    credentials: SignInWithPasswordCredentials,
+  ) => Promise<boolean>;
 }
