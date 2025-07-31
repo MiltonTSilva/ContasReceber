@@ -3,11 +3,12 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Main } from "../../Components/Main/Main";
 import { supabase } from "../../services/supabase";
 import { useGlobalState } from "../../Hooks/useGlobalState";
-import style from "./home.module.css";
+import styles from "./home.module.css";
+import stylesShared from "../sharedPage.module.css";
 import type { Recebimento } from "../../Types/RecebimentosTypes";
 
-import Card from "../../Components/UI/Card/Card";
-import CardField from "../../Components/UI/Card/CardField";
+import Card from "../../Components/Card/Card";
+import CardField from "../../Components/Card/CardField";
 import { Button } from "../../Components/Button/Button";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { useAdmin } from "../../Hooks/useAdmin";
@@ -77,7 +78,7 @@ export function Home() {
 
       let query = supabase
         .from("accounts_receivable_view")
-        .select("*, custumer:costumer_id(name)", { count: "exact" })
+        .select("*, custumer:custumer_id(name)", { count: "exact" })
         .eq("received_date", today)
         .is("payment_received_at", null);
 
@@ -118,7 +119,7 @@ export function Home() {
         .from("accounts_receivable")
         .update({ payment_received_at: payment_received_at })
         .eq("id", recebimentoPago)
-        .select("*, custumer:costumer_id(name)");
+        .select("*, custumer:custumer_id(name)");
 
       if (error) throw error;
 
@@ -163,7 +164,7 @@ export function Home() {
     (error: string) => {
       geminiTranslate(error, "português do Brasil");
       if (translationError) {
-        console.error("Erro na tradução:", translationError);
+        throw new Error("Erro na tradução: " + translationError);
       }
     },
     [geminiTranslate, translationError]
@@ -176,36 +177,47 @@ export function Home() {
   }, [error, translateError]);
 
   return (
-    <div className={style["container"]}>
-      <Main>
-        <h1 className={style.title}>Bem-vindo</h1>
-        <p className={style.phrase}>
-          Um aplicativo simples e eficiente para o controle de contas a receber.
-        </p>
-        <p className={style.phrase}>
-          Pensado para qualquer pessoa que deseja organizar seus recebimentos
-          com clareza e agilidade.
-        </p>
+    <Main>
+      <h1 className={styles.title}>Bem-vindo</h1>
+      <div className={styles.container}>
+        {Recebimento.length == 0 ? (
+          <p className={styles.phrase}>
+            Um aplicativo simples e eficiente para o controle de contas a
+            receber.
+          </p>
+        ) : (
+          ""
+        )}
+
+        {Recebimento.length == 0 ? (
+          <p className={styles.phrase}>
+            Pensado para qualquer pessoa que deseja organizar seus recebimentos
+            com clareza e agilidade.
+          </p>
+        ) : (
+          ""
+        )}
+
         {Recebimento.length > 0 ? (
-          <section className={style.receivementsSection}>
-            <p className={`${style.phrase} ${style.phraseReceivements}`}>
+          <section>
+            <p className={`${styles.phrase} ${styles.phraseReceivements}`}>
               Aqui você pode visualizar os recebimentos do dia, facilitando o
               acompanhamento das suas finanças.
             </p>
 
-            <div className={`${style.cardList} ${style.cardBody}`}>
+            <div className={`${styles.cardList} ${styles.cardBody}`}>
               {Recebimento.map((recebimento) => (
                 <Card
                   key={recebimento.id}
                   className={
                     recebimento.payment_received_at
-                      ? style.notReceived
+                      ? `${styles.notReceived} ${stylesShared.card}`
                       : recebimento.active
-                      ? style.active
-                      : style.notActive
+                      ? `${stylesShared.active} ${stylesShared.card}`
+                      : `${stylesShared.notActive} ${stylesShared.card}`
                   }
                 >
-                  <Card.Header className={style.cardHeader}>
+                  <Card.Header className={styles.cardHeader}>
                     {recebimento?.custumer?.name ?? "Cliente não encontrado"}
                   </Card.Header>
                   <Card.Body>
@@ -224,7 +236,7 @@ export function Home() {
                       }).format(recebimento.amount_to_receive)}
                     </CardField>
                   </Card.Body>
-                  <Card.Actions className={style.received}>
+                  <Card.Actions className={styles.received}>
                     <ActionButtons
                       recebimento={recebimento}
                       loading={loading}
@@ -235,8 +247,8 @@ export function Home() {
               ))}
             </div>
 
-            <div className={style.pagination}>
-              <div className={style.paginationControls}>
+            <div className={styles.pagination}>
+              <div className={stylesShared.paginationControls}>
                 <Button
                   onClick={handlePaginaAnterior}
                   disabled={currentPage === 1 || loading}
@@ -260,26 +272,26 @@ export function Home() {
         ) : (
           ""
         )}
+      </div>
 
-        <ErrorDialogs
-          title="Ocorreu um erro"
-          message={translatedText}
-          isOpen={error !== null}
-          onClose={() => setError(null)}
-        />
+      <ErrorDialogs
+        title="Ocorreu um erro"
+        message={translatedText}
+        isOpen={error !== null}
+        onClose={() => setError(null)}
+      />
 
-        <ConfirmationDialogs
-          title="Confirmar Recebimento"
-          titleColor="#218838"
-          variant="bg-success"
-          message="Tem certeza que deseja fazer este recebimento? Esta ação não pode ser desfeita."
-          isOpen={recebimentoPago !== null}
-          onClose={() => {
-            setRecebimentoPago(null);
-          }}
-          onConfirm={confirmarRecebimento}
-        />
-      </Main>
-    </div>
+      <ConfirmationDialogs
+        title="Confirmar Recebimento"
+        titleColor="#218838"
+        variant="bg-success"
+        message="Tem certeza que deseja fazer este recebimento? Esta ação não pode ser desfeita."
+        isOpen={recebimentoPago !== null}
+        onClose={() => {
+          setRecebimentoPago(null);
+        }}
+        onConfirm={confirmarRecebimento}
+      />
+    </Main>
   );
 }
