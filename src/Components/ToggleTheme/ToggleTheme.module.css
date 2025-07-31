@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  position: absolute;
+  top: 17px;
+  right: 10px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    display: flex;
+    right: 10px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    display: flex;
+    right: 25px;
+  }
+}
