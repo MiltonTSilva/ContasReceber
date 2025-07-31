@@ -10,7 +10,7 @@ import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
 import { Button } from "../../Components/Button/Button";
 import { FaEdit } from "react-icons/fa";
-import { LuReceipt } from "react-icons/lu";
+import { FaCircleUser } from "react-icons/fa6";
 import { MdAssignmentReturn, MdOutlineSave } from "react-icons/md";
 
 export function ClientesForm() {
@@ -117,7 +117,7 @@ export function ClientesForm() {
     (error: string) => {
       geminiTranslate(error, "português do Brasil");
       if (translationError) {
-        console.error("Erro na tradução:", translationError);
+        throw new Error("Erro na tradução: " + translationError);
       }
     },
     [geminiTranslate, translationError]
@@ -132,13 +132,13 @@ export function ClientesForm() {
   return (
     <Main>
       <div className={style.container}>
-        <p className={style.title}>{isEditing ? <FaEdit /> : <LuReceipt />}</p>
         <p className={style.title}>
+          {isEditing ? <FaEdit /> : <FaCircleUser />}
           {isEditing ? "Editar Cliente" : "Cadastro de Cliente"}
         </p>
-
+        <hr className={"separator"} />
         <div className={style.card}>
-          <form className={style.form} onSubmit={handleSubmit}>
+          <form className={`${style.form}`} onSubmit={handleSubmit}>
             <div>
               <label className={style.label}>Nome:</label>
               <input
@@ -186,7 +186,7 @@ export function ClientesForm() {
               </div>
             </div>
 
-            <div className="actions">
+            <div className={`${style.actions} ${"actions"}`}>
               <Button
                 type="reset"
                 variant="bg-cancel"

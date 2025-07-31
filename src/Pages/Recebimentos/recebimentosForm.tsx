@@ -5,7 +5,7 @@ import { supabase } from "../../services/supabase";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGlobalState } from "../../Hooks/useGlobalState";
 import Dialogs from "../../Components/Dialogs/Dialogs/Dialogs";
-import MoneyInput from "../../Components/UI/MoneyInput/MoneyInput";
+import MoneyInput from "../../Components/MoneyInput/MoneyInput";
 import type { Cliente } from "../../Types/ClientesTypes";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
@@ -27,14 +27,14 @@ export function RecebimentosForm() {
   const [received_date, setReceivedDate] = useState("");
   const [payment_received_at, setPaymentReceivedAt] = useState("");
   const [amount_to_receive, setAmountToReceive] = useState("");
-  const [costumer_id, setCostumerId] = useState("");
+  const [custumer_id, setcustumerId] = useState("");
   const [active, setActive] = useState(true);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
-  const costumerIdSelectRef = useRef<HTMLSelectElement | null>(null);
+  const custumerIdSelectRef = useRef<HTMLSelectElement | null>(null);
   const { isAdmin } = useAdmin();
 
   const {
@@ -71,7 +71,7 @@ export function RecebimentosForm() {
             currency: "BRL",
           }).format(data.amount_to_receive || 0)
         );
-        setCostumerId(data.costumer_id);
+        setcustumerId(data.custumer_id);
         setActive(data.active);
       }
     } catch (error) {
@@ -117,14 +117,14 @@ export function RecebimentosForm() {
   }, [fetchcliente]);
 
   useEffect(() => {
-    costumerIdSelectRef.current?.focus();
+    custumerIdSelectRef.current?.focus();
   }, []);
 
   const translateError = useCallback(
     (error: string) => {
       geminiTranslate(error, "português do Brasil");
       if (translationError) {
-        console.error("Erro na tradução:", translationError);
+        throw new Error("Erro na tradução: " + translationError);
       }
     },
     [geminiTranslate, translationError]
@@ -147,7 +147,7 @@ export function RecebimentosForm() {
         received_date,
         payment_received_at: payment_received_at || null,
         amount_to_receive: unformatMoney(amount_to_receive),
-        costumer_id: costumer_id,
+        custumer_id: custumer_id,
         active,
         user_id: user.id,
       };
@@ -168,7 +168,7 @@ export function RecebimentosForm() {
         if (error) throw error;
         setDialogMessage("Recebimento cadastrado com sucesso!");
         setIsSuccessDialogOpen(true);
-        setCostumerId("");
+        setcustumerId("");
         setAmountToReceive("");
         setReceivedDate("");
         setPaymentReceivedAt("");
@@ -188,32 +188,32 @@ export function RecebimentosForm() {
   return (
     <Main>
       <div className={style.container}>
-        <p className={style.title}>{isEditing ? <FaEdit /> : <LuReceipt />}</p>
         <p className={style.title}>
+          {isEditing ? <FaEdit /> : <LuReceipt />}
           {isEditing ? "Editar Recebimentos" : "Cadastro de recebimentos"}
         </p>
+        <hr className={"separator"} />
         <div className={style.card}>
-          <form className={style.form} onSubmit={handleSubmit}>
-            <div>
-              <label className={style.label}>
-                Cliente:
-                <select
-                  name="costumerId"
-                  ref={costumerIdSelectRef}
-                  className={style.input}
-                  value={costumer_id}
-                  onChange={(e) => setCostumerId(e.target.value)}
-                  required
-                >
-                  <option value="">Selecione</option>
-                  {clientes.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+          <form className={`${style.form}`} onSubmit={handleSubmit}>
+            <label className={style.label}>
+              Cliente:
+              <select
+                name="custumerId"
+                ref={custumerIdSelectRef}
+                className={style.input}
+                value={custumer_id}
+                onChange={(e) => setcustumerId(e.target.value)}
+                required
+              >
+                <option value="">Selecione</option>
+                {clientes.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
             <label className={style.label}>
               Data de recebimento:
               <input
@@ -257,7 +257,8 @@ export function RecebimentosForm() {
                 Ativo
               </div>
             </label>
-            <div className="actions">
+
+            <div className={`${style.actions} ${"actions"}`}>
               <Button
                 type="reset"
                 variant="bg-cancel"

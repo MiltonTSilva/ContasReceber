@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Main } from "../../Components/Main/Main";
 import { supabase } from "../../services/supabase";
 import { useGlobalState } from "../../Hooks/useGlobalState";
-import style from "./recebimentos.module.css";
+import styles from "./recebimentos.module.css";
+import stylesShared from "../sharedPage.module.css";
 import type { Recebimento } from "../../Types/RecebimentosTypes";
 import { ConfirmationDialogs } from "../../Components/Dialogs/ConfirmationDialogs/ConfirmationDialogs";
 import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
-import Card from "../../Components/UI/Card/Card";
-import CardField from "../../Components/UI/Card/CardField";
+import Card from "../../Components/Card/Card";
+import CardField from "../../Components/Card/CardField";
 import { Button } from "../../Components/Button/Button";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { useAdmin } from "../../Hooks/useAdmin";
@@ -46,6 +47,7 @@ const ActionButtons = ({
       disabled={loading}
       onClick={() => onEdit(recebimento.id)}
       title="Editar"
+      type="button"
     >
       <FaEdit />
     </Button>
@@ -54,6 +56,7 @@ const ActionButtons = ({
       disabled={loading}
       onClick={() => onDelete(recebimento.id)}
       title="Excluir"
+      type="button"
     >
       <FaTrashAlt />
     </Button>
@@ -62,6 +65,7 @@ const ActionButtons = ({
       disabled={loading}
       onClick={() => onToggleActive(recebimento.id, recebimento.active)}
       title="Ativar/Desativar"
+      type="button"
     >
       {recebimento.active ? <FaToggleOff /> : <FaToggleOn />}
     </Button>
@@ -70,6 +74,7 @@ const ActionButtons = ({
       disabled={loading}
       onClick={() => onPaymentReceived(recebimento.id)}
       title="Receber Pagamento"
+      type="button"
     >
       <FaMoneyCheckAlt />
     </Button>
@@ -114,7 +119,7 @@ export function Recebimentos() {
     try {
       let query = supabase
         .from("accounts_receivable_view")
-        .select("*, custumer:costumer_id(name)", { count: "exact" });
+        .select("*, custumer:custumer_id(name)", { count: "exact" });
 
       if (!isAdmin) {
         query = query.eq("active", true).eq("user_id", user.id);
@@ -233,7 +238,7 @@ export function Recebimentos() {
         .from("accounts_receivable")
         .update({ payment_received_at: payment_received_at })
         .eq("id", recebimentoPago)
-        .select("*, custumer:costumer_id(name)");
+        .select("*, custumer:custumer_id(name)");
 
       if (error) throw error;
 
@@ -243,7 +248,6 @@ export function Recebimentos() {
         fetchRecebimento();
       }
       if (payment_received_at && isAdmin) {
- 
         setRecebimento((clientesAtuais) =>
           clientesAtuais.filter((c) => c.id !== recebimentoPago)
         );
@@ -271,7 +275,7 @@ export function Recebimentos() {
         .from("accounts_receivable")
         .update({ active: novoStatus })
         .eq("id", id)
-        .select("*, custumer:costumer_id(name)");
+        .select("*, custumer:custumer_id(name)");
 
       if (error) throw error;
 
@@ -320,7 +324,7 @@ export function Recebimentos() {
     (error: string) => {
       geminiTranslate(error, "português do Brasil");
       if (translationError) {
-        console.error("Erro na tradução:", translationError);
+        throw new Error("Erro na tradução: " + translationError);
       }
     },
     [geminiTranslate, translationError]
@@ -334,22 +338,27 @@ export function Recebimentos() {
 
   return (
     <Main>
-      <div className={style.container}>
-        <div className={style.header}>
-          <h1>Lista de Recebimento</h1>
-          <div className={style.headerActions}>
+      <div className={`${stylesShared.container}`}>
+        <div className={stylesShared.header}>
+          <h1>
+            {" "}
+            <LuReceipt />
+            Lista de Recebimento
+          </h1>
+          <div className={stylesShared.headerActions}>
             <input
+              id="buscaInput"
               name="buscaInput"
               ref={buscaInputRef}
               type="text"
-              placeholder="Buscar por cliente, data de recebimento ou valor..."
+              placeholder="Buscar por cliente,recebimento ou valor..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className={style.searchInput}
+              className={stylesShared.searchInput}
               disabled={loading}
+              title="Buscar por cliente, data de recebimento ou valor..."
             />
             <Button
-              className={style.button}
               onClick={handleNovoRecebimento}
               disabled={loading || error !== null}
               title="Novo Recebimento"
@@ -358,8 +367,8 @@ export function Recebimentos() {
             </Button>
           </div>
         </div>
-        <div className={style.tableContainer}>
-          <table className={style.table}>
+        <div className={stylesShared.tableContainer}>
+          <table className={`${styles.table} ${stylesShared.table}`}>
             <thead>
               <tr>
                 <th>Cliente</th>
@@ -373,7 +382,7 @@ export function Recebimentos() {
             <tbody>
               {loading && Recebimento.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className={style.loadingRow}>
+                  <td colSpan={5} className={stylesShared.loadingRow}>
                     Carregando Recebimento...
                   </td>
                 </tr>
@@ -383,10 +392,10 @@ export function Recebimentos() {
                     <td
                       className={
                         recebimento.payment_received_at
-                          ? style.notReceived
+                          ? styles.notReceived
                           : recebimento.active
-                          ? style.active
-                          : style.notActive
+                          ? stylesShared.active
+                          : stylesShared.notActive
                       }
                     >
                       {recebimento?.custumer?.name ?? "Cliente não encontrado"}
@@ -394,10 +403,10 @@ export function Recebimentos() {
                     <td
                       className={
                         recebimento.payment_received_at
-                          ? style.notReceived
+                          ? styles.notReceived
                           : recebimento.active
-                          ? style.active
-                          : style.notActive
+                          ? stylesShared.active
+                          : stylesShared.notActive
                       }
                     >
                       {recebimento.received_date
@@ -409,10 +418,10 @@ export function Recebimentos() {
                     <td
                       className={
                         recebimento.payment_received_at
-                          ? style.notReceived
+                          ? styles.notReceived
                           : recebimento.active
-                          ? style.active
-                          : style.notActive
+                          ? stylesShared.active
+                          : stylesShared.notActive
                       }
                     >
                       {new Intl.NumberFormat("pt-BR", {
@@ -423,10 +432,10 @@ export function Recebimentos() {
                     <td
                       className={
                         recebimento.payment_received_at
-                          ? style.notReceived
+                          ? styles.notReceived
                           : recebimento.active
-                          ? style.active
-                          : style.notActive
+                          ? stylesShared.active
+                          : stylesShared.notActive
                       }
                     >
                       {recebimento.payment_received_at
@@ -437,7 +446,9 @@ export function Recebimentos() {
                     </td>
                     <td
                       className={
-                        recebimento.active ? style.active : style.notActive
+                        recebimento.active
+                          ? stylesShared.active
+                          : stylesShared.notActive
                       }
                     >
                       {recebimento.active ? "Ativo" : "Inativo"}
@@ -456,7 +467,7 @@ export function Recebimentos() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className={style.emptyRow}>
+                  <td colSpan={5} className={stylesShared.emptyRow}>
                     Nenhum recebimento cadastrado.
                   </td>
                 </tr>
@@ -465,22 +476,22 @@ export function Recebimentos() {
           </table>
         </div>
 
-        <div className={style.cardList}>
+        <div className={stylesShared.cardList}>
           {loading && Recebimento.length === 0 ? (
-            <div className={style.loadingCardList}>
+            <div className={stylesShared.loadingCardList}>
               <p>Carregando Recebimento...</p>
             </div>
           ) : Recebimento.length > 0 ? (
-            <div className={style.cardList}>
+            <div className={stylesShared.cardList}>
               {Recebimento.map((recebimento) => (
                 <Card
                   key={recebimento.id}
                   className={
                     recebimento.payment_received_at
-                      ? style.notReceived
+                      ? `${styles.notReceived} ${stylesShared.card}`
                       : recebimento.active
-                      ? style.active
-                      : style.notActive
+                      ? `${stylesShared.active} ${stylesShared.card}`
+                      : `${stylesShared.notActive} ${stylesShared.card}`
                   }
                 >
                   <Card.Header>
@@ -512,7 +523,7 @@ export function Recebimentos() {
                       {recebimento.active ? "Ativo" : "Inativo"}
                     </CardField>
                   </Card.Body>
-                  <Card.Actions className={style.received}>
+                  <Card.Actions className={styles.received}>
                     <ActionButtons
                       recebimento={recebimento}
                       loading={loading}
@@ -526,48 +537,52 @@ export function Recebimentos() {
               ))}
             </div>
           ) : (
-            <div className={style.emptyCardList}>
+            <div className={stylesShared.emptyCardList}>
               <p>Nenhum recebimento cadastrado ainda.</p>
             </div>
           )}
         </div>
 
-        <div className={style.pagination}>
-          <div className={style.itemsPerPageSelector}>
-            <label htmlFor="items-per-page">Itens por página:</label>
-            <select
-              id="items-per-page"
-              value={itemsPerPage}
-              onChange={handleItemsPerPageChange}
-              title="Selecione o número de itens por página"
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
-            </select>
-          </div>
+        {Recebimento.length > 0 ? (
+          <div className={stylesShared.pagination}>
+            <div className={stylesShared.itemsPerPageSelector}>
+              <label htmlFor="items-per-page">Itens por página:</label>
+              <select
+                id="items-per-page"
+                value={itemsPerPage}
+                onChange={handleItemsPerPageChange}
+                title="Selecione o número de itens por página"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
 
-          <div className={style.paginationControls}>
-            <Button
-              onClick={handlePaginaAnterior}
-              disabled={currentPage === 1 || loading}
-              title="Página Anterior"
-            >
-              <FaArrowAltCircleLeft />
-            </Button>
-            <span>
-              Página {currentPage} de {totalPages}
-            </span>
-            <Button
-              onClick={handlePaginaSeguinte}
-              disabled={currentPage >= totalPages || loading}
-              title="Próxima Página"
-            >
-              <FaRegArrowAltCircleRight />
-            </Button>
+            <div className={stylesShared.paginationControls}>
+              <Button
+                onClick={handlePaginaAnterior}
+                disabled={currentPage === 1 || loading}
+                title="Página Anterior"
+              >
+                <FaArrowAltCircleLeft />
+              </Button>
+              <p>
+                Página {currentPage} de {totalPages}
+              </p>
+              <Button
+                onClick={handlePaginaSeguinte}
+                disabled={currentPage >= totalPages || loading}
+                title="Próxima Página"
+              >
+                <FaRegArrowAltCircleRight />
+              </Button>
+            </div>
           </div>
-        </div>
+        ) : (
+          ""
+        )}
       </div>
 
       <ErrorDialogs

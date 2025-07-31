@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Main } from "../../Components/Main/Main";
 import { supabase } from "../../services/supabase";
 import { useGlobalState } from "../../Hooks/useGlobalState";
-import style from "./clientes.module.css";
+import styles from "./clientes.module.css";
+import stylesShared from "../sharedPage.module.css";
 import type { Cliente } from "../../Types/ClientesTypes";
 import { ConfirmationDialogs } from "../../Components/Dialogs/ConfirmationDialogs/ConfirmationDialogs";
 import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
-import Card from "../../Components/UI/Card/Card";
-import CardField from "../../Components/UI/Card/CardField";
+import Card from "../../Components/Card/Card";
+import CardField from "../../Components/Card/CardField";
 import { Button } from "../../Components/Button/Button";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { useAdmin } from "../../Hooks/useAdmin";
@@ -53,6 +54,7 @@ const ActionButtons = ({
         disabled={isDisabled}
         onClick={() => onEdit(cliente.id)}
         title="Editar"
+        type="button"
       >
         <FaEdit />
       </Button>
@@ -61,6 +63,7 @@ const ActionButtons = ({
         disabled={isDisabled}
         onClick={() => onDelete(cliente.id)}
         title="Excluir"
+        type="button"
       >
         <FaTrashAlt />
       </Button>
@@ -69,6 +72,7 @@ const ActionButtons = ({
         disabled={isDisabled}
         onClick={() => onToggleActive(cliente.id, cliente.active)}
         title="Ativar/Desativar"
+        type="button"
       >
         {cliente.active ? <FaToggleOff /> : <FaToggleOn />}
       </Button>
@@ -274,7 +278,7 @@ export function Clientes() {
     (error: string) => {
       geminiTranslate(error, "português do Brasil");
       if (translationError) {
-        console.error("Erro na tradução:", translationError);
+        throw new Error("Erro na tradução: " + translationError);
       }
     },
     [geminiTranslate, translationError]
@@ -288,10 +292,13 @@ export function Clientes() {
 
   return (
     <Main>
-      <div className={style.container}>
-        <div className={style.header}>
-          <h1>Lista de Clientes</h1>
-          <div className={style.headerActions}>
+      <div className={stylesShared.container}>
+        <div className={stylesShared.header}>
+          <h1>
+            <FaCircleUser />
+            Lista de Clientes
+          </h1>
+          <div className={stylesShared.headerActions}>
             <input
               name="buscaInput"
               ref={buscaInputRef}
@@ -299,11 +306,11 @@ export function Clientes() {
               placeholder="Buscar por nome ou e-mail..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className={style.searchInput}
+              className={stylesShared.searchInput}
               disabled={loading}
             />
             <Button
-              variant="bg-primary"
+              type="button"
               onClick={handleNovoCliente}
               disabled={loading || error !== null}
               title="Novo Cliente"
@@ -312,8 +319,8 @@ export function Clientes() {
             </Button>
           </div>
         </div>
-        <div className={style.tableContainer}>
-          <table className={style.table}>
+        <div className={stylesShared.tableContainer}>
+          <table className={`${styles.table} ${stylesShared.table}`}>
             <thead>
               <tr>
                 <th>Nome</th>
@@ -326,7 +333,7 @@ export function Clientes() {
             <tbody>
               {loading && clientes.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className={style.loadingRow}>
+                  <td colSpan={5} className={stylesShared.loadingRow}>
                     Carregando clientes...
                   </td>
                 </tr>
@@ -335,28 +342,36 @@ export function Clientes() {
                   <tr key={cliente.id}>
                     <td
                       className={
-                        cliente.active ? style.active : style.notActive
+                        cliente.active
+                          ? stylesShared.active
+                          : stylesShared.notActive
                       }
                     >
                       {cliente.name}
                     </td>
                     <td
                       className={
-                        cliente.active ? style.active : style.notActive
+                        cliente.active
+                          ? stylesShared.active
+                          : stylesShared.notActive
                       }
                     >
                       {cliente.email}
                     </td>
                     <td
                       className={
-                        cliente.active ? style.active : style.notActive
+                        cliente.active
+                          ? stylesShared.active
+                          : stylesShared.notActive
                       }
                     >
                       {cliente.mobile}
                     </td>
                     <td
                       className={
-                        cliente.active ? style.active : style.notActive
+                        cliente.active
+                          ? stylesShared.active
+                          : stylesShared.notActive
                       }
                     >
                       {cliente.active ? "Ativo" : "Inativo"}
@@ -376,7 +391,7 @@ export function Clientes() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className={style.emptyRow}>
+                  <td colSpan={5} className={stylesShared.emptyRow}>
                     Nenhum cliente cadastrado.
                   </td>
                 </tr>
@@ -385,17 +400,21 @@ export function Clientes() {
           </table>
         </div>
 
-        <div className={style.cardList}>
+        <div className={stylesShared.cardList}>
           {loading && clientes.length === 0 ? (
-            <div className={style.loadingCardList}>
+            <div className={stylesShared.loadingCardList}>
               <p>Carregando clientes...</p>
             </div>
           ) : clientes.length > 0 ? (
-            <div className={style.cardList}>
+            <div className={stylesShared.cardList}>
               {clientes.map((cliente) => (
                 <Card key={cliente.id}>
                   <Card.Header
-                    className={cliente.active ? style.active : style.notActive}
+                    className={
+                      cliente.active
+                        ? stylesShared.active
+                        : stylesShared.notActive
+                    }
                   >
                     {cliente.name}
                   </Card.Header>
@@ -406,7 +425,13 @@ export function Clientes() {
                       {cliente.active ? "Ativo" : "Inativo"}
                     </CardField>
                   </Card.Body>
-                  <Card.Actions>
+                  <Card.Actions
+                    className={
+                      cliente.active
+                        ? stylesShared.notActive
+                        : stylesShared.active
+                    }
+                  >
                     <ActionButtons
                       cliente={cliente}
                       loading={loading}
@@ -421,50 +446,52 @@ export function Clientes() {
               ))}
             </div>
           ) : (
-            <div className={style.emptyCardList}>
+            <div className={stylesShared.emptyCardList}>
               <p>Nenhum cliente cadastrado ainda.</p>
             </div>
           )}
         </div>
 
-        <div className={style.pagination}>
-          <div className={style.itemsPerPageSelector}>
-            <label htmlFor="items-per-page">Itens por página:</label>
-            <select
-              id="items-per-page"
-              value={itemsPerPage}
-              onChange={handleItemsPerPageChange}
-              title="Selecione o número de itens por página"
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
-            </select>
-          </div>
+        {clientes.length > 0 ? (
+          <div className={stylesShared.pagination}>
+            <div className={stylesShared.itemsPerPageSelector}>
+              <label htmlFor="items-per-page">Itens por página:</label>
+              <select
+                id="items-per-page"
+                value={itemsPerPage}
+                onChange={handleItemsPerPageChange}
+                title="Selecione o número de itens por página"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
 
-          <div className={style.paginationControls}>
-            <Button
-              variant="bg-primary"
-              onClick={handlePaginaAnterior}
-              disabled={currentPage === 1 || loading}
-              title="Página Anterior"
-            >
-              <FaArrowAltCircleLeft />
-            </Button>
-            <span>
-              Página {currentPage} de {totalPages}
-            </span>
-            <Button
-              variant="bg-primary"
-              onClick={handlePaginaSeguinte}
-              disabled={currentPage >= totalPages || loading}
-              title="Próxima Página"
-            >
-              <FaRegArrowAltCircleRight />
-            </Button>
+            <div className={stylesShared.paginationControls}>
+              <Button
+                onClick={handlePaginaAnterior}
+                disabled={currentPage === 1 || loading}
+                title="Página Anterior"
+              >
+                <FaArrowAltCircleLeft />
+              </Button>
+              <p>
+                Página {currentPage} de {totalPages}
+              </p>
+              <Button
+                onClick={handlePaginaSeguinte}
+                disabled={currentPage >= totalPages || loading}
+                title="Próxima Página"
+              >
+                <FaRegArrowAltCircleRight />
+              </Button>
+            </div>
           </div>
-        </div>
+        ) : (
+          ""
+        )}
       </div>
 
       <ErrorDialogs
