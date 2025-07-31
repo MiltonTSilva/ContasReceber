@@ -3,7 +3,7 @@ export type Recebimento = {
   received_date: string;
   payment_received_at: string;
   amount_to_receive: number;
-  costumer_id: string;
+  custumer_id: string;
   active: boolean;
   user_id: string;
   custumer: {
