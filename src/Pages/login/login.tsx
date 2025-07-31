@@ -5,6 +5,7 @@ import { useGlobalState } from "../../Hooks/useGlobalState";
 import { Link, useNavigate } from "react-router-dom";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
+import { Button } from "../../Components/Button/Button";
 
 export function Login() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ export function Login() {
     (error: string) => {
       geminiTranslate(error, "português do Brasil");
       if (translationError) {
-        console.error("Erro na tradução:", translationError);
+        throw new Error("Erro na tradução: " + translationError);
       }
     },
     [geminiTranslate, translationError]
@@ -59,6 +60,7 @@ export function Login() {
         <div className={style.card}>
           <p className={style.title}>Contas a Receber</p>
           <p className={style.title}>Login</p>
+          <hr className={"separator"} />
           <p className={style.subtitle}>Acesse sua conta para continuar.</p>
 
           <form className={style["form"]} onSubmit={handleLogin}>
@@ -85,14 +87,18 @@ export function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <button
-              className={style.button}
-              type="submit"
-              disabled={loading || error !== null}
-            >
-              {loading ? "Entrando..." : "Entrar"}
-            </button>
-            <hr className={style.separator} />
+            <Link to="/forgot">Esqueceu sua senha?</Link>
+
+            <div className="actions">
+              <Button
+                className="button"
+                type="submit"
+                disabled={loading || error !== null}
+              >
+                {loading ? "Entrando..." : "Entrar"}
+              </Button>
+            </div>
+            <hr className={"separator"} />
             <Link to="/register">Não tem uma conta? Cadastre-se</Link>
           </form>
         </div>
