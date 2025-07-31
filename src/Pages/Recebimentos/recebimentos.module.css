@@ -1,249 +1,47 @@
-.container {
-  max-width: 100dvw;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.container h1 {
-  margin-bottom: 0.5rem;
-  color: #fff;
-  text-align: center;
-}
-
-.tableContainer {
-  width: 100%;
-  display: block;
-  overflow-x: auto;
-  overflow-y: auto;
-  max-height: 40dvh;
-  border: 1px solid #dddddd;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: var(--gray-darker);
-}
-
-.table th {
-  background-color: var(--gray);
-  font-size: 1.1rem;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  border: 1px solid #dddddd;
-  color: #fff;
-}
-
-.table th,
-.table td {
-  padding: 5px 15px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  vertical-align: middle;
-  white-space: nowrap;
-}
-
-.table tbody tr:hover td:nth-child(1),
-.table tbody tr:hover td:nth-child(2),
-.table tbody tr:hover td:nth-child(3),
-.table tbody tr:hover td:nth-child(4),
-.table tbody tr:hover td:nth-child(5) {
-  background-color: var(--primary);
-}
-
-.table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-.pagination span {
-  margin: 0 15px;
-  color: #fff;
-}
-
-.paginationControls {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.pagination button {
-  padding: 8px 16px;
-  cursor: pointer;
-}
-
-.pagination button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.itemsPerPageSelector {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.itemsPerPageSelector select {
-  padding: 8px;
-  background-color: var(--primary);
-}
-
-.itemsPerPageSelector label {
-  color: #fff;
-}
-
-.header {
-  margin-bottom: 1.5rem;
-  width: 100%;
-}
-
-.headerActions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.searchInput {
-  background-color: var(--primary);
-  padding: 0.1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1.3rem;
-  font-weight: bold;
-  flex-grow: 1;
-  width: 450px;
-}
-
-.searchInput::placeholder {
-  color: #fff;
-  opacity: 1;
-}
-
-.searchInput:disabled {
-  background-color: var(--disabled);
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.searchInput:hover:not(:disabled) {
-  background-color: var(--h-disabled);
-}
-
-.loadingRow {
-  text-align: center;
-  padding: 2rem;
-  font-style: italic;
-  color: #6c757d;
-}
-
-.emptyRow {
-  text-align: center;
-  padding: 2rem;
-  font-style: italic;
-  color: #6c757d;
-}
-
-.loadingCardList {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem;
-  margin-top: 1.5rem;
-  border: 2px dashed #e0e0e0;
-  border-radius: 8px;
-  text-align: center;
-  color: #6c757d;
-  width: 100%;
-}
-.emptyCardList {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem;
-  margin-top: 1.5rem;
-  border: 2px dashed #e0e0e0;
-  border-radius: 8px;
-  text-align: center;
-  color: #6c757d;
-}
-
-.emptyCardList p {
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-}
-
-.cardList {
-  display: none;
-}
-
 .received {
   background-color: var(--gray-darker);
-  color: var(--white);
 }
 
 .notReceived {
   background-color: var(--info);
-  color: var(--black);
-  font-weight: bold;
 }
 
-.active {
-  background-color: var(--active);
-  color: var(--white);
-}
-
-.notActive {
-  background-color: var(--notActive);
-  color: var(--black);
-  font-weight: bold;
-}
-
-/* Breakpoint Responsivo: abaixo de 1200px, troca para cartões */
-@media (max-width: 1199px) {
-  .tableContainer {
-    display: none;
+@media (min-width: 1024px) {
+  .table tbody tr:hover td:nth-child(1),
+  .table tbody tr:hover td:nth-child(2),
+  .table tbody tr:hover td:nth-child(3),
+  .table tbody tr:hover td:nth-child(4),
+  .table tbody tr:hover td:nth-child(5) {
+    background-color: var(--primary);
   }
 
-  .header {
-    font-size: 0.78rem;
+  .table tbody tr td:nth-child(1) {
+    /* Cliente */
+    width: 35%;
   }
 
-  .cardList {
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-  }
-  .headerActions {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    align-items: stretch;
+  .table tbody tr td:nth-child(2) {
+    /* Recebimento */
+    width: 12.5%;
   }
 
-  .searchInput {
-    font-size: 0.9rem;
-    width: 100%;
+  .table tbody tr td:nth-child(3) {
+    /* Valor */
+    width: 12.5%;
   }
 
-  .button {
-    padding: 0.3rem;
-    width: 100%;
+  .table tbody tr td:nth-child(4) {
+    /* Pagamento */
+    width: 12.5%;
+  }
+
+  .table tbody tr td:nth-child(5) {
+    /* Status */
+    width: 12.5%;
+  }
+
+  .table tbody tr td:nth-child(6) {
+    /* Ação */
+    width: 15%;
   }
 }

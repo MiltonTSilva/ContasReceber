@@ -2,24 +2,42 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 5px;
+  padding: 15px;
   background-color: var(--black);
   border-bottom: 1px solid #eaeaea;
 }
 
 .nav ul {
+  background-color: var(--primary);
+  border-radius: 5px;
+  display: none;
+  flex-direction: column;
+  width: 94.5dvw;
+  height: 30dvh;
+  position: absolute;
+  top: 175px;
+  left: 10px;
   list-style: none;
 }
 
-.nav li {
-  padding: 0 0.3rem;
+.nav ul li {
+  display: flex;
+  align-items: center;
+  padding: 0.1rem;
+}
+
+.nav.open {
+  display: flex;
+}
+
+.header h1 {
+  font-size: 0.5;
 }
 
 .user {
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: flex-end;
-  flex-direction: column;
   color: var(--white);
   font-size: 1.1rem;
 }
@@ -30,22 +48,17 @@
   font-size: 1.2rem;
 }
 
-.brand {
-  font-size: 1rem;
-  font-weight: bold;
-  color: white;
-  text-decoration: none;
-}
-
 .menuIcon {
-  display: none;
+  display: flex;
   flex-direction: column;
+  position: absolute;
+  top: 58px;
+  right: 10px;
   cursor: pointer;
-  margin-left: auto;
 }
 
 .menuIcon div {
-  width: 25px;
+  width: 35px;
   height: 3px;
   background-color: var(--primary);
   margin: 4px 10px;
@@ -68,11 +81,11 @@
 }
 
 .link {
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: bold;
   position: relative;
   text-decoration: none;
-  color: #555;
-  font-size: 1.2rem;
-  font-weight: 500;
   padding: 0.5rem 0;
   transition: color 0.2s ease-in-out;
 }
@@ -87,7 +100,16 @@
   background-color: var(--primary);
   transform: scaleX(0);
   transform-origin: bottom right;
-  transition: transform 0.25s ease-out;
+  transition: transform 0.15s ease-out;
+}
+
+.linkActive {
+  color: #007bff;
+}
+
+.linkActive::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 .link:hover,
@@ -101,50 +123,35 @@
   transform-origin: bottom left;
 }
 
-@media (max-width: 1199px) {
-  .header h1 {
-    font-size: 0.5;
-  }
+@media (min-width: 1024px) {
   .nav {
-    padding-bottom: 15px;
+    padding-bottom: 5px;
   }
 
   .nav ul {
-    background-color: var(--primary);
-    border-radius: 5px;
-    display: none;
-    flex-direction: column;
-    width: 94.5dvw;
-    height: 30dvh;
-    position: absolute;
-    top: 155px;
-    left: 10px;
-  }
-
-  .nav ul li {
     display: flex;
-    align-items: center;
-    padding: 0.1rem;
+    flex-direction: row;
+    position: static;
+    background-color: var(--black);
+    height: 10dvh;
+  }
+  .nav ul li {
+    padding: 0 0.3rem;
   }
 
   .link {
-    color: var(--white);
-    font-size: 1rem;
-    font-weight: bold;
-  }
-
-  .nav.open {
-    display: flex;
+    color: #555;
+    font-size: 1.2rem;
+    font-weight: 500;
   }
 
   .menuIcon {
-    display: flex;
+    display: none;
   }
 
   .user {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
+    position: absolute;
+    top: 70px;
+    right: 50px;
   }
 }

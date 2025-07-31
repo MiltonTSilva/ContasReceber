@@ -1,5 +1,5 @@
 .container {
-  max-width: 100dvw;
+  width: 95dvw;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -8,26 +8,23 @@
 
 .title {
   color: #1c70be;
-  margin-bottom: 2px;
-  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 10px;
+  border-bottom: 1px solid;
 }
 
 .phrase {
   text-align: center;
   text-wrap: wrap;
   font-size: 1.2em;
-  color: #fff;
   width: 80%;
-  margin: 2px auto;
-}
-
-.phrase .receivementsSection {
-  margin-top: 10px;
+  margin: 5px auto;
 }
 
 .phraseReceivements {
   color: var(--teal);
-  margin-bottom: 1px;
+  font-weight: 500;
+  margin-bottom: 5px;
+  margin-top: 10px;
 }
 
 .pagination {
@@ -38,62 +35,19 @@
   flex-wrap: wrap;
   gap: 1rem;
 }
-.pagination span {
-  margin: 0 15px;
-  color: #fff;
-}
-
-.paginationControls {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.pagination button {
-  padding: 8px 16px;
-  cursor: pointer;
-}
-
-.pagination button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.itemsPerPageSelector {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.itemsPerPageSelector select {
-  padding: 8px;
-  background-color: var(--primary);
-}
-
-.itemsPerPageSelector label {
-  color: #fff;
-}
 
 .active {
   background-color: var(--active);
-  color: var(--white);
 }
 
 .notActive {
   background-color: var(--notActive);
-  color: var(--black);
   font-weight: bold;
 }
 
-.cardList {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 2rem;
-  width: 100%;
-}
 .cardHeader {
-  color: var(--black);
+  background-color: var(--info);
+  color: var(--blue);
 }
 
 .cardBody {
@@ -114,22 +68,18 @@
   font-weight: bold;
 }
 
-@media (max-width: 1199px) {
-  .cardList {
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-  }
+.cardList {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+  margin-top: 2rem;
+  width: 93dvw;
 }
 
-@media (max-width: 992px) {
+@media (min-width: 1024px) {
   .cardList {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .cardList {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(295px, 1fr));
   }
 }

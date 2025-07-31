@@ -1,24 +1,25 @@
 .title {
   color: #1c70be;
   margin-bottom: 20px;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid;
 }
 
 .phrase {
+  font-weight: 600;
   text-align: center;
   text-wrap: wrap;
   font-size: 1.2em;
-  color: #fff;
   width: 80%;
   margin: 10px auto;
 }
 
 .address {
-  display: grid;
-  font-size: 1.2em;
-  grid-template-columns: auto auto;
-  gap: 8px 12px;
-  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  font-size: 1em;
 }
 
 .address a {
@@ -26,35 +27,25 @@
 }
 
 .author {
-  color: #fff;
-  font-weight: 400;
+  font-weight: 600;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin-bottom: 1px;
   text-align: right;
 }
+
 .author + span {
   color: #1c70be;
   text-align: left;
   font-style: italic;
+  font-weight: bold;
 }
 
-@media (max-width: 1199px) {
+@media (min-width: 1024px) {
   .address {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    font-size: 1em;
-  }
-
-  .address a {
-    text-decoration: none;
-  }
-
-  .author + span {
-    color: #1c70be;
-    text-align: left;
-    font-style: italic;
+    display: grid;
+    font-size: 1.2em;
+    grid-template-columns: auto auto;
+    gap: 8px 12px;
+    margin-top: 5px;
   }
 }

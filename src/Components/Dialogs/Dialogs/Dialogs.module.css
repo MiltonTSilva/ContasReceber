@@ -1,15 +1,16 @@
 .dialogs {
-  background-color: var(--cyan);
+  background-color: var(--gray-lighter);
   padding: 25px;
   border-radius: 8px;
   box-shadow: 1px 1px rgb(250, 249, 249);
   position: relative;
-  width: 80%;
+  width: 100%;
   max-width: 500px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   animation: slideUp 0.3s ease-in-out;
+  width: 85%;
 }
 
 .overlay {
@@ -40,8 +41,7 @@
 .dialogsContent {
   border-radius: 15px;
   margin-bottom: 10px;
-  padding: 15px;
-  background-color: var(--gray-lighter);
+  color: var(--black);
   font-size: 1rem;
   font-weight: bold;
 }
@@ -130,4 +130,10 @@
   max-width: 100%;
   height: auto;
   border-radius: 4px;
+}
+
+@media (min-width: 1024px) {
+  .dialogs {
+    width: 100%;
+  }
 }

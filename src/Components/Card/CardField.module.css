@@ -1,0 +1,14 @@
+.cardField {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.label {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: start;
+}
+.value {
+  font-size: 1rem;
+}

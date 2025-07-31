@@ -1,12 +1,12 @@
 .container {
-  background-color: var(--primary);
+  border: 1px solid;
   border-radius: 12px;
-  width: 50%;
   padding: 5px;
+  width: 100%;
 }
 
 .card {
-  background-color: var(--gray-dark);
+  background-color: var(--gray);
   padding: 1rem 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -15,38 +15,44 @@
 
 .title {
   font-size: 1.6rem;
-  color: #fff;
   margin-bottom: 1rem;
   text-align: center;
 }
 
 .subtitle {
   font-size: 1rem;
-  color: #87909c;
-  margin-bottom: 1rem;
-  grid-column: 1 / -1;
 }
 
 .form {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 10px;
+}
+
+.actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-direction: row;
 }
 
 .label {
   text-align: start;
   font-size: 1.2rem;
-  color: #606770;
+  font-weight: bold;
   margin-bottom: 15px;
+  color: var(--darkGray);
 }
 
 .input {
   width: 100%;
-  padding: 0.8rem 1rem;
+  padding: 0.8rem 0.5rem;
   border: 1px solid #dddfe2;
   border-radius: 6px;
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
+  margin-top: 5px;
 }
 
 .input:focus {
@@ -74,11 +80,6 @@
   height: 25px;
 }
 
-.separator {
-  border-bottom: 1px solid #dadde1;
-  margin: 1.5rem 0;
-}
-
 .error {
   color: #ff0000;
   font-size: 1.2rem;
@@ -86,12 +87,15 @@
   grid-column: 1 / -1;
 }
 
-@media (max-width: 1199px) {
+@media (min-width: 1024px) {
   .container {
-    width: 100%;
+    width: 50%;
+  }
+  .form {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .form {
-    grid-template-columns: 1fr;
+  .actions {
+    justify-content: flex-end;
   }
 }

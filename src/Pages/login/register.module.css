@@ -1,33 +1,16 @@
 .container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgb(65, 66, 65);
+  border: solid 1px;
   padding: 5px;
   border-radius: 12px;
 }
 
 .card {
-  background-color: rgb(36 36 36 / 1);
   padding: 1rem 3rem;
-
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
   text-align: center;
-}
-
-.title {
-  font-size: 1.6rem;
-  color: #fff;
-  margin-bottom: 1rem;
-}
-
-.subtitle {
-  font-size: 1rem;
-  color: #87909c;
-  margin-bottom: 1rem;
 }
 
 .form {
@@ -36,10 +19,21 @@
   gap: 1rem;
 }
 
+.title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
 .input {
   width: 100%;
   padding: 0.8rem 1rem;
-  border: 1px solid #dddfe2;
   border-radius: 6px;
   font-size: 1rem;
   box-sizing: border-box;
@@ -51,30 +45,3 @@
   outline: none;
 }
 
-.button {
-  width: 65%;
-  margin: 10px auto;
-  padding: 0.8rem 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: #1877f2;
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.button:hover:not(:disabled) {
-  background-color: #166fe5;
-}
-
-.button:disabled {
-  background-color: #a0c3f7;
-  cursor: not-allowed;
-}
-
-.separator {
-  border-bottom: 1px solid #dadde1;
-  margin: 1.5rem 0;
-}
