@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import style from "./NavBar.module.css";
 import { useGlobalState } from "../../Hooks/useGlobalState";
 import { Logout } from "../../Pages/Logout/logout";
@@ -30,60 +30,70 @@ export function NavBar() {
 
           <ul className={`${style.nav} ${menuOpen ? style.open : ""}`}>
             <li>
-              <Link
-                className={style.link}
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${style.link} ${style.linkActive}` : style.link
+                }
                 to="/Home"
                 onClick={() => setMenuOpen(false)}
               >
                 Home
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
-                className={style.link}
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${style.link} ${style.linkActive}` : style.link
+                }
                 to="/clientes"
                 onClick={() => setMenuOpen(false)}
               >
                 Clientes
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
-                className={style.link}
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${style.link} ${style.linkActive}` : style.link
+                }
                 to="/recebimentos"
                 onClick={() => setMenuOpen(false)}
               >
                 Recebimento
-              </Link>
+              </NavLink>
             </li>
 
             <li>
-              <Link
-                className={style.link}
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${style.link} ${style.linkActive}` : style.link
+                }
                 to="/sobre"
                 onClick={() => setMenuOpen(false)}
               >
                 Sobre
-              </Link>
+              </NavLink>
             </li>
             <li>
               {user ? (
                 <Logout />
               ) : (
-                <Link
-                  className={style.link}
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? `${style.link} ${style.linkActive}` : style.link
+                  }
                   to="/login"
                   onClick={() => setMenuOpen(false)}
                 >
                   Login
-                </Link>
+                </NavLink>
               )}
             </li>
           </ul>
         </nav>
         <div className={style.user}>
           <p>
-            <span className={style["user-name"]}>Bem-vindo,</span>
+            <span className={style["user-name"]}>Olá,</span>
             {user?.user_metadata.display_name != undefined
               ? user?.user_metadata.display_name
               : user?.user_metadata.full_name}
