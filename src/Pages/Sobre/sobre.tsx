@@ -12,7 +12,7 @@ export function Sobre() {
 
       <p className={style.phrase}>
         O aplicativo é uma ferramenta simples e eficiente para o controle de
-        contas a receber, pensado qualquer pessoa que deseja organizar seus
+        contas a receber, pensado para qualquer pessoa que deseja organizar seus
         recebimentos com clareza e agilidade.
       </p>
 
