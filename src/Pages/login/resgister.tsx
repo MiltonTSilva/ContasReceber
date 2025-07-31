@@ -3,6 +3,7 @@ import { Main } from "../../Components/Main/Main";
 import style from "./register.module.css";
 import { supabase } from "../../services/supabase";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../../Components/Button/Button";
 
 export function Register() {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ export function Register() {
       <div className={style.container}>
         <div className={style.card}>
           <h2 className={style.title}>Cadastro de Conta</h2>
-
+          <hr className={"separator"} />
           <form className={style.form} onSubmit={handleRegister}>
             <p className={style.subtitle}>
               Para fazer o seu registro, informe os dados abaixo.
@@ -80,17 +81,19 @@ export function Register() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <button className={style.button} type="submit" disabled={loading}>
-              {loading ? "Cadastrando..." : "Cadastrar"}
-            </button>
-            <button
-              className={style.button}
-              type="button"
-              onClick={handleReturn}
-              disabled={loading}
-            >
-              Retornar ao Login
-            </button>
+            <div className="actions">
+              <Button
+                variant="bg-cancel"
+                type="button"
+                onClick={handleReturn}
+                disabled={loading}
+              >
+                Retornar
+              </Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? "Cadastrando..." : "Cadastrar"}
+              </Button>
+            </div>
           </form>
         </div>
       </div>
