@@ -11,6 +11,8 @@ import { Sobre } from "../Pages/Sobre/sobre";
 
 import { ProtectedRoute } from "../Components/ProtectedRoute/ProtectedRoute";
 import { useGlobalState } from "../Hooks/useGlobalState";
+import { Forgot } from "../Pages/login/forgot";
+import { UpdatePassword } from "../Pages/login/updatePassword";
 
 export function AppRoutes() {
   const { user } = useGlobalState();
@@ -72,7 +74,10 @@ export function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot" element={<Forgot />} />
+      <Route path="/updatePassword" element={<UpdatePassword />} />
       <Route path="/login" element={<Login />} />
       <Route
         path="/home"
