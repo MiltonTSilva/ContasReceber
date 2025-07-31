@@ -64,7 +64,14 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   const clearError = useCallback(() => setError(null), []);
 
-  // Memoriza o valor do contexto para evitar re-renderizações desnecessárias
+  const resetPassword = useCallback(async (email: string) => {
+    await supabase.auth.resetPasswordForEmail(email);
+  }, []);
+
+  const updateUser = useCallback(async (data: Partial<User>) => {
+    await supabase.auth.updateUser({ data });
+  }, []);
+
   const value = useMemo(
     () => ({
       user,
@@ -73,8 +80,19 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       signOut,
       signInWithPassword,
       clearError,
+      resetPassword,
+      updateUser,
     }),
-    [user, loading, error, signOut, signInWithPassword, clearError]
+    [
+      user,
+      loading,
+      error,
+      signOut,
+      signInWithPassword,
+      clearError,
+      resetPassword,
+      updateUser,
+    ]
   );
 
   return (
