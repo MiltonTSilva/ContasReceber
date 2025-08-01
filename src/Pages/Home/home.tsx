@@ -247,27 +247,31 @@ export function Home() {
               ))}
             </div>
 
-            <div className={styles.pagination}>
-              <div className={stylesShared.paginationControls}>
-                <Button
-                  onClick={handlePaginaAnterior}
-                  disabled={currentPage === 1 || loading}
-                  title="Página Anterior"
-                >
-                  <FaArrowAltCircleLeft />
-                </Button>
-                <span>
-                  Página {currentPage} de {totalPages}
-                </span>
-                <Button
-                  onClick={handlePaginaSeguinte}
-                  disabled={currentPage >= totalPages || loading}
-                  title="Próxima Página"
-                >
-                  <FaRegArrowAltCircleRight />
-                </Button>
+            {Recebimento.length > 1 ? (
+              <div className={styles.pagination}>
+                <div className={stylesShared.paginationControls}>
+                  <Button
+                    onClick={handlePaginaAnterior}
+                    disabled={currentPage === 1 || loading}
+                    title="Página Anterior"
+                  >
+                    <FaArrowAltCircleLeft />
+                  </Button>
+                  <span>
+                    Página {currentPage} de {totalPages}
+                  </span>
+                  <Button
+                    onClick={handlePaginaSeguinte}
+                    disabled={currentPage >= totalPages || loading}
+                    title="Próxima Página"
+                  >
+                    <FaRegArrowAltCircleRight />
+                  </Button>
+                </div>
               </div>
-            </div>
+            ) : (
+              ""
+            )}
           </section>
         ) : (
           ""
