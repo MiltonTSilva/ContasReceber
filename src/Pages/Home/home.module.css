@@ -15,14 +15,14 @@
 .phrase {
   text-align: center;
   text-wrap: wrap;
-  font-size: 1.2em;
-  width: 80%;
+  font-size: 1.5em;
+  width: 90%;
   margin: 5px auto;
 }
 
 .phraseReceivements {
   color: var(--teal);
-  font-weight: 500;
+  font-weight: bold;
   margin-bottom: 5px;
   margin-top: 10px;
 }
@@ -31,7 +31,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem;
+  margin-top: 1rem;
   flex-wrap: wrap;
   gap: 1rem;
 }

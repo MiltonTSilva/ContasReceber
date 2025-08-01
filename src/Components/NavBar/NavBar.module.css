@@ -1,6 +1,6 @@
 .nav {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   padding: 15px;
   background-color: var(--black);
@@ -12,11 +12,11 @@
   border-radius: 5px;
   display: none;
   flex-direction: column;
-  width: 94.5dvw;
+  width: 95.55dvw;
   height: 30dvh;
   position: absolute;
-  top: 175px;
-  left: 10px;
+  top: 165px;
+  left: 9px;
   list-style: none;
 }
 
@@ -40,6 +40,7 @@
   justify-content: center;
   color: var(--white);
   font-size: 1.1rem;
+  margin-top: 3px;
 }
 
 .user-name {
@@ -52,8 +53,8 @@
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 58px;
-  right: 10px;
+  top: 17px;
+  left: 10px;
   cursor: pointer;
 }
 
@@ -88,6 +89,8 @@
   text-decoration: none;
   padding: 0.5rem 0;
   transition: color 0.2s ease-in-out;
+    user-select: none; 
+  -webkit-user-select: none;
 }
 
 .link::after {
@@ -104,7 +107,7 @@
 }
 
 .linkActive {
-  color: #007bff;
+  color: var(--white);
 }
 
 .linkActive::after {
@@ -114,7 +117,7 @@
 
 .link:hover,
 .link:focus {
-  color: #007bff;
+  color: var(--primary);
 }
 
 .link:hover::after,
@@ -125,7 +128,12 @@
 
 @media (min-width: 1024px) {
   .nav {
-    padding-bottom: 5px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px;
+    background-color: var(--black);
+    border-bottom: 1px solid #eaeaea;
   }
 
   .nav ul {
@@ -145,13 +153,17 @@
     font-weight: 500;
   }
 
+  .linkActive {
+    color: #007bff;
+  }
+
   .menuIcon {
     display: none;
   }
 
   .user {
     position: absolute;
-    top: 70px;
-    right: 50px;
+    top: 63px;
+    right: 25px;
   }
 }

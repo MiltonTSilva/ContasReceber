@@ -61,6 +61,7 @@
   font-weight: bold;
   flex-grow: 1;
   width: 100%;
+  margin-bottom: 5px;
 }
 
 .searchInput::placeholder {
@@ -116,7 +117,7 @@
   align-items: center;
   gap: 1.5rem;
   grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-  margin-top: 2rem;
+  margin-top: 1rem;
   width: 93dvw;
 }
 
