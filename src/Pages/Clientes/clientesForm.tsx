@@ -17,11 +17,14 @@ export function ClientesForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditing = Boolean(id);
-  const [name, setName] = useState("");
   const { user } = useGlobalState();
+
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
+  const [receive_billing_email, setreceive_billing_email] = useState(false);
   const [active, setActive] = useState(true);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
@@ -50,6 +53,7 @@ export function ClientesForm() {
         setName(data.name);
         setEmail(data.email);
         setMobile(data.mobile);
+        setreceive_billing_email(data.receive_billing_email);
         setActive(data.active);
       }
     } catch (error) {
@@ -76,9 +80,17 @@ export function ClientesForm() {
     try {
       if (!user) throw new Error("Usuário não autenticado.");
 
-      const customerData = { name, email, mobile, active, user_id: user.id };
+      const customerData = {
+        name,
+        email,
+        mobile,
+        receive_billing_email,
+        active,
+        user_id: user.id,
+      };
 
       if (isEditing) {
+        console.log(customerData);
         const { error } = await supabase
           .from("customer")
           .update(customerData)
@@ -96,6 +108,7 @@ export function ClientesForm() {
         setName("");
         setEmail("");
         setMobile("");
+        setreceive_billing_email(false);
         setActive(true);
       }
     } catch (error) {
@@ -174,10 +187,35 @@ export function ClientesForm() {
               />
             </div>
             <div>
-              <label className={style.label}>Status:</label>
-              <div className={style.checkboxContainer} tabIndex={0}>
+              <label className={style.label}>Receber e-mail de cobrança?</label>
+              <div className={style.checkboxRadioContainer} tabIndex={0}>
                 <input
-                  className={style.inputCheckbox}
+                  className={style.inputRadioCheckbox}
+                  id="receive_billing_email"
+                  name="receive_billing_email"
+                  type="radio"
+                  value="true"
+                  checked={receive_billing_email === true}
+                  onChange={() => setreceive_billing_email(true)}
+                />
+                <label htmlFor="receive_billing_email">Sim</label>
+                <input
+                  className={style.inputRadioCheckbox}
+                  id="receive_billing_email"
+                  name="receive_billing_email"
+                  type="radio"
+                  value="false"
+                  checked={receive_billing_email === false}
+                  onChange={() => setreceive_billing_email(false)}
+                />
+                <label htmlFor="receive_billing_email">Não</label>
+              </div>
+            </div>
+            <div>
+              <label className={style.label}>Status:</label>
+              <div className={style.checkboxRadioContainer} tabIndex={1}>
+                <input
+                  className={style.inputRadioCheckbox}
                   id="active"
                   type="checkbox"
                   checked={active}
