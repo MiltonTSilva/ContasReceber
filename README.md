@@ -116,11 +116,12 @@ create table public.customer (
   name character varying null,
   email character varying null,
   mobile character varying null,
-  active boolean null,
+  receive_billing_email boolean null default false,
+  active boolean null default false,
+  user_id uuid null,
   created_at timestamp without time zone null default now(),
   constraint customer_pkey primary key (id)
 ) TABLESPACE pg_default;
-
 
 🗂️ Tabela `accounts_receivable`
 
