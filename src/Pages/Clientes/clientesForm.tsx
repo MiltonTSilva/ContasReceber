@@ -107,6 +107,7 @@ export function ClientesForm() {
 
   const handleCloseDialog = () => {
     setIsSuccessDialogOpen(false);
+    if (isEditing) navigate("/clientes");
   };
 
   useEffect(() => {

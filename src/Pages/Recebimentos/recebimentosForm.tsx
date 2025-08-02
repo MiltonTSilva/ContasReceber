@@ -183,6 +183,7 @@ export function RecebimentosForm() {
 
   const handleCloseDialog = () => {
     setIsSuccessDialogOpen(false);
+    if (isEditing) navigate("/recebimentos");
   };
 
   return (
