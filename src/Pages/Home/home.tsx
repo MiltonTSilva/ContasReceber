@@ -247,7 +247,7 @@ export function Home() {
               ))}
             </div>
 
-            {Recebimento.length > 1 ? (
+            {totalRecebimento > itemsPerPage ? (
               <div className={styles.pagination}>
                 <div className={stylesShared.paginationControls}>
                   <Button

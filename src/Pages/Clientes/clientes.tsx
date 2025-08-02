@@ -452,7 +452,7 @@ export function Clientes() {
           )}
         </div>
 
-        {clientes.length > 0 ? (
+        {totalClientes > itemsPerPage ? (
           <div className={stylesShared.pagination}>
             <div className={stylesShared.itemsPerPageSelector}>
               <label htmlFor="items-per-page">Itens por página:</label>

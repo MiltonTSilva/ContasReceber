@@ -543,7 +543,7 @@ export function Recebimentos() {
           )}
         </div>
 
-        {Recebimento.length > 0 ? (
+        {totalRecebimento > itemsPerPage ? (
           <div className={stylesShared.pagination}>
             <div className={stylesShared.itemsPerPageSelector}>
               <label htmlFor="items-per-page">Itens por página:</label>
