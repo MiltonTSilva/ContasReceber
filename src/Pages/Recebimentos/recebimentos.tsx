@@ -50,6 +50,7 @@ const ActionButtons = ({
       type="button"
     >
       <FaEdit />
+      Editar
     </Button>
     <Button
       variant="bg-danger"
@@ -59,24 +60,30 @@ const ActionButtons = ({
       type="button"
     >
       <FaTrashAlt />
+      Excluir
     </Button>
     <Button
-      variant={recebimento.active ? "bg-active" : "bg-notActive"}
+      variant={recebimento.active ? "bg-notActive" : "bg-active"}
       disabled={loading}
       onClick={() => onToggleActive(recebimento.id, recebimento.active)}
       title="Ativar/Desativar"
       type="button"
     >
       {recebimento.active ? <FaToggleOff /> : <FaToggleOn />}
+      {recebimento.active ? "Desativar" : "Ativar"}
     </Button>
     <Button
       variant="bg-info"
+      className={
+        recebimento.payment_received_at ? styles.notReceived : styles.received
+      }
       disabled={loading}
       onClick={() => onPaymentReceived(recebimento.id)}
       title="Receber Pagamento"
       type="button"
     >
       <FaMoneyCheckAlt />
+      {recebimento.payment_received_at ? "Recebido" : "Receber"}
     </Button>
   </>
 );
@@ -133,6 +140,7 @@ export function Recebimentos() {
       }
 
       const { data, error, count } = await query
+        .order("payment_received_at", { ascending: false })
         .order("received_date", { ascending: true })
         .range(from, to);
 
@@ -341,7 +349,6 @@ export function Recebimentos() {
       <div className={`${stylesShared.container}`}>
         <div className={stylesShared.header}>
           <h1>
-            {" "}
             <LuReceipt />
             Lista de Recebimento
           </h1>
@@ -364,6 +371,7 @@ export function Recebimentos() {
               title="Novo Recebimento"
             >
               <LuReceipt />
+              Novo Recebimento
             </Button>
           </div>
         </div>
@@ -453,7 +461,7 @@ export function Recebimentos() {
                     >
                       {recebimento.active ? "Ativo" : "Inativo"}
                     </td>
-                    <td className="actionsColumn ">
+                    <td className={stylesShared.actionsColumn}>
                       <ActionButtons
                         recebimento={recebimento}
                         loading={loading}
@@ -476,72 +484,70 @@ export function Recebimentos() {
           </table>
         </div>
 
-        <div className={stylesShared.cardList}>
-          {loading && Recebimento.length === 0 ? (
-            <div className={stylesShared.loadingCardList}>
-              <p>Carregando Recebimento...</p>
-            </div>
-          ) : Recebimento.length > 0 ? (
-            <div className={stylesShared.cardList}>
-              {Recebimento.map((recebimento) => (
-                <Card
-                  key={recebimento.id}
-                  className={
-                    recebimento.payment_received_at
-                      ? `${styles.notReceived} ${stylesShared.card}`
-                      : recebimento.active
-                      ? `${stylesShared.active} ${stylesShared.card}`
-                      : `${stylesShared.notActive} ${stylesShared.card}`
-                  }
-                >
-                  <Card.Header>
-                    {recebimento?.custumer?.name ?? "Cliente não encontrado"}
-                  </Card.Header>
-                  <Card.Body>
-                    <CardField label="Recebimento">
-                      {recebimento.received_date
-                        ? new Intl.DateTimeFormat("pt-BR", {
-                            timeZone: "UTC",
-                          }).format(new Date(recebimento.received_date))
-                        : "-"}
-                    </CardField>
+        {loading && Recebimento.length === 0 ? (
+          <div className={stylesShared.loadingCardList}>
+            <p>Carregando Recebimento...</p>
+          </div>
+        ) : Recebimento.length > 0 ? (
+          <div className={stylesShared.cardList}>
+            {Recebimento.map((recebimento) => (
+              <Card
+                key={recebimento.id}
+                className={
+                  recebimento.payment_received_at
+                    ? `${styles.notReceived} ${stylesShared.card}`
+                    : recebimento.active
+                    ? `${stylesShared.active} ${stylesShared.card}`
+                    : `${stylesShared.notActive} ${stylesShared.card}`
+                }
+              >
+                <Card.Header>
+                  {recebimento?.custumer?.name ?? "Cliente não encontrado"}
+                </Card.Header>
+                <Card.Body className={stylesShared.cardBody}>
+                  <CardField label="Recebimento">
+                    {recebimento.received_date
+                      ? new Intl.DateTimeFormat("pt-BR", {
+                          timeZone: "UTC",
+                        }).format(new Date(recebimento.received_date))
+                      : "-"}
+                  </CardField>
 
-                    <CardField label="Pagamento">
-                      {recebimento.payment_received_at
-                        ? new Intl.DateTimeFormat("pt-BR", {
-                            timeZone: "UTC",
-                          }).format(new Date(recebimento.payment_received_at))
-                        : "Aguardando"}
-                    </CardField>
-                    <CardField label="Valor">
-                      {new Intl.NumberFormat("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                      }).format(recebimento.amount_to_receive)}
-                    </CardField>
-                    <CardField label="Status">
-                      {recebimento.active ? "Ativo" : "Inativo"}
-                    </CardField>
-                  </Card.Body>
-                  <Card.Actions className={styles.received}>
-                    <ActionButtons
-                      recebimento={recebimento}
-                      loading={loading}
-                      onEdit={handleEditar}
-                      onDelete={handleExcluir}
-                      onToggleActive={handleAtivarDesativar}
-                      onPaymentReceived={handlePagar}
-                    />
-                  </Card.Actions>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className={stylesShared.emptyCardList}>
-              <p>Nenhum recebimento cadastrado ainda.</p>
-            </div>
-          )}
-        </div>
+                  <CardField label="Pagamento">
+                    {recebimento.payment_received_at
+                      ? new Intl.DateTimeFormat("pt-BR", {
+                          timeZone: "UTC",
+                        }).format(new Date(recebimento.payment_received_at))
+                      : "Aguardando"}
+                  </CardField>
+                  <CardField label="Valor">
+                    {new Intl.NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    }).format(recebimento.amount_to_receive)}
+                  </CardField>
+                  <CardField label="Status">
+                    {recebimento.active ? "Ativo" : "Inativo"}
+                  </CardField>
+                </Card.Body>
+                <Card.Actions className={stylesShared.cardActions}>
+                  <ActionButtons
+                    recebimento={recebimento}
+                    loading={loading}
+                    onEdit={handleEditar}
+                    onDelete={handleExcluir}
+                    onToggleActive={handleAtivarDesativar}
+                    onPaymentReceived={handlePagar}
+                  />
+                </Card.Actions>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className={stylesShared.emptyCardList}>
+            <p>Nenhum recebimento cadastrado ainda.</p>
+          </div>
+        )}
 
         {totalRecebimento > itemsPerPage ? (
           <div className={stylesShared.pagination}>
@@ -559,7 +565,9 @@ export function Recebimentos() {
                 <option value={50}>50</option>
               </select>
             </div>
-
+            <p>
+              Página {currentPage} de {totalPages}
+            </p>
             <div className={stylesShared.paginationControls}>
               <Button
                 onClick={handlePaginaAnterior}
@@ -567,16 +575,16 @@ export function Recebimentos() {
                 title="Página Anterior"
               >
                 <FaArrowAltCircleLeft />
+                Página Anterior
               </Button>
-              <p>
-                Página {currentPage} de {totalPages}
-              </p>
+
               <Button
                 onClick={handlePaginaSeguinte}
                 disabled={currentPage >= totalPages || loading}
                 title="Próxima Página"
               >
                 <FaRegArrowAltCircleRight />
+                Próxima Página
               </Button>
             </div>
           </div>

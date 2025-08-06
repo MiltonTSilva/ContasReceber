@@ -57,6 +57,7 @@ const ActionButtons = ({
         type="button"
       >
         <FaEdit />
+        Editar
       </Button>
       <Button
         variant="bg-danger"
@@ -66,15 +67,17 @@ const ActionButtons = ({
         type="button"
       >
         <FaTrashAlt />
+        Excluir
       </Button>
       <Button
-        variant={cliente.active ? "bg-active" : "bg-notActive"}
+        variant={cliente.active ? "bg-notActive" : "bg-active"}
         disabled={isDisabled}
         onClick={() => onToggleActive(cliente.id, cliente.active)}
         title="Ativar/Desativar"
         type="button"
       >
         {cliente.active ? <FaToggleOff /> : <FaToggleOn />}
+        {cliente.active ? "Desativar" : "Ativar"}
       </Button>
     </>
   );
@@ -316,9 +319,11 @@ export function Clientes() {
               title="Novo Cliente"
             >
               <FaCircleUser />
+              Novo Cliente
             </Button>
           </div>
         </div>
+
         <div className={stylesShared.tableContainer}>
           <table className={`${styles.table} ${stylesShared.table}`}>
             <thead>
@@ -376,7 +381,7 @@ export function Clientes() {
                     >
                       {cliente.active ? "Ativo" : "Inativo"}
                     </td>
-                    <td>
+                    <td className={stylesShared.actionsColumn}>
                       <ActionButtons
                         cliente={cliente}
                         loading={loading}
@@ -400,57 +405,55 @@ export function Clientes() {
           </table>
         </div>
 
-        <div className={stylesShared.cardList}>
-          {loading && clientes.length === 0 ? (
-            <div className={stylesShared.loadingCardList}>
-              <p>Carregando clientes...</p>
-            </div>
-          ) : clientes.length > 0 ? (
-            <div className={stylesShared.cardList}>
-              {clientes.map((cliente) => (
-                <Card key={cliente.id}>
-                  <Card.Header
-                    className={
-                      cliente.active
-                        ? stylesShared.active
-                        : stylesShared.notActive
-                    }
-                  >
-                    {cliente.name}
-                  </Card.Header>
-                  <Card.Body>
-                    <CardField label="E-mail">{cliente.email}</CardField>
-                    <CardField label="Celular">{cliente.mobile}</CardField>
-                    <CardField label="Status">
-                      {cliente.active ? "Ativo" : "Inativo"}
-                    </CardField>
-                  </Card.Body>
-                  <Card.Actions
-                    className={
-                      cliente.active
-                        ? stylesShared.notActive
-                        : stylesShared.active
-                    }
-                  >
-                    <ActionButtons
-                      cliente={cliente}
-                      loading={loading}
-                      onEdit={handleEditar}
-                      onDelete={handleExcluir}
-                      onToggleActive={handleAtivarDesativar}
-                      isAdmin={isAdmin}
-                      userLogado={user}
-                    />
-                  </Card.Actions>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className={stylesShared.emptyCardList}>
-              <p>Nenhum cliente cadastrado ainda.</p>
-            </div>
-          )}
-        </div>
+        {loading && clientes.length === 0 ? (
+          <div className={stylesShared.loadingCardList}>
+            <p>Carregando clientes...</p>
+          </div>
+        ) : clientes.length > 0 ? (
+          <div className={stylesShared.cardList}>
+            {clientes.map((cliente) => (
+              <Card key={cliente.id}>
+                <Card.Header
+                  className={
+                    cliente.active
+                      ? stylesShared.active
+                      : stylesShared.notActive
+                  }
+                >
+                  {cliente.name}
+                </Card.Header>
+                <Card.Body>
+                  <CardField label="E-mail">{cliente.email}</CardField>
+                  <CardField label="Celular">{cliente.mobile}</CardField>
+                  <CardField label="Status">
+                    {cliente.active ? "Ativo" : "Inativo"}
+                  </CardField>
+                </Card.Body>
+                <Card.Actions
+                  className={
+                    cliente.active
+                      ? stylesShared.notActive
+                      : stylesShared.active
+                  }
+                >
+                  <ActionButtons
+                    cliente={cliente}
+                    loading={loading}
+                    onEdit={handleEditar}
+                    onDelete={handleExcluir}
+                    onToggleActive={handleAtivarDesativar}
+                    isAdmin={isAdmin}
+                    userLogado={user}
+                  />
+                </Card.Actions>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className={stylesShared.emptyCardList}>
+            <p>Nenhum cliente cadastrado ainda.</p>
+          </div>
+        )}
 
         {totalClientes > itemsPerPage ? (
           <div className={stylesShared.pagination}>
@@ -468,24 +471,25 @@ export function Clientes() {
                 <option value={50}>50</option>
               </select>
             </div>
-
+            <p>
+              Página {currentPage} de {totalPages}
+            </p>
             <div className={stylesShared.paginationControls}>
               <Button
                 onClick={handlePaginaAnterior}
                 disabled={currentPage === 1 || loading}
                 title="Página Anterior"
               >
-                <FaArrowAltCircleLeft />
+                <FaArrowAltCircleLeft /> Página Anterior
               </Button>
-              <p>
-                Página {currentPage} de {totalPages}
-              </p>
+
               <Button
                 onClick={handlePaginaSeguinte}
                 disabled={currentPage >= totalPages || loading}
                 title="Próxima Página"
               >
                 <FaRegArrowAltCircleRight />
+                Próxima Página
               </Button>
             </div>
           </div>
