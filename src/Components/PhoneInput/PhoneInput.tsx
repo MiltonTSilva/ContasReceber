@@ -22,7 +22,7 @@ const PhoneInput: FC<PhoneInputProps> = ({
       ref={inputRef}
       value={mobile}
       onChange={(e) => setMobile(e.target.value)}
-      placeholder="Digite o celular."
+      placeholder="Digite o celular. (__) ____-____"
       type="tel"
       className={className}
       required
