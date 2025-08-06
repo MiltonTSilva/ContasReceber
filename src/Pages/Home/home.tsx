@@ -178,8 +178,8 @@ export function Home() {
 
   return (
     <Main>
-      <h1 className={styles.title}>Bem-vindo</h1>
       <div className={styles.container}>
+        <h1 className={styles.title}>Bem-vindo</h1>
         {Recebimento.length == 0 ? (
           <p className={styles.phrase}>
             Um aplicativo simples e eficiente para o controle de contas a
