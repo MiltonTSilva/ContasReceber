@@ -15,7 +15,9 @@ const AppContent: React.FC<{
 }> = ({ isDarkMode, toggleTheme }) => {
   const location = useLocation();
   const shouldShowToggleTheme =
-    location.pathname !== "/forgot" && location.pathname !== "/register";
+    location.pathname !== "/login" &&
+    location.pathname !== "/forgot" &&
+    location.pathname !== "/register";
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   return (
