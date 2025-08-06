@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
 import { Button } from "../../Components/Button/Button";
+import { Password } from "../../Components/Password/Password";
 
 export function Login() {
   const navigate = useNavigate();
@@ -67,7 +68,9 @@ export function Login() {
             <p className={style.subtitle}>
               Para fazer o login, utilize o email e senha cadastrados.
             </p>
-
+            <label className={style.label} htmlFor="email">
+              E-mail
+            </label>
             <input
               ref={emailInputRef}
               className={style.input}
@@ -78,14 +81,11 @@ export function Login() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <input
+
+            <Password
               className={style.input}
-              type="password"
-              autoComplete="current-password"
-              placeholder="Digite sua senha."
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              onPasswordChange={setPassword}
             />
             <Link to="/forgot">Esqueceu sua senha?</Link>
 
