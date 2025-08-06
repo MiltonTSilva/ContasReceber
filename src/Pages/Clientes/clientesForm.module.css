@@ -6,8 +6,7 @@
 }
 
 .card {
-  background-color: var(--gray);
-  padding: 1rem 2rem;
+  padding: 0.1rem;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   max-width: 100%;
@@ -40,8 +39,8 @@
 .label {
   text-align: start;
   font-size: 1.2rem;
-  font-weight: bold;
   margin-bottom: 15px;
+  font-weight: bold;
   color: var(--darkGray);
 }
 
@@ -61,12 +60,13 @@
 }
 
 .checkboxRadioContainer {
-  background-color: var(--white);
   border-radius: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.8rem 1rem;
+  border: solid 1px;
+  background-color: var(--info);
 }
 
 .checkboxRadioContainer input {
@@ -81,7 +81,7 @@
 .inputRadioCheckbox {
   margin-right: 5px;
   width: 20px;
-  height: 24px;
+  height: 25px;
 }
 
 .error {
@@ -93,10 +93,10 @@
 
 @media (min-width: 1024px) {
   .container {
-    width: 65%;
+    width: 80%;
   }
   .form {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .actions {

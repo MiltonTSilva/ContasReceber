@@ -8,11 +8,6 @@
 
 #root {
   padding: 0.5rem;
-  /* background-image: radial-gradient(
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0.5) 100%
-    ),
-    radial-gradient(rgba(0, 0, 0, 0) 33%, rgba(0, 0, 0, 0.3) 166%); */
   min-height: 100dvh;
 
   --h-primary: #0056b3;
@@ -145,12 +140,9 @@
   align-items: center;
   justify-content: space-around;
   flex-direction: column;
-  gap: 5px;
+  gap: 1px;
   width: 100%;
-  padding: 1rem;
-  border: 1px solid;
   margin-top: 10px;
-  background-color: var(--light);
   border-radius: 10px;
 }
 

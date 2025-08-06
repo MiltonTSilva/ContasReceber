@@ -6,8 +6,7 @@
 }
 
 .card {
-  background-color: var(--gray);
-  padding: 1rem;
+  padding: 0.1rem;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   max-width: 100%;
@@ -43,10 +42,12 @@
   margin-bottom: 15px;
   font-weight: bold;
   color: var(--darkGray);
+  display: flex;
+  flex-direction: column;
 }
 
 .input {
-  width: 100%;
+  width: 88dvw;
   padding: 0.5rem 1rem;
   border: 1px solid #dddfe2;
   border-radius: 6px;
@@ -61,12 +62,18 @@
 }
 
 .checkboxContainer {
-  background-color: var(--white);
   border-radius: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.8rem 1rem;
+  border: solid 1px;
+  background-color: var(--info);
+  width: 88dvw;
+}
+
+.checkboxRadioContainer input {
+  margin-left: 10px;
 }
 
 .checkboxContainer:focus {
@@ -89,7 +96,7 @@
 
 @media (min-width: 1024px) {
   .container {
-    width: 50%;
+    width: 70%;
   }
   .form {
     grid-template-columns: repeat(2, 1fr);
@@ -97,5 +104,25 @@
 
   .actions {
     justify-content: flex-end;
+  }
+
+  .input {
+    width: 100%;
+  }
+
+  .checkboxContainer {
+    width: 100%;
+  }
+
+  .checkboxRadioContainer {
+    margin-top: 5px;
+  }
+
+  .inputRadioCheckbox {
+    height: 22px;
+  }
+
+  .inputCheckbox {
+    width: 100%;
   }
 }

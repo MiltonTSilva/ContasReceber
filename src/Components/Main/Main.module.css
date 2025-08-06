@@ -22,3 +22,10 @@
   display: flex;
   flex-direction: column;
 }
+
+@media (min-width: 1024px) {
+  .main {
+    justify-content: start;
+    margin-top: 1rem;
+  }
+}

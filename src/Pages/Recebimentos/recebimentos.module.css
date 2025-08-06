@@ -1,5 +1,5 @@
 .received {
-  background-color: var(--gray-darker);
+  background-color: var(--teal);
 }
 
 .notReceived {
@@ -7,6 +7,7 @@
 }
 
 @media (min-width: 1024px) {
+
   .table tbody tr:hover td:nth-child(1),
   .table tbody tr:hover td:nth-child(2),
   .table tbody tr:hover td:nth-child(3),
@@ -42,6 +43,6 @@
 
   .table tbody tr td:nth-child(6) {
     /* Ação */
-    width: 15%;
+    width: 15%; 
   }
 }
