@@ -90,7 +90,6 @@ export function ClientesForm() {
       };
 
       if (isEditing) {
-        console.log(customerData);
         const { error } = await supabase
           .from("customer")
           .update(customerData)
@@ -153,8 +152,8 @@ export function ClientesForm() {
         <hr className={"separator"} />
         <div className={style.card}>
           <form className={`${style.form}`} onSubmit={handleSubmit}>
-            <div>
-              <label className={style.label}>Nome:</label>
+            <label className={style.label}>
+              Nome completo:
               <input
                 name="name"
                 ref={nameInputRef}
@@ -165,9 +164,9 @@ export function ClientesForm() {
                 onChange={(e) => setName(e.target.value)}
                 required
               />
-            </div>
-            <div>
-              <label className={style.label}>Email:</label>
+            </label>
+            <label className={style.label}>
+              Email:
               <input
                 className={style.input}
                 type="email"
@@ -176,18 +175,18 @@ export function ClientesForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-            </div>
+            </label>
 
-            <div>
-              <label className={style.label}>Telefone:</label>
+            <label className={style.label}>
+              Telefone:
               <PhoneInput
                 mobile={mobile}
                 setMobile={setMobile}
                 className={style.input}
               />
-            </div>
-            <div>
-              <label className={style.label}>Receber e-mail de cobrança?</label>
+            </label>
+            <label className={style.label}>
+              Receber e-mail de cobrança?
               <div className={style.checkboxRadioContainer} tabIndex={0}>
                 <input
                   className={style.inputRadioCheckbox}
@@ -210,9 +209,10 @@ export function ClientesForm() {
                 />
                 <label htmlFor="receive_billing_email">Não</label>
               </div>
-            </div>
-            <div>
-              <label className={style.label}>Status:</label>
+            </label>
+
+            <label className={style.label}>
+              Status:
               <div className={style.checkboxRadioContainer} tabIndex={1}>
                 <input
                   className={style.inputRadioCheckbox}
@@ -223,8 +223,7 @@ export function ClientesForm() {
                 />
                 Ativo
               </div>
-            </div>
-
+            </label>
             <div className={`${style.actions} ${"actions"}`}>
               <Button
                 type="reset"
@@ -232,7 +231,8 @@ export function ClientesForm() {
                 onClick={() => navigate("/clientes")}
                 title="Voltar para lista de Clientes"
               >
-                <MdAssignmentReturn />
+                <MdAssignmentReturn size={28} />
+                Voltar para lista
               </Button>
 
               <Button
@@ -241,7 +241,8 @@ export function ClientesForm() {
                 disabled={loading || error !== null}
                 title="Salvar Cliente"
               >
-                <MdOutlineSave />
+                <MdOutlineSave size={28} />
+                Salvar Cliente
               </Button>
             </div>
           </form>

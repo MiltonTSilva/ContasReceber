@@ -266,7 +266,8 @@ export function RecebimentosForm() {
                 onClick={() => navigate("/recebimentos")}
                 title="Voltar para lista de Recebimentos"
               >
-                <MdAssignmentReturn />
+                <MdAssignmentReturn size={28} />
+                Voltar para lista
               </Button>
               <Button
                 variant="bg-primary"
@@ -274,7 +275,8 @@ export function RecebimentosForm() {
                 disabled={loading || error !== null}
                 title="Salvar Recebimento"
               >
-                <MdOutlineSave />
+                <MdOutlineSave size={28} />
+                Salvar Recebimento
               </Button>
             </div>
           </form>
