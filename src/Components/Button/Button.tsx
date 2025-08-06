@@ -30,7 +30,7 @@ export const Button = ({
   }`;
 
   return (
-    <button className={buttonClass.trim()} {...props}>
+    <button type="button" className={buttonClass.trim()} {...props}>
       {children}
     </button>
   );
