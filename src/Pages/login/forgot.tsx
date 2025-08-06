@@ -98,7 +98,7 @@ export function Forgot() {
                 required
               />
             </Card.Body>
-            <Card.Actions className="actions">
+            <Card.Actions>
               <Button
                 variant="bg-cancel"
                 type="button"
