@@ -149,6 +149,7 @@
 .separator {
   border-bottom: 1px solid;
   margin: 0.8rem 0;
+  width: 100%;
 }
 
 @media (min-width: 1024px) {
