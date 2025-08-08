@@ -87,19 +87,19 @@ export function Login() {
               value={password}
               onPasswordChange={setPassword}
             />
-            <Link to="/forgot">Esqueceu sua senha?</Link>
 
-            <div className="actions">
+            <div className={style.actions}>
+              <Link to="/forgot">Esqueceu sua senha?</Link>
               <Button
-                className="button"
+                className={style.button}
                 type="submit"
                 disabled={loading || error !== null}
               >
                 {loading ? "Entrando..." : "Entrar"}
               </Button>
+              <hr className={"separator"} />
+              <Link to="/register">Não tem uma conta? Cadastre-se</Link>
             </div>
-            <hr className={"separator"} />
-            <Link to="/register">Não tem uma conta? Cadastre-se</Link>
           </form>
         </div>
       </div>
