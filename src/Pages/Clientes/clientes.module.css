@@ -7,10 +7,6 @@
     display: none;
   }
 
-  .searchInput {
-    font-size: 1.3rem;
-  }
-
   .headerActions {
     display: flex;
     justify-content: space-between;

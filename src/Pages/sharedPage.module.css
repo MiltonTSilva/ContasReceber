@@ -62,7 +62,8 @@
   font-size: 0.8rem;
   font-weight: bold;
   flex-grow: 1;
-  width: 80px;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .searchInput::placeholder {
@@ -155,7 +156,6 @@
   justify-content: start;
   align-items: center;
   gap: 0.5rem;
-;
 }
 
 @media (min-width: 1024px) {
@@ -167,8 +167,9 @@
   }
 
   .searchInput {
-    font-size: 1rem;
-
+    padding: 10px;
+    font-size: 1.2rem;
+    margin-bottom: 0px;
   }
 
   .headerActions {
