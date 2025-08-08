@@ -191,7 +191,7 @@ export function RecebimentosForm() {
       <div className={style.container}>
         <p className={style.title}>
           {isEditing ? <FaEdit /> : <LuReceipt />}
-          {isEditing ? "Editar Recebimentos" : "Cadastro de recebimentos"}
+          {isEditing ? " Editar Recebimentos" : " Cadastro de recebimentos"}
         </p>
         <hr className={"separator"} />
         <div className={style.card}>

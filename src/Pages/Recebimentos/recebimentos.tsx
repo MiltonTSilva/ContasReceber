@@ -349,8 +349,8 @@ export function Recebimentos() {
       <div className={`${stylesShared.container}`}>
         <div className={stylesShared.header}>
           <h1>
-            <LuReceipt />
-            Lista de Recebimento
+            <LuReceipt size={24} />
+            &nbsp; Lista de Recebimento
           </h1>
           <div className={stylesShared.headerActions}>
             <input
@@ -370,7 +370,7 @@ export function Recebimentos() {
               disabled={loading || error !== null}
               title="Novo Recebimento"
             >
-              <LuReceipt />
+              <LuReceipt size={24} />
               Novo Recebimento
             </Button>
           </div>
@@ -574,7 +574,7 @@ export function Recebimentos() {
                 disabled={currentPage === 1 || loading}
                 title="Página Anterior"
               >
-                <FaArrowAltCircleLeft />
+                <FaArrowAltCircleLeft size={28} />
                 Página Anterior
               </Button>
 
@@ -583,7 +583,7 @@ export function Recebimentos() {
                 disabled={currentPage >= totalPages || loading}
                 title="Próxima Página"
               >
-                <FaRegArrowAltCircleRight />
+                <FaRegArrowAltCircleRight size={28} />
                 Próxima Página
               </Button>
             </div>
