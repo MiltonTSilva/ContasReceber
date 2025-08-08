@@ -21,8 +21,9 @@ import {
   FaArrowAltCircleLeft,
   FaRegArrowAltCircleRight,
 } from "react-icons/fa";
+import { Users } from "lucide-react";
 
-import { FaCircleUser } from "react-icons/fa6";
+/* import { FaCircleUser } from "react-icons/fa6"; */
 
 type ActionButtonsProps = {
   cliente: Cliente;
@@ -298,8 +299,8 @@ export function Clientes() {
       <div className={stylesShared.container}>
         <div className={stylesShared.header}>
           <h1>
-            <FaCircleUser />
-            Lista de Clientes
+            <Users className="h-5 w-5" />
+            &nbsp; Lista de Clientes
           </h1>
           <div className={stylesShared.headerActions}>
             <input
@@ -318,7 +319,7 @@ export function Clientes() {
               disabled={loading || error !== null}
               title="Novo Cliente"
             >
-              <FaCircleUser />
+              <Users className="h-5 w-5" />
               Novo Cliente
             </Button>
           </div>
@@ -429,13 +430,7 @@ export function Clientes() {
                     {cliente.active ? "Ativo" : "Inativo"}
                   </CardField>
                 </Card.Body>
-                <Card.Actions
-                  className={
-                    cliente.active
-                      ? stylesShared.notActive
-                      : stylesShared.active
-                  }
-                >
+                <Card.Actions className={stylesShared.cardActions}>
                   <ActionButtons
                     cliente={cliente}
                     loading={loading}

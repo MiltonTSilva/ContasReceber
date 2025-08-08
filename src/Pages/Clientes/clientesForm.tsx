@@ -10,8 +10,9 @@ import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
 import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
 import { Button } from "../../Components/Button/Button";
 import { FaEdit } from "react-icons/fa";
-import { FaCircleUser } from "react-icons/fa6";
+
 import { MdAssignmentReturn, MdOutlineSave } from "react-icons/md";
+import { Users } from "lucide-react";
 
 export function ClientesForm() {
   const navigate = useNavigate();
@@ -146,8 +147,8 @@ export function ClientesForm() {
     <Main>
       <div className={style.container}>
         <p className={style.title}>
-          {isEditing ? <FaEdit /> : <FaCircleUser />}
-          {isEditing ? "Editar Cliente" : "Cadastro de Cliente"}
+          {isEditing ? <FaEdit /> : <Users className="h-5 w-5" />}
+          {isEditing ? " Editar Cliente" : " Cadastro de Cliente"}
         </p>
         <hr className={"separator"} />
         <div className={style.card}>
