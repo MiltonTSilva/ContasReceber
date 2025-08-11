@@ -79,7 +79,7 @@ export function Home() {
       let query = supabase
         .from("accounts_receivable_view")
         .select("*, custumer:custumer_id(name)", { count: "exact" })
-        .eq("received_date", today)
+        .lt("received_date", today)
         .is("payment_received_at", null);
 
       if (!isAdmin) {
@@ -245,6 +245,19 @@ export function Home() {
                   </Card.Actions>
                 </Card>
               ))}
+            </div>
+
+            <div className={styles.totalReceber}>
+              Total a receber:{" "}
+              <span>
+                {" "}
+                {new Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(
+                  Recebimento.reduce((acc, r) => acc + r.amount_to_receive, 0)
+                )}
+              </span>
             </div>
 
             {totalRecebimento > itemsPerPage ? (
