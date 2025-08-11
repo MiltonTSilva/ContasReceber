@@ -35,7 +35,8 @@ const ActionButtons = ({
       onClick={() => onPaymentReceived(recebimento.id)}
       title="Receber Pagamento"
     >
-      <FaMoneyCheckAlt />
+      <FaMoneyCheckAlt size={32} />
+      Receber Pagamento
     </Button>
   </>
 );
