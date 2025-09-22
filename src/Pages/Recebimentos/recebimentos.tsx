@@ -44,7 +44,7 @@ const ActionButtons = ({
   <>
     <Button
       variant="bg-warning"
-      disabled={loading}
+      disabled={loading || !!recebimento.payment_received_at}
       onClick={() => onEdit(recebimento.id)}
       title="Editar"
       type="button"
@@ -54,7 +54,7 @@ const ActionButtons = ({
     </Button>
     <Button
       variant="bg-danger"
-      disabled={loading}
+      disabled={loading || !!recebimento.payment_received_at}
       onClick={() => onDelete(recebimento.id)}
       title="Excluir"
       type="button"
@@ -77,7 +77,7 @@ const ActionButtons = ({
       className={
         recebimento.payment_received_at ? styles.notReceived : styles.received
       }
-      disabled={loading}
+      disabled={loading || !!recebimento.payment_received_at}
       onClick={() => onPaymentReceived(recebimento.id)}
       title="Receber Pagamento"
       type="button"
