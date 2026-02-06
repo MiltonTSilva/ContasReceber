@@ -38,25 +38,29 @@ export function ProdutosForm() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Buscar imagens disponíveis da pasta public/Produtos
+  // Buscar imagens disponíveis da pasta public/produtos
   useEffect(() => {
     const loadAvailableImages = async () => {
       try {
-        // Usar import.meta.glob para carregar imagens
-        const images = import.meta.glob<{ default: string }>(
-          "/src/assets/produtos/**/*.{jpg,jpeg,png,gif,webp}",
+        // Usar import.meta.glob para encontrar imagens em public/produtos
+        const modules = import.meta.glob<{ default: string }>(
+          "/public/produtos/**/*.{jpg,jpeg,png,gif,webp}",
           { eager: true },
         );
 
-        const imageUrls = Object.keys(images)
-          .map((path) => path.replace(/^\/assets\//, ""))
+        const imageUrls = Object.keys(modules)
+          .map((path) => {
+            // Extrair o caminho relativo partindo de /produtos/
+            const match = path.match(/public[/\\]produtos[/\\](.+)$/);
+            return match ? `/produtos/${match[1].replace(/\\/g, "/")}` : null;
+          })
+          .filter((url): url is string => url !== null)
           .sort();
 
         setAvailableImages(imageUrls);
 
-        // Se não encontrou imagens com glob, tenta o método anterior
         if (imageUrls.length === 0) {
-          console.log("Nenhuma imagem encontrada com import.meta.glob");
+          console.log("Nenhuma imagem encontrada em public/produtos");
         }
       } catch (err) {
         console.error("Erro ao carregar imagens:", err);
@@ -84,10 +88,10 @@ export function ProdutosForm() {
         setDescription(produto.description || "");
         setPrice(produto.price || 0);
         setQuantity(produto.quantity || 0);
-        setPricePerKilo((produto as any).price_per_kilo || 0);
-        setPackageWeight((produto as any).package_weight || 0);
-        setBarcode((produto as any).barcode || "");
-        setFlavor((produto as any).flavor || "");
+        setPricePerKilo(produto.price_per_kilo || 0);
+        setPackageWeight(produto.package_weight || 0);
+        setBarcode(produto.barcode || "");
+        setFlavor(produto.flavor || "");
         setImageUrl(produto.image_url || "");
         setActive(produto.active ?? true);
       }
