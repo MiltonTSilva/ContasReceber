@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Main } from "../../Components/Main/Main";
 import { supabase } from "../../services/supabase";
 import { useGlobalState } from "../../Hooks/useGlobalState";
-import styles from "./Usuarios.module.css";
+import styles from "./usuarios.module.css";
 import stylesShared from "../sharedPage.module.css";
 import type { Usuario } from "../../Types/usuariosTypes";
 import { ConfirmationDialogs } from "../../Components/Dialogs/ConfirmationDialogs/ConfirmationDialogs";
@@ -96,7 +96,7 @@ export function Usuarios() {
 
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [usuarioParaExcluir, setUsuarioParaExcluir] = useState<string | null>(
-    null
+    null,
   );
   const [error, setError] = useState<string | null>(null);
   const buscaInputRef = useRef<HTMLInputElement | null>(null);
@@ -127,7 +127,7 @@ export function Usuarios() {
 
       if (debouncedSearchTerm) {
         query = query.or(
-          `full_name.ilike.%${debouncedSearchTerm}%,email.ilike.%${debouncedSearchTerm}%`
+          `full_name.ilike.%${debouncedSearchTerm}%,email.ilike.%${debouncedSearchTerm}%`,
         );
       }
 
@@ -160,7 +160,7 @@ export function Usuarios() {
         { event: "*", schema: "public", table: "users" },
         () => {
           fetchUsuarios();
-        }
+        },
       )
       .subscribe();
 
@@ -238,13 +238,13 @@ export function Usuarios() {
 
       if (!data || data.length === 0) {
         throw new Error(
-          "Permissão negada. Apenas o proprietário ou um administrador pode alterar este usuario."
+          "Permissão negada. Apenas o proprietário ou um administrador pode alterar este usuario.",
         );
       }
 
       if (novoStatus === false && !isAdmin) {
         setUsuarios((usuariosAtuais) =>
-          usuariosAtuais.filter((c) => c.id !== id)
+          usuariosAtuais.filter((c) => c.id !== id),
         );
         if (usuarios.length === 1 && currentPage > 1) {
           setCurrentPage(currentPage - 1);
@@ -271,7 +271,7 @@ export function Usuarios() {
   };
 
   const handleItemsPerPageChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
+    e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     skipFocusRef.current = true;
     setItemsPerPage(Number(e.target.value));
@@ -285,7 +285,7 @@ export function Usuarios() {
         throw new Error("Erro na tradução: " + translationError);
       }
     },
-    [geminiTranslate, translationError]
+    [geminiTranslate, translationError],
   );
 
   useEffect(() => {
