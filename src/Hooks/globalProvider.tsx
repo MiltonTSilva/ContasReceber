@@ -37,22 +37,27 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         !credentials.password
       ) {
         setLoading(false);
-        throw new Error("Email e senha são obrigatórios.");
+        const err = new Error("Email e senha são obrigatórios.");
+        setError(err.message);
+        return { data: null, error: err };
       }
 
-      const { error: signInError } = await supabase.auth.signInWithPassword(
-        credentials
-      );
+      try {
+        const response = await supabase.auth.signInWithPassword(credentials);
 
-      if (signInError) {
+        if (response.error) {
+          setError(response.error.message || "Ocorreu um erro ao tentar fazer login.");
+          return { data: null, error: response.error };
+        }
+
+        return { data: response.data, error: null };
+      } catch (err) {
+        const e = err instanceof Error ? err : new Error(String(err));
+        setError(e.message);
+        return { data: null, error: e };
+      } finally {
         setLoading(false);
-        throw new Error(
-          signInError.message || "Ocorreu um erro ao tentar fazer login."
-        );
       }
-
-      setLoading(false);
-      return true;
     },
     []
   );

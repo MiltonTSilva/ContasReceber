@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-
 import { Main } from "../../Components/Main/Main";
 import { supabase } from "../../services/supabase";
 import { useGlobalState } from "../../Hooks/useGlobalState";
@@ -84,7 +83,7 @@ export function Home() {
         .is("payment_received_at", null);
 
       if (!isAdmin) {
-        query = query.eq("active", true).eq("user_id", user.id);
+        query = query.eq("active", true); //.eq("user_id", user.id);
       }
 
       const { data, error, count } = await query
@@ -131,14 +130,14 @@ export function Home() {
       }
       if (payment_received_at && isAdmin) {
         setRecebimento((clientesAtuais) =>
-          clientesAtuais.filter((c) => c.id !== recebimentoPago)
+          clientesAtuais.filter((c) => c.id !== recebimentoPago),
         );
         if (Recebimento.length === 1 && currentPage > 1) {
           setCurrentPage(currentPage - 1);
         }
       } else {
         setRecebimento(
-          Recebimento.map((r) => (r.id === recebimentoPago ? data[0] : r))
+          Recebimento.map((r) => (r.id === recebimentoPago ? data[0] : r)),
         );
       }
     } catch (error) {
@@ -168,7 +167,7 @@ export function Home() {
         throw new Error("Erro na tradução: " + translationError);
       }
     },
-    [geminiTranslate, translationError]
+    [geminiTranslate, translationError],
   );
 
   useEffect(() => {
@@ -183,13 +182,13 @@ export function Home() {
         <h1 className={styles.title}>Bem-vindo</h1>
         {Recebimento.length == 0 ? (
           <p className={styles.phrase}>
-            Um aplicativo simples e eficiente para o controle de contas a
-            receber.
+            Um aplicativo simples e eficiente para o controle do seu Mascotes
+            Pet Shop.
           </p>
         ) : (
           ""
         )}
-
+        {/* 
         {Recebimento.length == 0 ? (
           <p className={styles.phrase}>
             Pensado para qualquer pessoa que deseja organizar seus recebimentos
@@ -197,7 +196,7 @@ export function Home() {
           </p>
         ) : (
           ""
-        )}
+        )} */}
 
         {Recebimento.length > 0 ? (
           <section>
@@ -214,8 +213,8 @@ export function Home() {
                     recebimento.payment_received_at
                       ? `${styles.notReceived} ${stylesShared.card}`
                       : recebimento.active
-                      ? `${stylesShared.active} ${stylesShared.card}`
-                      : `${stylesShared.notActive} ${stylesShared.card}`
+                        ? `${stylesShared.active} ${stylesShared.card}`
+                        : `${stylesShared.notActive} ${stylesShared.card}`
                   }
                 >
                   <Card.Header className={styles.cardHeader}>
@@ -256,7 +255,7 @@ export function Home() {
                   style: "currency",
                   currency: "BRL",
                 }).format(
-                  Recebimento.reduce((acc, r) => acc + r.amount_to_receive, 0)
+                  Recebimento.reduce((acc, r) => acc + r.amount_to_receive, 0),
                 )}
               </span>
             </div>

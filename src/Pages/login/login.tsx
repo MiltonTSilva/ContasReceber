@@ -22,16 +22,20 @@ export function Login() {
   } = useGeminiTranslation();
 
   const handleLogin = async (e: React.FormEvent) => {
-    try {
-      e.preventDefault();
+    e.preventDefault();
 
-      const success = await signInWithPassword({ email, password });
+    const { data, error: errorx } = await signInWithPassword({
+      email,
+      password,
+    });
 
-      if (success) {
-        navigate("/home");
-      }
-    } catch (error) {
-      setError((error as Error).message);
+    if (errorx) {
+      setError(errorx.message);
+      return;
+    }
+
+    if (data) {
+      navigate("/home");
     }
   };
 
@@ -42,11 +46,12 @@ export function Login() {
   const translateError = useCallback(
     (error: string) => {
       geminiTranslate(error, "português do Brasil");
+      console.log("Iniciando tradução do erro:", error);
       if (translationError) {
         throw new Error("Erro na tradução: " + translationError);
       }
     },
-    [geminiTranslate, translationError]
+    [geminiTranslate, translationError],
   );
 
   useEffect(() => {
@@ -59,7 +64,7 @@ export function Login() {
     <Main>
       <div className={style.container}>
         <div className={style.card}>
-          <p className={style.title}>Contas a Receber</p>
+          <p className={style.title}>Mascotes Pet Shop</p>
           <p className={style.title}>Login</p>
           <hr className={"separator"} />
           <p className={style.subtitle}>Acesse sua conta para continuar.</p>
