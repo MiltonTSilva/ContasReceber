@@ -5,7 +5,7 @@ export type Recebimento = {
   amount_to_receive: number;
   custumer_id: string;
   active: boolean;
-  user_id: string;
+  business_id: string;
   custumer: {
     id: string;
     name: string;

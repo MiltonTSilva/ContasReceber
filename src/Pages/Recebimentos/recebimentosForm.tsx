@@ -15,12 +15,13 @@ import { useAdmin } from "../../Hooks/useAdmin";
 import { FaEdit } from "react-icons/fa";
 import { LuReceipt } from "react-icons/lu";
 import { MdAssignmentReturn, MdOutlineSave } from "react-icons/md";
+import { useBusinessId } from "../../Hooks/useBusiness";
 
 export function RecebimentosForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditing = Boolean(id);
-  const { user } = useGlobalState();
+  const { user  } = useGlobalState();
 
   const [clientes, setClientes] = useState<Cliente[]>([]);
 
@@ -36,6 +37,7 @@ export function RecebimentosForm() {
   const [dialogMessage, setDialogMessage] = useState("");
   const custumerIdSelectRef = useRef<HTMLSelectElement | null>(null);
   const { isAdmin } = useAdmin();
+  const { businessId } = useBusinessId();
 
   const {
     translate: geminiTranslate,
@@ -89,7 +91,7 @@ export function RecebimentosForm() {
       let query = supabase.from("customer").select("*");
 
       if (!isAdmin) {
-        query = query.eq("active", true).eq("user_id", user.id);
+        query = query.eq("active", true);
       }
 
       const { data, error } = await query.order("name", {
@@ -104,7 +106,7 @@ export function RecebimentosForm() {
     } finally {
       setLoading(false);
     }
-  }, [user, isAdmin]);
+  }, [user, isAdmin, businessId]);
 
   useEffect(() => {
     if (isEditing) {
@@ -136,6 +138,8 @@ export function RecebimentosForm() {
     }
   }, [error, translateError]);
 
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -143,13 +147,16 @@ export function RecebimentosForm() {
     try {
       if (!user) throw new Error("Usuário não autenticado.");
 
+      if (loading && !businessId) {
+        throw new Error("Erro ao identificar a empresa do usuário logado.");
+      }
       const accounts_receivableData = {
         received_date,
         payment_received_at: payment_received_at || null,
         amount_to_receive: unformatMoney(amount_to_receive),
         custumer_id: custumer_id,
         active,
-        user_id: user.id,
+        business_id: businessId,
       };
 
       if (isEditing) {

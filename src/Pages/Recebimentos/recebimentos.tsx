@@ -129,7 +129,8 @@ export function Recebimentos() {
         .select("*, custumer:custumer_id(name)", { count: "exact" });
 
       if (!isAdmin) {
-        query = query.eq("active", true).eq("user_id", user.id);
+        query = query.eq("active", true);
+        //.eq("user_id", user.id)
       }
 
       if (debouncedSearchTerm) {
@@ -402,8 +403,8 @@ export function Recebimentos() {
                         recebimento.payment_received_at
                           ? styles.notReceived
                           : recebimento.active
-                          ? stylesShared.active
-                          : stylesShared.notActive
+                            ? stylesShared.active
+                            : stylesShared.notActive
                       }
                     >
                       {recebimento?.custumer?.name ?? "Cliente não encontrado"}
@@ -413,8 +414,8 @@ export function Recebimentos() {
                         recebimento.payment_received_at
                           ? styles.notReceived
                           : recebimento.active
-                          ? stylesShared.active
-                          : stylesShared.notActive
+                            ? stylesShared.active
+                            : stylesShared.notActive
                       }
                     >
                       {recebimento.received_date
@@ -428,8 +429,8 @@ export function Recebimentos() {
                         recebimento.payment_received_at
                           ? styles.notReceived
                           : recebimento.active
-                          ? stylesShared.active
-                          : stylesShared.notActive
+                            ? stylesShared.active
+                            : stylesShared.notActive
                       }
                     >
                       {new Intl.NumberFormat("pt-BR", {
@@ -442,8 +443,8 @@ export function Recebimentos() {
                         recebimento.payment_received_at
                           ? styles.notReceived
                           : recebimento.active
-                          ? stylesShared.active
-                          : stylesShared.notActive
+                            ? stylesShared.active
+                            : stylesShared.notActive
                       }
                     >
                       {recebimento.payment_received_at
@@ -497,8 +498,8 @@ export function Recebimentos() {
                   recebimento.payment_received_at
                     ? `${styles.notReceived} ${stylesShared.card}`
                     : recebimento.active
-                    ? `${stylesShared.active} ${stylesShared.card}`
-                    : `${stylesShared.notActive} ${stylesShared.card}`
+                      ? `${stylesShared.active} ${stylesShared.card}`
+                      : `${stylesShared.notActive} ${stylesShared.card}`
                 }
               >
                 <Card.Header>
