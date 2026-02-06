@@ -7,13 +7,13 @@ export type { SignInWithPasswordCredentials };
 
 export interface GlobalContextType {
   user: User | null;
-  loading: boolean; 
-  error: string | null; 
-  clearError: () => void; 
-  signOut: () => Promise<void>; 
+  loading: boolean;
+  error: string | null;
+  clearError: () => void;
+  signOut: () => Promise<void>;
   signInWithPassword: (
     credentials: SignInWithPasswordCredentials
-  ) => Promise<boolean>; 
+  ) => Promise<{ data: any | null; error: any | null }>;
   resetPassword: (email: string) => Promise<void>;
   updateUser: (userData: Partial<User>) => Promise<void>;
 }

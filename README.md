@@ -1,6 +1,6 @@
-# 📲 Contas a Receber
+# 📲 Mascotes Pet Shop
 
-É um aplicativo simples e eficiente para o controle de contas a receber.
+É um aplicativo simples e eficiente para o controle de vendas, contas a receber e contas a pagar.
 
 Pensado para qualquer pessoa que deseja organizar seus recebimentos com clareza e agilidade.
 
@@ -9,7 +9,6 @@ Pensado para qualquer pessoa que deseja organizar seus recebimentos com clareza 
 🔍 Funcionalidades principais:
 
 - **Autenticação:**
-
   - Login seguro via Supabase Auth (e-mail e senha).
 
   - Cadastro de usuário
@@ -17,26 +16,21 @@ Pensado para qualquer pessoa que deseja organizar seus recebimentos com clareza 
   - Esqueci minha senha
 
 - **Cadastro rápido de clientes**
-
   - Permite adicionar, editar, ativar/desativar e excluir clientes. Cada cliente possui nome, e-mail, celular e status (ativo/inativo).
 
 - **Cadastro do recebimento**
-
   - Registre valores a receber, associando-os a um cliente, com data de vencimento, valor, status de pagamento e ativação.
 
   - **Visualização de Recebimentos:**
-
     - Veja todos os recebimentos cadastrados, filtrando por cliente, data ou valor. Exibe status de pagamento (pago/aguardando), valor, data e cliente associado.
 
   - **Busca e Filtros:**
-
     - Pesquise rapidamente por nome do cliente, data de recebimento ou valor.
 
   - **Envio de E-mail:**
     - Envio automático de e-mail dois dias antes do vencimento do recebimento.
 
 - **Sobre**
-
   - Mostra o objetivo do aplicativo
 
 > Outras funcionalidades:
@@ -88,17 +82,33 @@ Pensado para qualquer pessoa que deseja organizar seus recebimentos com clareza 
 ## 🗂️Esquema das tabelas, views e policies do banco de dados Supabase:
 
 ```
+🗂️ Tabela `business`
+
+create table public.business (
+  id uuid not null default gen_random_uuid (),
+  business_name text null,
+  responsible_name text null,
+  email character varying null,
+  mobile character varying null,
+  active boolean null default false,
+  created_at timestamp without time zone null default now(),
+  constraint business_pkey primary key (id)
+) TABLESPACE pg_default;
+
 🗂️ Tabela `users`
 
 create table public.users (
-full_name text null,
-email text null,
-created_at timestamp without time zone not null default now(),
-id uuid not null default gen_random_uuid (),
-active boolean null,
-constraint users_pkey primary key (id),
-constraint users_email_key unique (email),
-constraint users_name_key unique (full_name)
+  id uuid not null default gen_random_uuid (),
+  full_name text null,
+  email text null,
+  active boolean null,
+  business_id uuid not null,
+  created_at timestamp without time zone not null default now(),
+
+  constraint users_pkey primary key (id),
+  constraint users_email_key unique (email),
+  constraint users_name_key unique (full_name),
+  constraint users_business_id_fkey foreign KEY (business_id) references business (id)
 ) TABLESPACE pg_default;
 
 CREATE TRIGGER on_auth_user_created
@@ -116,7 +126,7 @@ create table public.customer (
   name character varying null,
   email character varying null,
   mobile character varying null,
-  receive_billing_email boolean null default false,
+  receive_billing_email boolean null default true,
   active boolean null default false,
   user_id uuid null,
   created_at timestamp without time zone null default now(),
@@ -132,7 +142,7 @@ create table public.accounts_receivable (
   amount_to_receive numeric not null default '0'::numeric,
   custumer_id uuid not null,
   created_at timestamp with time zone not null default now(),
-  active boolean not null default false,
+  active boolean not null default true,
   user_id uuid not null,
   email_send boolean null default false,
   constraint accounts_receivable_pkey primary key (id),
@@ -172,6 +182,32 @@ FROM public.accounts_receivable ar
 JOIN public.customer c ON c.id = ar.custumer_id;
 
 🗂️ Políticas de segurança:
+
+-- Habilita a Segurança a Nível de Linha (RLS)
+ALTER TABLE public.business ENABLE ROW LEVEL SECURITY;
+
+-- Cria uma nova política de CREATE,UPDATE,DELETE E SELECT que inclui administradores
+CREATE POLICY "Enable all operations for users and admins"
+ON public.business
+FOR ALL
+USING (
+  (auth.uid() = user_id) OR
+  (EXISTS (
+    SELECT 1
+    FROM profiles
+    WHERE profiles.id = auth.uid()
+    AND profiles.role = 'admin'
+  ))
+)
+WITH CHECK (
+  (auth.uid() = user_id) OR
+  (EXISTS (
+    SELECT 1
+    FROM profiles
+    WHERE profiles.id = auth.uid()
+    AND profiles.role = 'admin'
+  ))
+);
 
 -- Habilita a Segurança a Nível de Linha (RLS)
 ALTER TABLE public.customer ENABLE ROW LEVEL SECURITY;
