@@ -13,6 +13,7 @@ import { FaEdit } from "react-icons/fa";
 
 import { MdAssignmentReturn, MdOutlineSave } from "react-icons/md";
 import { Users } from "lucide-react";
+import { useBusinessId } from "../../Hooks/useBusiness";
 
 export function ClientesForm() {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ export function ClientesForm() {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const { businessId } = useBusinessId();
 
   const {
     translate: geminiTranslate,
@@ -45,24 +47,25 @@ export function ClientesForm() {
       const { data, error } = await supabase
         .from("customer")
         .select("*")
-        .eq("id", id)
+        .eq("id", id.trim())
+        .eq("business_id", businessId)
         .single();
 
       if (error) throw error;
 
       if (data) {
-        setName(data.name);
-        setEmail(data.email);
-        setMobile(data.mobile);
-        setreceive_billing_email(data.receive_billing_email);
-        setActive(data.active);
+        setName(data.name || "");
+        setEmail(data.email || "");
+        setMobile(data.mobile || "");
+        setreceive_billing_email(data.receive_billing_email ?? false);
+        setActive(data.active ?? true);
       }
     } catch (error) {
       setError((error as Error).message);
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, businessId]);
 
   useEffect(() => {
     if (isEditing) {
@@ -81,13 +84,16 @@ export function ClientesForm() {
     try {
       if (!user) throw new Error("Usuário não autenticado.");
 
+      if (loading && !businessId) {
+        throw new Error("Erro ao identificar a empresa do usuário logado.");
+      }
       const customerData = {
         name,
         email,
         mobile,
         receive_billing_email,
         active,
-        user_id: user.id,
+        business_id: businessId,
       };
 
       if (isEditing) {
@@ -99,10 +105,13 @@ export function ClientesForm() {
         setDialogMessage("Cliente atualizado com sucesso!");
         setIsSuccessDialogOpen(true);
       } else {
+        setDialogMessage("inserindo novo cliente");
         const { error } = await supabase
           .from("customer")
           .insert([customerData]);
+
         if (error) throw error;
+
         setDialogMessage("Cliente cadastrado com sucesso!");
         setIsSuccessDialogOpen(true);
         setName("");

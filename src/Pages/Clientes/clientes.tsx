@@ -41,12 +41,12 @@ const ActionButtons = ({
   onEdit,
   onDelete,
   onToggleActive,
-  isAdmin,
-  userLogado,
+  //isAdmin,
+  //userLogado,
 }: ActionButtonsProps) => {
-  const isOwner = userLogado?.id === cliente.user_id;
-  const canPerformAction = isAdmin || isOwner;
-  const isDisabled = loading || !canPerformAction;
+  //const isOwner = userLogado?.id === cliente.user_id;
+  //const canPerformAction = isAdmin || isOwner;
+  const isDisabled = loading; //|| !canPerformAction;
 
   return (
     <>
@@ -123,13 +123,13 @@ export function Clientes() {
 
       if (!isAdmin) {
         query = query.eq("active", true);
-      }
+      } 
 
       if (debouncedSearchTerm) {
         query = query.or(
           `name.ilike.%${debouncedSearchTerm}%,email.ilike.%${debouncedSearchTerm}%`
         );
-      }
+      } 
 
       const { data, error, count } = await query
         .order("name", { ascending: true })

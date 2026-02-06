@@ -5,6 +5,6 @@ export type Cliente = {
   mobile: string;
   receive_billing_email: boolean;
   active: boolean;
-  user_id: string;
+  business_id: string;
   created_at: string;
 };
