@@ -89,7 +89,7 @@
   text-decoration: none;
   padding: 0.5rem 0;
   transition: color 0.2s ease-in-out;
-    user-select: none; 
+  user-select: none;
   -webkit-user-select: none;
 }
 

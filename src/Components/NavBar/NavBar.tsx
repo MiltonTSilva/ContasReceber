@@ -37,7 +37,7 @@ export function NavBar() {
                 to="/Home"
                 onClick={() => setMenuOpen(false)}
               >
-                Home
+                Inicio
               </NavLink>
             </li>
             <li>
@@ -56,13 +56,90 @@ export function NavBar() {
                 className={({ isActive }) =>
                   isActive ? `${style.link} ${style.linkActive}` : style.link
                 }
-                to="/recebimentos"
+                to="/despesas"
                 onClick={() => setMenuOpen(false)}
               >
-                Recebimento
+                Despesas
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${style.link} ${style.linkActive}` : style.link
+                }
+                to="/empresas"
+                onClick={() => setMenuOpen(false)}
+              >
+                Empresas
               </NavLink>
             </li>
 
+            <li>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${style.link} ${style.linkActive}` : style.link
+                }
+                to="/pagamentos"
+                onClick={() => setMenuOpen(false)}
+              >
+                Pagamentos
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${style.link} ${style.linkActive}` : style.link
+                }
+                to="/recebimentos"
+                onClick={() => setMenuOpen(false)}
+              >
+                Recebimentos
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${style.link} ${style.linkActive}` : style.link
+                }
+                to="/tiposdespesas"
+                onClick={() => setMenuOpen(false)}
+              >
+                Tipos de Despesas
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${style.link} ${style.linkActive}` : style.link
+                }
+                to="/usuarios"
+                onClick={() => setMenuOpen(false)}
+              >
+                Usuários
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${style.link} ${style.linkActive}` : style.link
+                }
+                to="/vendas"
+                onClick={() => setMenuOpen(false)}
+              >
+                Vendas
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${style.link} ${style.linkActive}` : style.link
+                }
+                to="/produtos"
+                onClick={() => setMenuOpen(false)}
+              >
+                Produtos
+              </NavLink>
+            </li>
             <li>
               <NavLink
                 className={({ isActive }) =>
