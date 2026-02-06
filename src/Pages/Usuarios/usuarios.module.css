@@ -1,0 +1,94 @@
+@media (min-width: 1024px) {
+  .tableContainer {
+    display: flex;
+  }
+
+  .cardList {
+    display: none;
+  }
+
+  .headerActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .pagination {
+    flex-direction: row;
+  }
+  .loadingRow {
+    text-align: center;
+    padding: 2rem;
+    font-style: italic;
+    color: #6c757d;
+  }
+
+  .emptyRow {
+    text-align: center;
+    padding: 2rem;
+    font-style: italic;
+  }
+
+  .table {
+    background-color: var(--gray);
+    border-collapse: collapse;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+
+  .table th {
+    background-color: var(--gray);
+    font-size: 1.1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border: 1px solid #dddddd;
+  }
+
+  .table th,
+  .table td {
+    padding: 5px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .table tbody tr:hover td:nth-child(1),
+  .table tbody tr:hover td:nth-child(2),
+  .table tbody tr:hover td:nth-child(3),
+  .table tbody tr:hover td:nth-child(4) {
+    background-color: var(--primary);
+  }
+
+  .table tbody tr td:nth-child(1) {
+    /* Nome */
+    width: 33%;
+  }
+
+  .table tbody tr td:nth-child(2) {
+    /* E-mail */
+    width: 32%;
+  }
+
+  .table tbody tr td:nth-child(3) {
+    /* Celular */
+    width: 11.6%;
+  }
+
+  .table tbody tr td:nth-child(4) {
+    /* Status */
+    width: 11.6%;
+  }
+
+  .table tbody tr td:nth-child(5) {
+    /* Ação */
+    width: 11.6%;
+  }
+}
