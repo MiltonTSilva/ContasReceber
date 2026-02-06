@@ -1,0 +1,30 @@
+.received {
+  background-color: var(--teal);
+}
+
+.notReceived {
+  background-color: var(--info);
+}
+
+@media (min-width: 1024px) {
+  .table tbody tr:hover td:nth-child(1),
+  .table tbody tr:hover td:nth-child(2),
+  .table tbody tr:hover td:nth-child(3) {
+    background-color: var(--primary);
+  }
+
+  .table tbody tr td:nth-child(1) {
+    /* Cliente */
+    width: 50%;
+  }
+
+  .table tbody tr td:nth-child(2) {
+    /* Recebimento */
+    width: 25%;
+  }
+
+  .table tbody tr td:nth-child(3) {
+    /* Valor */
+    width: 25%;
+  }
+}
