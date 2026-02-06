@@ -8,7 +8,7 @@ import { useBusinessId } from "../../Hooks/useBusiness";
 import Dialogs from "../../Components/Dialogs/Dialogs/Dialogs";
 import style from "./produtos.module.css";
 import type { Produto } from "../../Types/ProdutosTypes";
-import { Plus, Package, X } from "lucide-react";
+import { Plus, Package } from "lucide-react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
 export function Produtos() {
