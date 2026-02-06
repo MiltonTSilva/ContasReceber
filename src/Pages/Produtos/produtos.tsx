@@ -74,12 +74,9 @@ export function Produtos() {
     return (
       produto.name.toLowerCase().includes(term) ||
       produto.description.toLowerCase().includes(term) ||
-      ((produto as any).barcode || "").toLowerCase().includes(term) ||
-      ((produto as any).flavor || "").toLowerCase().includes(term) ||
-      ((produto as any).package_weight || "")
-        .toString()
-        .toLowerCase()
-        .includes(term)
+      (produto.barcode || "").toLowerCase().includes(term) ||
+      (produto.flavor || "").toLowerCase().includes(term) ||
+      (produto.package_weight || "").toString().toLowerCase().includes(term)
     );
   });
 
@@ -170,7 +167,7 @@ export function Produtos() {
                           color: "var(--text-color-secondary)",
                         }}
                       >
-                        {formatPrice((produto as any).price_per_kilo)} / kg
+                        {formatPrice(produto.price_per_kilo || 0)} / kg
                       </span>
                     )}
                   </div>
@@ -261,17 +258,18 @@ export function Produtos() {
                 {(selectedProduto.price_per_kilo ?? 0) > 0 && (
                   <div>
                     <strong>Preço por Kilo:</strong>{" "}
-                    {formatPrice((selectedProduto as any).price_per_kilo)}
+                    {formatPrice(selectedProduto.price_per_kilo || 0)} / kg
                   </div>
                 )}
-                {(selectedProduto as any).package_weight !== undefined && (
+                {selectedProduto.package_weight !== undefined && (
                   <div>
                     <strong>Peso do Pacote:</strong>{" "}
-                    {Number(
-                      (selectedProduto as any).package_weight,
-                    ).toLocaleString("pt-BR", {
-                      maximumFractionDigits: 3,
-                    })}{" "}
+                    {Number(selectedProduto.package_weight).toLocaleString(
+                      "pt-BR",
+                      {
+                        maximumFractionDigits: 3,
+                      },
+                    )}{" "}
                     kg
                   </div>
                 )}
@@ -279,9 +277,9 @@ export function Produtos() {
                   <strong>Quantidade em Estoque:</strong>{" "}
                   {selectedProduto.quantity}
                 </div>
-                {(selectedProduto as any).flavor && (
+                {selectedProduto.flavor && (
                   <div>
-                    <strong>Sabor:</strong> {(selectedProduto as any).flavor}
+                    <strong>Sabor:</strong> {selectedProduto.flavor}
                   </div>
                 )}
               </div>
