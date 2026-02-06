@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Main } from "../../Components/Main/Main";
 import { supabase } from "../../services/supabase";
 import { useGlobalState } from "../../Hooks/useGlobalState";
-import styles from "./Empresas.module.css";
+import styles from "./empresas.module.css";
 import stylesShared from "../sharedPage.module.css";
 import type { Empresa } from "../../Types/empresasTypes";
 import { ConfirmationDialogs } from "../../Components/Dialogs/ConfirmationDialogs/ConfirmationDialogs";
@@ -96,7 +96,7 @@ export function Empresas() {
 
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [empresaParaExcluir, setEmpresaParaExcluir] = useState<string | null>(
-    null
+    null,
   );
   const [error, setError] = useState<string | null>(null);
   const buscaInputRef = useRef<HTMLInputElement | null>(null);
@@ -127,7 +127,7 @@ export function Empresas() {
 
       if (debouncedSearchTerm) {
         query = query.or(
-          `business_name.ilike.%${debouncedSearchTerm}%,responsible_name.ilike.%${debouncedSearchTerm}%,email.ilike.%${debouncedSearchTerm}%`
+          `business_name.ilike.%${debouncedSearchTerm}%,responsible_name.ilike.%${debouncedSearchTerm}%,email.ilike.%${debouncedSearchTerm}%`,
         );
       }
 
@@ -160,7 +160,7 @@ export function Empresas() {
         { event: "*", schema: "public", table: "business" },
         () => {
           fetchEmpresas();
-        }
+        },
       )
       .subscribe();
 
@@ -238,13 +238,13 @@ export function Empresas() {
 
       if (!data || data.length === 0) {
         throw new Error(
-          "Permissão negada. Apenas o proprietário ou um administrador pode alterar este empresa."
+          "Permissão negada. Apenas o proprietário ou um administrador pode alterar este empresa.",
         );
       }
 
       if (novoStatus === false && !isAdmin) {
         setEmpresas((empresasAtuais) =>
-          empresasAtuais.filter((c) => c.id !== id)
+          empresasAtuais.filter((c) => c.id !== id),
         );
         if (empresas.length === 1 && currentPage > 1) {
           setCurrentPage(currentPage - 1);
@@ -271,7 +271,7 @@ export function Empresas() {
   };
 
   const handleItemsPerPageChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
+    e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     skipFocusRef.current = true;
     setItemsPerPage(Number(e.target.value));
@@ -285,7 +285,7 @@ export function Empresas() {
         throw new Error("Erro na tradução: " + translationError);
       }
     },
-    [geminiTranslate, translationError]
+    [geminiTranslate, translationError],
   );
 
   useEffect(() => {
