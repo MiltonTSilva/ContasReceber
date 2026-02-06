@@ -6,17 +6,14 @@ export function Sobre() {
     <Main>
       <div className={styles.container}>
         <h1 className={styles.title}>Sobre</h1>
-        <p className={styles.phrase}>
-          Este aplicativo foi criado com o objetivo de centralizar as contas a
-          receber de clientes.
-        </p>
 
         <p className={styles.phrase}>
-          O aplicativo é uma ferramenta simples e eficiente para o controle de
-          contas a receber, pensado para qualquer pessoa que deseja organizar
-          seus recebimentos com clareza e agilidade.
+          Mascotes Pet Shop é um sistema de gestão empresarial (ERP) desenvolvido
+          para atender às necessidades específicas de pet shops. Ele oferece uma
+          solução completa para gerenciar as operações diárias, desde o controle
+          de estoque até a gestão financeira, proporcionando uma experiência
+          eficiente e organizada para os proprietários de pet shops.
         </p>
-
         <address className={styles.address}>
           <span className={styles.author}>Criado por:</span>
           <span>Milton Tomé da Silva</span>
