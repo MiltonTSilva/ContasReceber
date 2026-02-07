@@ -7,9 +7,6 @@ import { Home } from "../Pages/Home/home";
 import { Clientes } from "../Pages/Clientes/clientes";
 import { ClientesForm } from "../Pages/Clientes/clientesForm";
 
-import { Empresas } from "../Pages/Empresas/empresas";
-import { EmpresasForm } from "../Pages/Empresas/empresasForm";
-
 import { Pagamentos } from "../Pages/Pagamentos/pagamentos";
 import { PagamentosForm } from "../Pages/Pagamentos/pagamentosForm";
 
@@ -74,30 +71,7 @@ export function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/empresas"
-        element={
-          <ProtectedRoute>
-            <Empresas />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/empresas/empresasForm"
-        element={
-          <ProtectedRoute>
-            <EmpresasForm />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/empresas/empresasForm/:id"
-        element={
-          <ProtectedRoute>
-            <EmpresasForm />
-          </ProtectedRoute>
-        }
-      />
+
       <Route
         path="/usuarios"
         element={

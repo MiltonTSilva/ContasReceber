@@ -62,17 +62,6 @@ export function NavBar() {
                 Despesas
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? `${style.link} ${style.linkActive}` : style.link
-                }
-                to="/empresas"
-                onClick={() => setMenuOpen(false)}
-              >
-                Empresas
-              </NavLink>
-            </li>
 
             <li>
               <NavLink
@@ -140,17 +129,7 @@ export function NavBar() {
                 Produtos
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? `${style.link} ${style.linkActive}` : style.link
-                }
-                to="/sobre"
-                onClick={() => setMenuOpen(false)}
-              >
-                Sobre
-              </NavLink>
-            </li>
+
             <li>
               {user ? (
                 <Logout />
@@ -166,15 +145,26 @@ export function NavBar() {
                 </NavLink>
               )}
             </li>
+            {/*             <li>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? `${style.link} ${style.linkActive}` : style.link
+                }
+                to="/sobre"
+                onClick={() => setMenuOpen(false)}
+              >
+                Sobre
+              </NavLink>
+            </li> */}
           </ul>
         </nav>
         <div className={style.user}>
-          <p>
+          <span>
             <span className={style["user-name"]}>Olá,</span>
             {user?.user_metadata.display_name != undefined
               ? user?.user_metadata.display_name
               : user?.user_metadata.full_name}
-          </p>
+          </span>
         </div>
       </>
     )

@@ -4,7 +4,6 @@ import style from "./produtosForm.module.css";
 import { supabase } from "../../services/supabase";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGlobalState } from "../../Hooks/useGlobalState";
-import { useBusinessId } from "../../Hooks/useBusiness";
 import Dialogs from "../../Components/Dialogs/Dialogs/Dialogs";
 import { Button } from "../../Components/Button/Button";
 import { MdAssignmentReturn, MdOutlineSave } from "react-icons/md";
@@ -16,7 +15,6 @@ export function ProdutosForm() {
   const { id } = useParams<{ id: string }>();
   const isEditing = Boolean(id);
   const { user } = useGlobalState();
-  const { businessId } = useBusinessId();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -28,47 +26,15 @@ export function ProdutosForm() {
   const [flavor, setFlavor] = useState<string>("");
   const [imageUrl, setImageUrl] = useState("");
   const [active, setActive] = useState(true);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
-  const [availableImages, setAvailableImages] = useState<string[]>([]);
 
-  const nameInputRef = useRef<HTMLInputElement>(null);
+  const namedeInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Buscar imagens disponíveis da pasta public/produtos
-  useEffect(() => {
-    const loadAvailableImages = async () => {
-      try {
-        // Usar import.meta.glob para encontrar imagens em public/produtos
-        const modules = import.meta.glob<{ default: string }>(
-          "/public/produtos/**/*.{jpg,jpeg,png,gif,webp}",
-          { eager: true },
-        );
-
-        const imageUrls = Object.keys(modules)
-          .map((path) => {
-            // Extrair o caminho relativo partindo de /produtos/
-            const match = path.match(/public[/\\]produtos[/\\](.+)$/);
-            return match ? `/produtos/${match[1].replace(/\\/g, "/")}` : null;
-          })
-          .filter((url): url is string => url !== null)
-          .sort();
-
-        setAvailableImages(imageUrls);
-
-        if (imageUrls.length === 0) {
-          console.log("Nenhuma imagem encontrada em public/produtos");
-        }
-      } catch (err) {
-        console.error("Erro ao carregar imagens:", err);
-        setAvailableImages([]);
-      }
-    };
-    loadAvailableImages();
-  }, []);
 
   const fetchProduto = useCallback(async () => {
     if (!id) return;
@@ -92,7 +58,7 @@ export function ProdutosForm() {
         setPackageWeight(produto.package_weight || 0);
         setBarcode(produto.barcode || "");
         setFlavor(produto.flavor || "");
-        setImageUrl(produto.image_url || "");
+        setImageUrl(produto.image_url ?? "");
         setActive(produto.active ?? true);
       }
     } catch (fetchError) {
@@ -109,22 +75,15 @@ export function ProdutosForm() {
   }, [isEditing, fetchProduto]);
 
   useEffect(() => {
-    nameInputRef.current?.focus();
+    namedeInputRef.current?.focus();
   }, []);
-
-  const handleImageSelect = (imagePath: string) => {
-    setImageUrl(imagePath);
-  };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Criar uma URL local para preview
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setImageUrl(event.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+      setSelectedFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setImageUrl(previewUrl);
     }
   };
 
@@ -135,11 +94,27 @@ export function ProdutosForm() {
 
     try {
       if (!user) throw new Error("Usuário não autenticado.");
-      if (!businessId)
-        throw new Error("Erro ao identificar a empresa do usuário.");
 
       if (!name.trim()) throw new Error("Nome do produto é obrigatório.");
       if (price <= 0) throw new Error("Preço deve ser maior que zero.");
+
+      let finalImageUrl = imageUrl;
+
+      if (selectedFile) {
+        const fileExt = selectedFile.name.split(".").pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("produtos")
+          .upload(fileName, selectedFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage
+          .from("produtos")
+          .getPublicUrl(fileName);
+        finalImageUrl = data.publicUrl;
+      }
 
       const produtoData = {
         name,
@@ -148,7 +123,7 @@ export function ProdutosForm() {
         price_per_kilo: parseFloat(pricePerKilo.toString()),
         package_weight: parseFloat(packageWeight.toString()),
         quantity: parseInt(quantity.toString()),
-        image_url: imageUrl,
+        image_url: finalImageUrl,
         barcode,
         flavor,
         active,
@@ -173,10 +148,15 @@ export function ProdutosForm() {
         setDialogMessage("Produto cadastrado com sucesso!");
       }
 
+      // Limpar seleção de arquivo após sucesso
+      setSelectedFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+
       setIsSuccessDialogOpen(true);
     } catch (err) {
       setError((err as Error).message);
-      console.error("Erro ao salvar produto:", err);
     } finally {
       setLoading(false);
     }
@@ -201,19 +181,9 @@ export function ProdutosForm() {
 
         <form onSubmit={handleSubmit}>
           <div className={style.formGroup}>
-            <label className={style.label}>Código de Barras</label>
-            <input
-              type="text"
-              value={barcode}
-              onChange={(e) => setBarcode(e.target.value)}
-              className={style.input}
-              placeholder="Digite o código de barras"
-            />
-          </div>
-          <div className={style.formGroup}>
             <label className={style.label}>Nome do Produto *</label>
             <input
-              ref={nameInputRef}
+              ref={namedeInputRef}
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -230,6 +200,16 @@ export function ProdutosForm() {
               onChange={(e) => setDescription(e.target.value)}
               className={style.textarea}
               placeholder="Digite a descrição do produto"
+            />
+          </div>
+          <div className={style.formGroup}>
+            <label className={style.label}>Código de Barra</label>
+            <input
+              type="text"
+              value={barcode}
+              onChange={(e) => setBarcode(e.target.value)}
+              className={style.input}
+              placeholder="Digite o código de barras"
             />
           </div>
 
@@ -284,77 +264,72 @@ export function ProdutosForm() {
                 min="0"
               />
             </div>
+
+            <div className={style.formGroup}>
+              <label className={style.label}>Sabor</label>
+              <input
+                type="text"
+                value={flavor}
+                onChange={(e) => setFlavor(e.target.value)}
+                className={style.input}
+                placeholder="Digite o sabor"
+              />
+            </div>
+
+            <div className={style.formGroup}>
+              <label className={style.label}>
+                Produto ativo
+                <div
+                  className={style.checkboxContainer}
+                  tabIndex={0}
+                  onClick={() => setActive(!active)}
+                >
+                  <input
+                    className={style.inputCheckbox}
+                    id="active"
+                    type="checkbox"
+                    checked={active}
+                    onChange={(e) => setActive(e.target.checked)}
+                  />
+                  Ativo
+                </div>
+              </label>
+            </div>
           </div>
 
           <div className={style.formGroup}>
-            <label className={style.label}>Sabor</label>
-            <input
-              type="text"
-              value={flavor}
-              onChange={(e) => setFlavor(e.target.value)}
-              className={style.input}
-              placeholder="Digite o sabor"
-            />
-          </div>
-
-          <div className={style.formActions}>
-            <Button
-              onClick={() => navigate("/produtos")}
-              type="button"
-              style={{ backgroundColor: "#888", color: "white" }}
-            >
-              <MdAssignmentReturn size={20} />
-              Voltar
-            </Button>
-            <Button
-              type="submit"
-              disabled={loading}
-              style={{ backgroundColor: "var(--accent-color)", color: "white" }}
-            >
-              <MdOutlineSave size={20} />
-              {loading ? "Salvando..." : "Salvar"}
-            </Button>
-          </div>
-
-          <div className={style.imageUploadContainer}>
-            <label className={style.label}>Imagem do Produto</label>
-
-            <div className={style.imageOptions}>
-              {imageUrl && (
-                <div>
-                  <p
-                    style={{
-                      fontSize: "0.9rem",
-                      color: "var(--text-color-secondary)",
-                      marginBottom: "0.5rem",
-                    }}
-                  >
-                    Preview:
-                  </p>
-                  <img
-                    src={imageUrl}
-                    alt="Preview"
-                    className={style.imagePreview}
+            <div className={style.imageUploadContainer}>
+              <span className={style.label}>Imagem do Produto</span>
+              <div className={style.imageOptions}>
+                {imageUrl && (
+                  <div className={style.imagePreview}>
+                    <img
+                      src={imageUrl}
+                      alt="Preview"
+                      className={style.imagePreview}
+                    />
+                  </div>
+                )}
+                <label className={style.imageUploadArea}>
+                  <div className={style.imageUploadText}>
+                    <Upload size={32} className={style.imageUploadIcon} />
+                    <span>Clique para selecionar imagem</span>
+                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
                   />
-                </div>
-              )}
-              <label className={style.imageUploadArea}>
-                <div className={style.imageUploadText}>
-                  <Upload size={32} className={style.imageUploadIcon} />
-                  <span>Clique para selecionar imagem</span>
-                </div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileUpload}
-                />
-              </label>
+                </label>
+              </div>
+            </div>
+          </div>
 
-              <div className={style.optionDivider}>
+          {/* <div className={style.optionDivider}>
                 Ou selecione uma imagem abaixo
               </div>
-
+              <div className={style.optionDivider}>Ou carregue uma imagem</div>
               <div style={{ maxHeight: "300px", overflowY: "auto" }}>
                 {availableImages.length === 0 ? (
                   <p
@@ -411,25 +386,29 @@ export function ProdutosForm() {
                     ))}
                   </div>
                 )}
-              </div>
+              </div> */}
 
-              <div className={style.optionDivider}>Ou carregue uma imagem</div>
-            </div>
-          </div>
-
-          <div
-            className={style.checkboxContainer}
-            onClick={() => setActive(!active)}
-          >
-            <input
-              type="checkbox"
-              className={style.checkbox}
-              checked={active}
-              readOnly
-            />
-            <label className={style.checkboxLabel}>
-              Produto ativo (visível para clientes)
-            </label>
+          <div className={`${style.actions} ${"actions"}`}>
+            <Button
+              type="reset"
+              variant="bg-cancel"
+              onClick={() => navigate("/produtos")}
+              title="Voltar para lista de Produtos"
+              style={{ width: "120px" }}
+            >
+              <MdAssignmentReturn size={28} />
+              Voltar para lista
+            </Button>
+            <Button
+              variant="bg-primary"
+              type="submit"
+              disabled={loading || error !== null}
+              title="Salvar Produto"
+              style={{ width: "120px" }}
+            >
+              <MdOutlineSave size={28} />
+              {loading ? "Salvando..." : "Salvar"}
+            </Button>
           </div>
         </form>
 

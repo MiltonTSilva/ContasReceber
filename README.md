@@ -102,13 +102,11 @@ create table public.users (
   full_name text null,
   email text null,
   active boolean null,
-  business_id uuid not null,
   created_at timestamp without time zone not null default now(),
 
   constraint users_pkey primary key (id),
   constraint users_email_key unique (email),
   constraint users_name_key unique (full_name),
-  constraint users_business_id_fkey foreign KEY (business_id) references business (id)
 ) TABLESPACE pg_default;
 
 CREATE TRIGGER on_auth_user_created

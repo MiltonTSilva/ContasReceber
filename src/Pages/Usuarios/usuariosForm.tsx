@@ -13,7 +13,6 @@ import { FaEdit } from "react-icons/fa";
 
 import { MdAssignmentReturn, MdOutlineSave } from "react-icons/md";
 import { Users } from "lucide-react";
-import { useBusinessId } from "../../Hooks/useBusiness";
 
 export function UsuariosForm() {
   const navigate = useNavigate();
@@ -26,14 +25,12 @@ export function UsuariosForm() {
   const [mobile, setMobile] = useState("");
   const [receive_email, setReceiveEmail] = useState(false);
   const [active, setActive] = useState(true);
-  const [business_id, setBusinessId] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const fullnameInputRef = useRef<HTMLInputElement>(null);
-  const { businessId } = useBusinessId();
 
   const {
     translate: geminiTranslate,
@@ -59,14 +56,13 @@ export function UsuariosForm() {
         setMobile(data.mobile || "");
         setReceiveEmail(data.receive_email ?? false); // garante boolean
         setActive(data.active ?? true); // garante boolean
-        setBusinessId(data.business_id || businessId || "");
       }
     } catch (error) {
       setError((error as Error).message);
     } finally {
       setLoading(false);
     }
-  }, [id, businessId]);
+  }, [id]);
 
   useEffect(() => {
     if (isEditing) {
@@ -89,9 +85,8 @@ export function UsuariosForm() {
         full_name,
         email,
         mobile,
-        receive_email: !!receive_email, 
-        active: !!active, 
-        business_id,
+        receive_email: !!receive_email,
+        active: !!active,
       };
 
       if (isEditing) {
@@ -114,7 +109,6 @@ export function UsuariosForm() {
         setMobile("");
         setReceiveEmail(false);
         setActive(true);
-        setBusinessId("");
       }
     } catch (error) {
       setError((error as Error).message);
@@ -139,7 +133,7 @@ export function UsuariosForm() {
         throw new Error("Erro na tradução: " + translationError);
       }
     },
-    [geminiTranslate, translationError]
+    [geminiTranslate, translationError],
   );
 
   useEffect(() => {

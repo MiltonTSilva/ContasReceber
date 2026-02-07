@@ -26,13 +26,44 @@
   gap: 0.5rem;
 }
 
-.label {
+/* .label {
   font-weight: 600;
   color: var(--text-color);
   font-size: 0.95rem;
+} */
+
+.label {
+  text-align: start;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--darkGray);
+  display: flex;
+  flex-direction: column;
 }
 
 .input,
+.textarea,
+.select {
+  padding: 0.5rem 1rem;
+  border: 1px solid #383838;
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  margin-bottom: 15px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  box-shadow: 0 0 0 3px #007bff;
+  outline: none;
+}
+
+/* .input,
 .textarea,
 .select {
   padding: 0.75rem;
@@ -42,7 +73,7 @@
   color: var(--text-color);
   font-size: 1rem;
   font-family: inherit;
-}
+} 
 
 .input:focus,
 .textarea:focus,
@@ -50,7 +81,7 @@
   outline: none;
   border-color: var(--accent-color);
   box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.1);
-}
+}*/
 
 .textarea {
   resize: vertical;
@@ -60,7 +91,11 @@
 .imageUploadContainer {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
+  margin-top: 0.5rem;
+  border: 2px dashed red;
 }
 
 .imagePreviewContainer {
@@ -71,10 +106,10 @@
 }
 
 .imagePreview {
-  width: fit-content;
-  height: 300px;
+  width: min(300px, 100%);
+  height: auto;
   border-radius: 0.5rem;
-  object-fit: cover;
+  object-fit: scale-down;
   border: 2px solid var(--border-color);
 }
 
@@ -83,7 +118,7 @@
   align-items: center;
   justify-content: center;
   width: fit-content;
-  height: 200px;
+  height: 100px;
   border: 2px dashed var(--border-color);
   border-radius: 0.5rem;
   cursor: pointer;
@@ -122,8 +157,11 @@
 
 .imageOptions {
   display: flex;
+  justify-items: center;
+  align-items: center;
   flex-direction: column;
   gap: 1rem;
+  margin-top: 20px;
 }
 
 .optionDivider {
@@ -149,20 +187,19 @@
 }
 
 .checkboxContainer {
+  border-radius: 6px;
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
-  background: var(--input-bg);
-  cursor: pointer;
-  transition: all 0.3s ease;
+  padding: 0.8rem 1rem;
+  border: solid 1px;
+  background-color: rgba(var(--accent-color-rgb), 0.05);
+  margin-bottom: 10px;
 }
 
 .checkboxContainer:hover {
   border-color: var(--accent-color);
-  background: rgba(var(--accent-color-rgb), 0.05);
+  background: var(--info);
 }
 
 .checkbox {
@@ -170,6 +207,12 @@
   height: 1.25rem;
   cursor: pointer;
   accent-color: var(--accent-color);
+}
+
+.inputCheckbox {
+  margin-right: 5px;
+  width: 20px;
+  height: 25px;
 }
 
 .checkboxLabel {
@@ -186,6 +229,14 @@
   margin-top: 2rem;
   padding-top: 2rem;
   border-top: 1px solid var(--border-color);
+}
+
+.actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-direction: row;
 }
 
 .errorMessage {
@@ -217,5 +268,34 @@
 
   .formActions {
     flex-direction: column;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    width: 70%;
+  }
+  .form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .actions {
+    justify-content: flex-end;
+  }
+
+  .input {
+    width: 100%;
+  }
+
+  .checkboxContainer {
+    width: 100%;
+  }
+
+  .checkboxRadioContainer {
+    margin-top: 5px;
+  }
+
+  .inputRadioCheckbox {
+    height: 22px;
   }
 }

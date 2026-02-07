@@ -1,6 +1,6 @@
 .header {
   padding: 1px;
-  background-color: var(--white);
+  /* background-color: var(--white); */
   flex-shrink: 0;
   font-size: 0.78rem;
 }

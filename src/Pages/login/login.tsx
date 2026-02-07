@@ -102,8 +102,8 @@ export function Login() {
               >
                 {loading ? "Entrando..." : "Entrar"}
               </Button>
-              <hr className={"separator"} />
-              <Link to="/register">Não tem uma conta? Cadastre-se</Link>
+              {/* <hr className={"separator"} />
+              <Link to="/register">Não tem uma conta? Cadastre-se</Link> */}
             </div>
           </form>
         </div>

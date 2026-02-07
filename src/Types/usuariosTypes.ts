@@ -5,6 +5,5 @@ export type Usuario = {
   mobile: string;
   receive_email: boolean;
   active: boolean;
-  business_id: string;
   created_at: string;
 };

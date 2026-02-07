@@ -15,7 +15,6 @@ import { useAdmin } from "../../Hooks/useAdmin";
 import { FaEdit } from "react-icons/fa";
 import { LuReceipt } from "react-icons/lu";
 import { MdAssignmentReturn, MdOutlineSave } from "react-icons/md";
-import { useBusinessId } from "../../Hooks/useBusiness";
 
 export function VendasForm() {
   const navigate = useNavigate();
@@ -37,7 +36,7 @@ export function VendasForm() {
   const [dialogMessage, setDialogMessage] = useState("");
   const custumerIdSelectRef = useRef<HTMLSelectElement | null>(null);
   const { isAdmin } = useAdmin();
-  const { businessId } = useBusinessId();
+
 
   const {
     translate: geminiTranslate,
@@ -106,7 +105,7 @@ export function VendasForm() {
     } finally {
       setLoading(false);
     }
-  }, [user, isAdmin, businessId]);
+  }, [user, isAdmin]);
 
   useEffect(() => {
     if (isEditing) {
@@ -144,17 +143,12 @@ export function VendasForm() {
     setError(null);
     try {
       if (!user) throw new Error("Usuário não autenticado.");
-
-      if (loading && !businessId) {
-        throw new Error("Erro ao identificar a empresa do usuário logado.");
-      }
       const accounts_receivableData = {
         received_date,
         payment_received_at: payment_received_at || null,
         amount_to_receive: unformatMoney(amount_to_receive),
         custumer_id: custumer_id,
         active,
-        business_id: businessId,
       };
 
       if (isEditing) {

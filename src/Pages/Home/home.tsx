@@ -188,21 +188,12 @@ export function Home() {
         ) : (
           ""
         )}
-        {/* 
-        {Recebimento.length == 0 ? (
-          <p className={styles.phrase}>
-            Pensado para qualquer pessoa que deseja organizar seus recebimentos
-            com clareza e agilidade.
-          </p>
-        ) : (
-          ""
-        )} */}
 
         {Recebimento.length > 0 ? (
           <section>
             <p className={`${styles.phrase} ${styles.phraseReceivements}`}>
-              Aqui você pode visualizar os recebimentos do dia, facilitando o
-              acompanhamento das suas finanças.
+              Aqui você pode consultar os recebimentos do dia ou os pendentes,
+              tornando o acompanhamento das suas finanças mais organizado.
             </p>
 
             <div className={`${styles.cardList} ${styles.cardBody}`}>

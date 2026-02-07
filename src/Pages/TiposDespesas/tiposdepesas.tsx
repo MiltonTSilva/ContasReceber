@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Main } from "../../Components/Main/Main";
 import { supabase } from "../../services/supabase";
@@ -100,13 +100,13 @@ export function TiposDespesas() {
     error: translationError,
   } = useGeminiTranslation();
 
-  const fetchTipoDespesa = useCallback(async () => {
-    const typeOperationOptions = [
-      { id: 1, name: "Recebimento" },
-      { id: 2, name: "Despesa" },
-      { id: 3, name: "Ambos" },
-    ];
+  const typeOperationOptions = useMemo(() => [
+    { id: 1, name: "Recebimento" },
+    { id: 2, name: "Pagamento" },
+    { id: 3, name: "Ambos" },
+  ], []);
 
+  const fetchTipoDespesa = useCallback(async () => {
     if (!user) return;
 
     const from = (currentPage - 1) * itemsPerPage;
@@ -150,7 +150,7 @@ export function TiposDespesas() {
     } finally {
       setLoading(false);
     }
-  }, [user, currentPage, itemsPerPage, debouncedSearchTerm]);
+  }, [user, currentPage, itemsPerPage, debouncedSearchTerm, typeOperationOptions]);
 
   useEffect(() => {
     fetchTipoDespesa();
@@ -351,10 +351,16 @@ export function TiposDespesas() {
                       }
                     >
                       {tipodespesa?.type_operation === 1
-                        ? "Recebimento"
+                        ? typeOperationOptions.find(
+                            (opt) => opt.id === tipodespesa?.type_operation,
+                          )?.name
                         : tipodespesa?.type_operation === 2
-                          ? "Despesa"
-                          : "Ambos"}
+                          ? typeOperationOptions.find(
+                              (opt) => opt.id === tipodespesa?.type_operation,
+                            )?.name
+                          : typeOperationOptions.find(
+                              (opt) => opt.id === tipodespesa?.type_operation,
+                            )?.name}
                     </td>
                     <td
                       className={

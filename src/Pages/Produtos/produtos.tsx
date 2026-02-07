@@ -4,28 +4,41 @@ import { Main } from "../../Components/Main/Main";
 import { Button } from "../../Components/Button/Button";
 import { useGlobalState } from "../../Hooks/useGlobalState";
 import { supabase } from "../../services/supabase";
-import { useBusinessId } from "../../Hooks/useBusiness";
 import Dialogs from "../../Components/Dialogs/Dialogs/Dialogs";
 import style from "./produtos.module.css";
 import type { Produto } from "../../Types/ProdutosTypes";
-import { Plus, Package } from "lucide-react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { Plus, Package, UploadCloud } from "lucide-react";
+import {
+  FaToggleOn,
+  FaToggleOff,
+  FaEdit,
+  FaTrashAlt,
+  FaWindowClose,
+} from "react-icons/fa";
+import { ConfirmationDialogs } from "../../Components/Dialogs/ConfirmationDialogs/ConfirmationDialogs";
+import { useGeminiTranslation } from "../../Hooks/useGeminiTranslation";
+import { ErrorDialogs } from "../../Components/Dialogs/ErrorDialogs/ErrorDialogs";
 
 export function Produtos() {
   const navigate = useNavigate();
   const { user } = useGlobalState();
-  const { businessId } = useBusinessId();
-
   const [produtos, setProdutos] = useState<Produto[]>([]);
+  const [produtoParaExcluir, setProdutoParaExcluir] = useState<string | null>(
+    null,
+  );
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [selectedProduto, setSelectedProduto] = useState<Produto | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchProdutos = useCallback(async () => {
-    if (!businessId) return;
+  const {
+    translate: geminiTranslate,
+    translatedText,
+    error: translationError,
+  } = useGeminiTranslation();
 
+  const fetchProdutos = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -44,28 +57,35 @@ export function Produtos() {
     } finally {
       setLoading(false);
     }
-  }, [businessId]);
+  }, []);
 
   useEffect(() => {
-    if (user && businessId) {
+    if (user) {
       fetchProdutos();
     }
-  }, [user, businessId, fetchProdutos]);
+  }, [user, fetchProdutos]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Tem certeza que deseja excluir este produto?")) {
-      return;
-    }
+  const handleExcluir = (id: string) => {
+    setProdutoParaExcluir(id);
+  };
+
+  const confirmarExclusao = async () => {
+    if (!produtoParaExcluir) return;
 
     try {
-      const { error } = await supabase.from("products").delete().eq("id", id);
+      const { error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", produtoParaExcluir);
 
       if (error) throw error;
 
-      setProdutos(produtos.filter((p) => p.id !== id));
-    } catch (err) {
-      setError((err as Error).message);
-      console.error("Erro ao excluir produto:", err);
+      setProdutos(produtos.filter((p) => p.id !== produtoParaExcluir));
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      setError(errorMessage);
+    } finally {
+      setProdutoParaExcluir(null);
     }
   };
 
@@ -87,6 +107,100 @@ export function Produtos() {
     }).format(price);
   };
 
+  const translateError = useCallback(
+    (error: string) => {
+      geminiTranslate(error, "português do Brasil");
+      if (translationError) {
+        throw new Error("Erro na tradução: " + translationError);
+      }
+    },
+    [geminiTranslate, translationError],
+  );
+
+  useEffect(() => {
+    if (error) {
+      translateError(error);
+    }
+  }, [error, translateError]);
+
+  const handleMigrateImages = async () => {
+    if (
+      !confirm(
+        "Isso irá procurar produtos com imagens locais (/produtos/...) e fazer upload para o Supabase Storage. Deseja continuar?",
+      )
+    )
+      return;
+
+    setLoading(true);
+    try {
+      // 1. Buscar produtos com caminho local (assumindo que começam com /produtos/)
+      const { data: products, error: fetchError } = await supabase
+        .from("products")
+        .select("*")
+        .ilike("image_url", "/produtos/%");
+
+      if (fetchError) throw fetchError;
+
+      if (!products || products.length === 0) {
+        alert("Nenhum produto com imagem local (/produtos/...) encontrado.");
+        setLoading(false);
+        return;
+      }
+
+      let successCount = 0;
+      let errorCount = 0;
+
+      for (const product of products) {
+        try {
+          if (!product.image_url) continue;
+
+          // 2. Baixar a imagem local (o navegador busca da pasta public)
+          const response = await fetch(product.image_url);
+          if (!response.ok)
+            throw new Error(
+              `Falha ao carregar imagem local: ${product.image_url}`,
+            );
+
+          const blob = await response.blob();
+          // Tenta manter o nome original do arquivo, adicionando timestamp para evitar duplicidade
+          const originalName = product.image_url.split("/").pop();
+          const fileName = originalName
+            ? `${Date.now()}_${originalName}`
+            : `${Date.now()}_${product.id}.jpg`;
+
+          // 3. Upload para o Supabase Storage
+          const { error: uploadError } = await supabase.storage
+            .from("produtos")
+            .upload(fileName, blob);
+
+          if (uploadError) throw uploadError;
+
+          // 4. Obter URL pública e atualizar produto
+          const { data: publicUrlData } = supabase.storage
+            .from("produtos")
+            .getPublicUrl(fileName);
+
+          await supabase
+            .from("products")
+            .update({ image_url: publicUrlData.publicUrl })
+            .eq("id", product.id);
+          successCount++;
+        } catch (err) {
+          console.error(`Erro ao migrar ${product.name}:`, err);
+          errorCount++;
+        }
+      }
+      alert(
+        `Migração concluída!\nSucesso: ${successCount}\nErros: ${errorCount}`,
+      );
+      fetchProdutos();
+    } catch (err) {
+      setError("Erro na migração: " + (err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Main>
       <div className={style.container}>
@@ -105,6 +219,18 @@ export function Produtos() {
                 className={style.searchInput}
               />
             </div>
+            <Button
+              onClick={handleMigrateImages}
+              title="Migrar Imagens Locais"
+              style={{
+                visibility: "hidden",
+                marginRight: "0.5rem",
+                backgroundColor: "#6c757d",
+              }}
+            >
+              <UploadCloud size={20} />
+              Migrar
+            </Button>
             <Button onClick={() => navigate("/produtos/novo")}>
               <Plus size={20} />
               Novo Produto
@@ -153,7 +279,7 @@ export function Produtos() {
                 )}
                 <div className={style.productInfo}>
                   <div style={{ marginBottom: "0.5rem" }}>
-                    <strong>Cód. Barras:</strong> {produto.barcode || "N/A"}
+                    <strong>Cód. Barra:</strong> {produto.barcode || "N/A"}
                   </div>
                   <h3 className={style.productName}>{produto.name}</h3>
                   <div className={style.productDetails}>
@@ -171,24 +297,35 @@ export function Produtos() {
                       </span>
                     )}
                   </div>
+
                   <div className={style.productActions}>
                     <Button
+                      variant="bg-warning"
+                      disabled={loading}
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/produtos/${produto.id}`);
                       }}
                       title="Editar"
+                      type="button"
+                      style={{ width: "80px" }}
                     >
                       <FaEdit />
+                      Editar
                     </Button>
                     <Button
+                      variant="bg-danger"
+                      disabled={loading}
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleDelete(produto.id);
+                        handleExcluir(produto.id);
                       }}
                       title="Excluir"
+                      type="button"
+                      style={{ width: "80px" }}
                     >
-                      <FaTrash />
+                      <FaTrashAlt />
+                      Excluir
                     </Button>
                   </div>
                 </div>
@@ -218,27 +355,13 @@ export function Produtos() {
                     src={selectedProduto.image_url}
                     alt={selectedProduto.name}
                     style={{
-                      maxWidth: "150px",
-                      height: "150px",
+                      width: "200px",
+                      height: "250px",
                       objectFit: "cover",
                       borderRadius: "0.5rem",
                     }}
                   />
                 )}
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    fontSize: "1.5rem",
-                    cursor: "pointer",
-                    color: "var(--text-color-secondary)",
-                    padding: "0",
-                  }}
-                  title="Fechar"
-                >
-                  ✕
-                </button>
               </div>
               <div
                 style={{
@@ -249,7 +372,7 @@ export function Produtos() {
               >
                 {selectedProduto.barcode && (
                   <div>
-                    <strong>Código de Barras:</strong> {selectedProduto.barcode}
+                    <strong>Código de Barra:</strong> {selectedProduto.barcode}
                   </div>
                 )}
                 <div>
@@ -293,6 +416,7 @@ export function Produtos() {
               )}
               <div style={{ marginTop: "1rem" }}>
                 <strong>Status:</strong>{" "}
+                {selectedProduto.active ? <FaToggleOff /> : <FaToggleOn />}
                 {selectedProduto.active ? (
                   <span style={{ color: "green" }}>Ativo</span>
                 ) : (
@@ -307,11 +431,40 @@ export function Produtos() {
                 justifyContent: "flex-end",
               }}
             >
-              <Button onClick={() => setIsModalOpen(false)}>Fechar</Button>
+              <Button
+                variant="bg-primary"
+                disabled={loading}
+                onClick={() => setIsModalOpen(false)}
+                title="Fechar"
+                type="button"
+                style={{ width: "80px" }}
+              >
+                <FaWindowClose size={20} />
+                Fechar
+              </Button>
             </div>
           </Dialogs>
         )}
       </div>
+
+      <ErrorDialogs
+        title="Ocorreu um erro"
+        message={translatedText}
+        isOpen={error !== null}
+        onClose={() => setError(null)}
+      />
+
+      <ConfirmationDialogs
+        title="Confirmar Exclusão"
+        titleColor="#dc3545"
+        variant="bg-danger"
+        message="Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita."
+        isOpen={produtoParaExcluir !== null}
+        onClose={() => {
+          setProdutoParaExcluir(null);
+        }}
+        onConfirm={confirmarExclusao}
+      />
     </Main>
   );
 }

@@ -13,7 +13,6 @@ import { FaEdit } from "react-icons/fa";
 
 import { MdAssignmentReturn, MdOutlineSave } from "react-icons/md";
 import { Users } from "lucide-react";
-import { useBusinessId } from "../../Hooks/useBusiness";
 
 export function ClientesForm() {
   const navigate = useNavigate();
@@ -32,7 +31,6 @@ export function ClientesForm() {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const nameInputRef = useRef<HTMLInputElement>(null);
-  const { businessId } = useBusinessId();
 
   const {
     translate: geminiTranslate,
@@ -48,7 +46,6 @@ export function ClientesForm() {
         .from("customer")
         .select("*")
         .eq("id", id.trim())
-        .eq("business_id", businessId)
         .single();
 
       if (error) throw error;
@@ -65,7 +62,7 @@ export function ClientesForm() {
     } finally {
       setLoading(false);
     }
-  }, [id, businessId]);
+  }, [id]);
 
   useEffect(() => {
     if (isEditing) {
@@ -84,16 +81,12 @@ export function ClientesForm() {
     try {
       if (!user) throw new Error("Usuário não autenticado.");
 
-      if (loading && !businessId) {
-        throw new Error("Erro ao identificar a empresa do usuário logado.");
-      }
       const customerData = {
         name,
         email,
         mobile,
         receive_billing_email,
         active,
-        business_id: businessId,
       };
 
       if (isEditing) {
@@ -143,7 +136,7 @@ export function ClientesForm() {
         throw new Error("Erro na tradução: " + translationError);
       }
     },
-    [geminiTranslate, translationError]
+    [geminiTranslate, translationError],
   );
 
   useEffect(() => {

@@ -48,6 +48,7 @@ const ActionButtons = ({
       onClick={() => onEdit(recebimento.id)}
       title="Editar"
       type="button"
+      style={{ maxWidth: "80px" }}
     >
       <FaEdit />
       Editar
@@ -58,6 +59,7 @@ const ActionButtons = ({
       onClick={() => onDelete(recebimento.id)}
       title="Excluir"
       type="button"
+      style={{ maxWidth: "80px" }}
     >
       <FaTrashAlt />
       Excluir
@@ -68,6 +70,7 @@ const ActionButtons = ({
       onClick={() => onToggleActive(recebimento.id, recebimento.active)}
       title="Ativar/Desativar"
       type="button"
+      style={{ maxWidth: "80px" }}
     >
       {recebimento.active ? <FaToggleOff /> : <FaToggleOn />}
       {recebimento.active ? "Desativar" : "Ativar"}
@@ -81,6 +84,7 @@ const ActionButtons = ({
       onClick={() => onPaymentReceived(recebimento.id)}
       title="Receber Pagamento"
       type="button"
+      style={{ maxWidth: "80px" }}
     >
       <FaMoneyCheckAlt />
       {recebimento.payment_received_at ? "Recebido" : "Receber"}

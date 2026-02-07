@@ -7,7 +7,6 @@
 }
 
 @media (min-width: 1024px) {
-
   .table tbody tr:hover td:nth-child(1),
   .table tbody tr:hover td:nth-child(2),
   .table tbody tr:hover td:nth-child(3),
@@ -18,7 +17,7 @@
 
   .table tbody tr td:nth-child(1) {
     /* Cliente */
-    width: 35%;
+    width: 40%;
   }
 
   .table tbody tr td:nth-child(2) {
@@ -43,6 +42,6 @@
 
   .table tbody tr td:nth-child(6) {
     /* Ação */
-    width: 15%; 
+    width: 10%;
   }
 }
